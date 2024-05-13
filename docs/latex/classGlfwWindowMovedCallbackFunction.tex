@@ -1,0 +1,121 @@
+\doxysection{Glfw\+Window\+Moved\+Callback\+Function Class Reference}
+\hypertarget{classGlfwWindowMovedCallbackFunction}{}\label{classGlfwWindowMovedCallbackFunction}\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+
+
+{\ttfamily \#include $<$Glfw\+Callback.\+hpp$>$}
+
+
+
+Collaboration diagram for Glfw\+Window\+Moved\+Callback\+Function\+:
+% FIG 0
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGlfwWindowMovedCallbackFunction_aecaa18dfa852782ef860e07d0947bc39}{Glfw\+Window\+Moved\+Callback\+Function}} (const \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \& \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction_a5911921161d36141861b80fc46893740}{operator=}} (const \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy assignment operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... \+\_\+\+Arg\+Types$>$ }\\void \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction_aa7ecba116bf29ed422aa9c6f98e5bc90}{call}} (\+\_\+\+Arg\+Types... args)
+\begin{DoxyCompactList}\small\item\em Call the callback function with the provided arguments. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename F $>$ }\\static \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction_a43e5e40f56fed49501d704b987965135}{get\+Instance}} (F \&\&callback, bool force=false)
+\begin{DoxyCompactList}\small\item\em Get the singleton instance of the \doxylink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction_ae42d056cc1471b58e28cdffb51833ada}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Get the singleton instance of the \doxylink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classGlfwWindowMovedCallbackFunction_aecaa18dfa852782ef860e07d0947bc39}\label{classGlfwWindowMovedCallbackFunction_aecaa18dfa852782ef860e07d0947bc39} 
+\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}!GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}!GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{GlfwWindowMovedCallbackFunction()}{GlfwWindowMovedCallbackFunction()}}
+{\footnotesize\ttfamily Glfw\+Window\+Moved\+Callback\+Function\+::\+Glfw\+Window\+Moved\+Callback\+Function (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Deleted copy constructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classGlfwWindowMovedCallbackFunction_aa7ecba116bf29ed422aa9c6f98e5bc90}\label{classGlfwWindowMovedCallbackFunction_aa7ecba116bf29ed422aa9c6f98e5bc90} 
+\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}!call@{call}}
+\index{call@{call}!GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{call()}{call()}}
+{\footnotesize\ttfamily template$<$typename... \+\_\+\+Arg\+Types$>$ \\
+void Glfw\+Window\+Moved\+Callback\+Function\+::call (\begin{DoxyParamCaption}\item[{\+\_\+\+Arg\+Types...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Call the callback function with the provided arguments. 
+
+If the callback function is valid, it will be called with the provided arguments.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em \+\_\+\+Arg\+Types} & The types of the arguments. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em args} & The arguments to be passed to the callback function. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classGlfwWindowMovedCallbackFunction_ae42d056cc1471b58e28cdffb51833ada}\label{classGlfwWindowMovedCallbackFunction_ae42d056cc1471b58e28cdffb51833ada} 
+\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \texorpdfstring{$\ast$}{*} Glfw\+Window\+Moved\+Callback\+Function\+::get\+Instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Get the singleton instance of the \doxylink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}. 
+
+\begin{DoxyReturn}{Returns}
+The singleton instance of the \doxylink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}. 
+\end{DoxyReturn}
+\Hypertarget{classGlfwWindowMovedCallbackFunction_a43e5e40f56fed49501d704b987965135}\label{classGlfwWindowMovedCallbackFunction_a43e5e40f56fed49501d704b987965135} 
+\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename F $>$ \\
+static \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \texorpdfstring{$\ast$}{*} Glfw\+Window\+Moved\+Callback\+Function\+::get\+Instance (\begin{DoxyParamCaption}\item[{F \&\&}]{callback,  }\item[{bool}]{force = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Get the singleton instance of the \doxylink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}. 
+
+If the instance does not exist, it will be created with the provided callback function. If the instance already exists and the \textquotesingle{}force\textquotesingle{} parameter is set to true, the existing instance will be deleted and a new one will be created.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em F} & The type of the callback function. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em callback} & The callback function to be registered. \\
+\hline
+{\em force} & Whether to force the creation of a new instance even if one already exists. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The singleton instance of the \doxylink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}. 
+\end{DoxyReturn}
+\Hypertarget{classGlfwWindowMovedCallbackFunction_a5911921161d36141861b80fc46893740}\label{classGlfwWindowMovedCallbackFunction_a5911921161d36141861b80fc46893740} 
+\index{GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}!operator=@{operator=}}
+\index{operator=@{operator=}!GlfwWindowMovedCallbackFunction@{GlfwWindowMovedCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \& Glfw\+Window\+Moved\+Callback\+Function\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classGlfwWindowMovedCallbackFunction}{Glfw\+Window\+Moved\+Callback\+Function}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Deleted copy assignment operator. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{GlfwCallback_8hpp}{Glfw\+Callback.\+hpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,125 @@
+\doxysection{Glfw\+Window\+Focus\+Callback\+Function Class Reference}
+\hypertarget{classGlfwWindowFocusCallbackFunction}{}\label{classGlfwWindowFocusCallbackFunction}\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+
+
+Represents a singleton callback function for GLFW window focus events.  
+
+
+
+
+{\ttfamily \#include $<$Glfw\+Callback.\+hpp$>$}
+
+
+
+Collaboration diagram for Glfw\+Window\+Focus\+Callback\+Function\+:
+% FIG 0
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGlfwWindowFocusCallbackFunction_a984407bfa8e5e042893e4763ee49efbb}{Glfw\+Window\+Focus\+Callback\+Function}} (const \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \& \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction_a91c49d42d488f0e91611cc0e1ac75d41}{operator=}} (const \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy assignment operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... \+\_\+\+Arg\+Types$>$ }\\void \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction_aed7025341b275a6912e25b8b6b6efda2}{call}} (\+\_\+\+Arg\+Types... args)
+\begin{DoxyCompactList}\small\item\em Calls the callback function with the provided arguments. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename F $>$ }\\static \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction_ac241b6714c53cc534edfff05a8721cf7}{get\+Instance}} (F \&\&callback, bool force=false)
+\item 
+static \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction_ac4690ebe9a8570ad68947f1b98e637a7}{get\+Instance}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a singleton callback function for GLFW window focus events. 
+
+This class provides a singleton implementation for a callback function that is invoked when a GLFW window gains or loses focus. It allows registering a callback function that takes a GLFWwindow pointer and an integer as arguments. The callback function can be set using the {\ttfamily get\+Instance} method. The {\ttfamily call} method is used to invoke the registered callback function. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classGlfwWindowFocusCallbackFunction_a984407bfa8e5e042893e4763ee49efbb}\label{classGlfwWindowFocusCallbackFunction_a984407bfa8e5e042893e4763ee49efbb} 
+\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}!GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}!GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{GlfwWindowFocusCallbackFunction()}{GlfwWindowFocusCallbackFunction()}}
+{\footnotesize\ttfamily Glfw\+Window\+Focus\+Callback\+Function\+::\+Glfw\+Window\+Focus\+Callback\+Function (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Deleted copy constructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classGlfwWindowFocusCallbackFunction_aed7025341b275a6912e25b8b6b6efda2}\label{classGlfwWindowFocusCallbackFunction_aed7025341b275a6912e25b8b6b6efda2} 
+\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}!call@{call}}
+\index{call@{call}!GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{call()}{call()}}
+{\footnotesize\ttfamily template$<$typename... \+\_\+\+Arg\+Types$>$ \\
+void Glfw\+Window\+Focus\+Callback\+Function\+::call (\begin{DoxyParamCaption}\item[{\+\_\+\+Arg\+Types...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calls the callback function with the provided arguments. 
+
+This function checks if a callback function is set and then calls it with the provided arguments.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em \+\_\+\+Arg\+Types} & The types of the arguments. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em args} & The arguments to be passed to the callback function. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classGlfwWindowFocusCallbackFunction_ac4690ebe9a8570ad68947f1b98e637a7}\label{classGlfwWindowFocusCallbackFunction_ac4690ebe9a8570ad68947f1b98e637a7} 
+\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \texorpdfstring{$\ast$}{*} Glfw\+Window\+Focus\+Callback\+Function\+::get\+Instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Returns the instance of the \doxylink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}.
+
+\begin{DoxyReturn}{Returns}
+A pointer to the instance of the \doxylink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}. 
+\end{DoxyReturn}
+\Hypertarget{classGlfwWindowFocusCallbackFunction_ac241b6714c53cc534edfff05a8721cf7}\label{classGlfwWindowFocusCallbackFunction_ac241b6714c53cc534edfff05a8721cf7} 
+\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename F $>$ \\
+static \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \texorpdfstring{$\ast$}{*} Glfw\+Window\+Focus\+Callback\+Function\+::get\+Instance (\begin{DoxyParamCaption}\item[{F \&\&}]{callback,  }\item[{bool}]{force = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Returns an instance of the \doxylink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function} with the specified callback function.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em F} & The type of the callback function. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em callback} & The callback function to be invoked when the window focus changes. \\
+\hline
+{\em force} & If set to true, forces the creation of a new instance even if one already exists. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the instance of the \doxylink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}. 
+\end{DoxyReturn}
+\Hypertarget{classGlfwWindowFocusCallbackFunction_a91c49d42d488f0e91611cc0e1ac75d41}\label{classGlfwWindowFocusCallbackFunction_a91c49d42d488f0e91611cc0e1ac75d41} 
+\index{GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}!operator=@{operator=}}
+\index{operator=@{operator=}!GlfwWindowFocusCallbackFunction@{GlfwWindowFocusCallbackFunction}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \& Glfw\+Window\+Focus\+Callback\+Function\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classGlfwWindowFocusCallbackFunction}{Glfw\+Window\+Focus\+Callback\+Function}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Deleted copy assignment operator. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{GlfwCallback_8hpp}{Glfw\+Callback.\+hpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,74 @@
+\doxysection{Matrix\texorpdfstring{$<$}{<} WIDTH, HEIGHT \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classMatrix}{}\label{classMatrix}\index{Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}}
+
+
+{\ttfamily \#include $<$Matrix.\+hpp$>$}
+
+
+
+Collaboration diagram for Matrix\texorpdfstring{$<$}{<} WIDTH, HEIGHT \texorpdfstring{$>$}{>}\+:
+% FIG 0
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classMatrix_1_1MatrixError}{Matrix\+Error}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMatrix_a1b0912b529df82a8a97556870f1a03ac}{Matrix}} ()
+\item 
+\mbox{\hyperlink{classMatrix_ae9ede9b2fe00ea151e48ac7e229daaa7}{Matrix}} (std\+::array$<$ std\+::array$<$ double, WIDTH $>$, HEIGHT $>$ matrix)
+\item 
+\mbox{\hyperlink{classMatrix_aa5f78d60af4b7ef550cc64f34e8203e6}{\texorpdfstring{$\sim$}{\string~}\+Matrix}} ()=default
+\item 
+double \mbox{\hyperlink{classMatrix_a82d90e4ce9f201ac8e9b45ce121fddbe}{operator\mbox{[}$\,$\mbox{]}}} (std\+::pair$<$ \mbox{\hyperlink{classint}{int}}, \mbox{\hyperlink{classint}{int}} $>$ pos) const
+\item 
+double \& \mbox{\hyperlink{classMatrix_a9d3a925bd3235ae8a500ba61dc12d062}{operator\mbox{[}$\,$\mbox{]}}} (std\+::pair$<$ \mbox{\hyperlink{classint}{int}}, \mbox{\hyperlink{classint}{int}} $>$ pos)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classMatrix_a1b0912b529df82a8a97556870f1a03ac}\label{classMatrix_a1b0912b529df82a8a97556870f1a03ac} 
+\index{Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}}
+\doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classint}{int}} WIDTH, \mbox{\hyperlink{classint}{int}} HEIGHT$>$ \\
+\mbox{\hyperlink{classMatrix}{Matrix}}$<$ WIDTH, HEIGHT $>$\mbox{\hyperlink{classMatrix}{\+::\+Matrix}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classMatrix_ae9ede9b2fe00ea151e48ac7e229daaa7}\label{classMatrix_ae9ede9b2fe00ea151e48ac7e229daaa7} 
+\index{Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}}
+\doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classint}{int}} WIDTH, \mbox{\hyperlink{classint}{int}} HEIGHT$>$ \\
+\mbox{\hyperlink{classMatrix}{Matrix}}$<$ WIDTH, HEIGHT $>$\mbox{\hyperlink{classMatrix}{\+::\+Matrix}} (\begin{DoxyParamCaption}\item[{std\+::array$<$ std\+::array$<$ double, WIDTH $>$, HEIGHT $>$}]{matrix }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classMatrix_aa5f78d60af4b7ef550cc64f34e8203e6}\label{classMatrix_aa5f78d60af4b7ef550cc64f34e8203e6} 
+\index{Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}!````~Matrix@{\texorpdfstring{$\sim$}{\string~}Matrix}}
+\index{````~Matrix@{\texorpdfstring{$\sim$}{\string~}Matrix}!Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Matrix()}{\string~Matrix()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classint}{int}} WIDTH, \mbox{\hyperlink{classint}{int}} HEIGHT$>$ \\
+\mbox{\hyperlink{classMatrix}{Matrix}}$<$ WIDTH, HEIGHT $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classMatrix}{Matrix}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMatrix_a9d3a925bd3235ae8a500ba61dc12d062}\label{classMatrix_a9d3a925bd3235ae8a500ba61dc12d062} 
+\index{Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classint}{int}} WIDTH, \mbox{\hyperlink{classint}{int}} HEIGHT$>$ \\
+double \& \mbox{\hyperlink{classMatrix}{Matrix}}$<$ WIDTH, HEIGHT $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{std\+::pair$<$ \mbox{\hyperlink{classint}{int}}, \mbox{\hyperlink{classint}{int}} $>$}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classMatrix_a82d90e4ce9f201ac8e9b45ce121fddbe}\label{classMatrix_a82d90e4ce9f201ac8e9b45ce121fddbe} 
+\index{Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!Matrix$<$ WIDTH, HEIGHT $>$@{Matrix$<$ WIDTH, HEIGHT $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classint}{int}} WIDTH, \mbox{\hyperlink{classint}{int}} HEIGHT$>$ \\
+double \mbox{\hyperlink{classMatrix}{Matrix}}$<$ WIDTH, HEIGHT $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{std\+::pair$<$ \mbox{\hyperlink{classint}{int}}, \mbox{\hyperlink{classint}{int}} $>$}]{pos }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\+Maths/\mbox{\hyperlink{Matrix_8hpp}{Matrix.\+hpp}}\end{DoxyCompactItemize}
