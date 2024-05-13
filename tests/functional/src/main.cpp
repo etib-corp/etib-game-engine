@@ -33,11 +33,11 @@ int main()
     window->bindWindowTrigger<GLFWwindow *, double, double>(EGE::Event::WindowTrigger::WindowScroll, [&color](GLFWwindow *win, double xoffset, double yoffset) {
         if (yoffset > 0)
             color.red = std::clamp(color.red + 0.01f, 0.0f, 1.0f);
-        else
+        else if (yoffset < 0)
             color.red = std::clamp(color.red - 0.01f, 0.0f, 1.0f);
         if (xoffset < 0)
             color.green = std::clamp(color.green + 0.01f, 0.0f, 1.0f);
-        else
+        else if (xoffset > 0)
             color.green = std::clamp(color.green - 0.01f, 0.0f, 1.0f);
     });
     window->bindWindowTrigger<GLFWwindow *, float, float>(EGE::Event::WindowTrigger::WindowContentScaleChanged, [](GLFWwindow *win, float x, float y) {
