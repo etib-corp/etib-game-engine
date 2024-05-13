@@ -36,51 +36,22 @@ namespace EGE {
                  * @param x The x component of the vector.
                  * @param y The y component of the vector.
                  */
-                Vector2(const T& x, const T& y) : _x(x), _y(y) {}
+                Vector2(const T& x, const T& y) : x(x), y(y) {}
 
                 /**
                  * @brief Constructs a Vector2 object with default x and y components.
                  *
                  * The default x and y components are set to 0.
                  */
-                Vector2() : _x(static_cast<T>(0)), _y(static_cast<T>(0)) {}
+                Vector2() : x(static_cast<T>(0)), y(static_cast<T>(0)) {}
 
                 /**
                  * @brief Destructor for the Vector2 object.
                  */
                 ~Vector2() {}
 
-                /**
-                 * @brief Sets the x component of the vector.
-                 *
-                 * @param x The new value for the x component.
-                 */
-                void setX(const T& x) { _x = x; }
-
-                /**
-                 * @brief Sets the y component of the vector.
-                 *
-                 * @param y The new value for the y component.
-                 */
-                void setY(const T& y) { _y = y; }
-
-                /**
-                 * @brief Gets the x component of the vector.
-                 *
-                 * @return The x component of the vector.
-                 */
-                T getX() const { return _x; }
-
-                /**
-                 * @brief Gets the y component of the vector.
-                 *
-                 * @return The y component of the vector.
-                 */
-                T getY() const { return _y; }
-
-            private:
-                T _x; /**< The x component of the vector. */
-                T _y; /**< The y component of the vector. */
+                T x; /**< The x component of the vector. */
+                T y; /**< The y component of the vector. */
         };
     }
 }
