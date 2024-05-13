@@ -43,7 +43,7 @@ void EGE::Window::create()
     if (this->_style & Styles::Fullscreen) {
         this->_window = glfwCreateWindow(this->_mode->width, this->_mode->height, _title.c_str(), this->_monitor, nullptr);
     } else {
-        this->_window = glfwCreateWindow(this->_size.getX(), this->_size.getY(), this->_title.c_str(), nullptr, nullptr);
+        this->_window = glfwCreateWindow(this->_size.x, this->_size.y, this->_title.c_str(), nullptr, nullptr);
     }
 
     if (!this->_window)
@@ -122,8 +122,8 @@ void EGE::Window::setTitle(const std::string &title)
 
 void EGE::Window::setSize(const int &width, const int &height)
 {
-    this->_size.setX(width);
-    this->_size.setY(height);
+    this->_size.x = width;
+    this->_size.x = height;
 }
 
 void EGE::Window::setSize(const EGE::Maths::Vector2<int> &size)
@@ -133,8 +133,8 @@ void EGE::Window::setSize(const EGE::Maths::Vector2<int> &size)
 
 void EGE::Window::setPosition(const int &x, const int &y)
 {
-    this->_size.setX(x);
-    this->_size.setY(y);
+    this->_size.x = x;
+    this->_size.x = y;
 }
 
 void EGE::Window::setPosition(const EGE::Maths::Vector2<int> &position)
