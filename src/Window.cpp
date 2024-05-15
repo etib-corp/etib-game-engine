@@ -52,11 +52,11 @@ void EGE::Window::create()
     this->_event = std::make_shared<EGE::Event>(EGE::Event(this->_window));
 
     if (this->_style & Styles::Close) {
-        this->_event->bindWindowTrigger(EGE::Event::WindowTrigger::WindowClose, [this]() {
+        this->_event->bindWindowTrigger<GLFWwindow *>(EGE::Event::WindowTrigger::WindowClose, [this](GLFWwindow* win) {
             this->close();
         });
     } else {
-        this->_event->bindWindowTrigger(EGE::Event::WindowTrigger::WindowClose, [this]() {
+        this->_event->bindWindowTrigger<GLFWwindow *>(EGE::Event::WindowTrigger::WindowClose, [this](GLFWwindow* win) {
             glfwSetWindowShouldClose(this->_window, GL_FALSE);
         });
     }
