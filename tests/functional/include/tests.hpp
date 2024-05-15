@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include "Window.hpp"
 #include "Color.hpp"
+#include "Shader.hpp"
+#include "Window.hpp"
 
 #include <iostream>
 #include <memory>
