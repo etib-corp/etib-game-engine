@@ -7,6 +7,10 @@
 
 #pragma once
 
+// Engine include
+#include "OpenGL.hpp"
+
+// C++ include
 #include <cmath>
 
 /**
@@ -27,9 +31,11 @@ namespace EGE {
          * @brief A 2D vector class template.
          *
          * This class represents a 2D vector with x and y components.
-         * The template parameter T represents the type of the vector components.
+         * @tparam T The type of the vector components.
+         * @note The template parameter T must be an arithmetic type.
          */
         template <typename T>
+        requires std::is_arithmetic<T>::value
         class Vector2 {
             public:
                 /**
@@ -66,6 +72,13 @@ namespace EGE {
                  * @param y The y component of the vector.
                  */
                 Vector2(const T& x, const T& y) : x(x), y(y) {}
+
+                /**
+                 * @brief Constructs a Vector2 object from the specified glm::vec2 object.
+                 *
+                 * @param vec The glm::vec2 object.
+                */
+                Vector2(const glm::vec2& vec) : x(vec.x), y(vec.y) {}
 
                 /**
                  * @brief Destructor for the Vector2 object.
@@ -163,6 +176,16 @@ namespace EGE {
                         return Vector2<T>();
                     else
                         return *this * eta - n * (eta * dot(n) + sqrt(k));
+                }
+
+                /**
+                 * @brief Returns the Vector2 object as a glm::vec2 object.
+                 *
+                 * @return The Vector2 object as a glm::vec2 object.
+                */
+                glm::vec2 toGlmVec2() const
+                {
+                    return glm::vec2(this->x, this->y);
                 }
 
                 /**

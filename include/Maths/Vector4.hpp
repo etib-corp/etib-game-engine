@@ -7,6 +7,11 @@
 
 #pragma once
 
+// Engine include
+#include "OpenGL.hpp"
+
+// C++ include
+#include <cmath>
 
 /**
  * @file Vector4.hpp
@@ -26,9 +31,11 @@ namespace EGE {
          * @brief A 4D vector class template.
          *
          * This class represents a 4D vector with x, y, z and w components.
-         * The template parameter T represents the type of the vector components.
+         * @tparam T The type of the components of the vector.
+         * @note The template parameter T must be an arithmetic type.
          */
         template <typename T>
+        requires std::is_arithmetic<T>::value
         class Vector4 {
             public:
                 class Vector4Error : public Error {
@@ -58,6 +65,13 @@ namespace EGE {
                  * @param w The w component of the vector.
                  */
                 Vector4(const T& x, const T& y, const T& z, const T& w) : x(x), y(y), z(z), w(w) {}
+
+                /**
+                 * @brief Constructs a Vector4 object from the specified glm::vec4 object.
+                 *
+                 * @param vec The glm::vec4 object.
+                 */
+                Vector4(const glm::vec4& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
 
 
                 /**
@@ -156,6 +170,16 @@ namespace EGE {
                         return Vector3<T>();
                     else
                         return *this * eta - n * (eta * dot(n) + sqrt(k));
+                }
+
+                /**
+                 * @brief Returns the Vector4 object as a glm::vec4 object.
+                 *
+                 * @return The Vector4 object as a glm::vec4 object.
+                */
+                glm::vec4 toGlmVec4() const
+                {
+                    return glm::vec4(this->x, this->y, this->z, this->w);
                 }
 
                 /**

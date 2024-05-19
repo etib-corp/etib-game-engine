@@ -7,6 +7,11 @@
 
 #pragma once
 
+
+// Engine include
+#include "OpenGL.hpp"
+
+// C++ include
 #include <cmath>
 
 /**
@@ -27,9 +32,11 @@ namespace EGE {
          * @brief A 3D vector class template.
          *
          * This class represents a 3D vector with x, y, and z components.
-         * The template parameter T represents the type of the vector components.
+         * @tparam T The type of the components of the vector.
+         * @note The template parameter T must be an arithmetic type.
          */
         template <typename T>
+        requires std::is_arithmetic<T>::value
         class Vector3 {
             public:
                 class Vector3Error : public Error {
@@ -56,6 +63,13 @@ namespace EGE {
                  * @param z The z component of the vector.
                  */
                 Vector3(const T& x, const T& y, const T& z) : x(x), y(y), z(z) {}
+
+                /**
+                 * @brief Constructs a Vector3 object from the specified glm::vec3 object.
+                 *
+                 * @param vec The glm::vec3 object.
+                 */
+                Vector3(const glm::vec3& vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
                 /**
                  * @brief Destructor for the Vector3 object.
@@ -153,6 +167,16 @@ namespace EGE {
                         return Vector3<T>();
                     else
                         return *this * eta - n * (eta * dot(n) + sqrt(k));
+                }
+
+                /**
+                 * @brief Returns the Vector3 object as a glm::vec3 object.
+                 *
+                 * @return The Vector3 object as a glm::vec3 object.
+                */
+                glm::vec3 toGlmVec3() const
+                {
+                    return glm::vec3(this->x, this->y, this->z);
                 }
 
                 /**
