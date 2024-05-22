@@ -189,6 +189,7 @@ void EGE::Window::_initializeGlfw()
 
     glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
 
+
     this->_monitor = glfwGetPrimaryMonitor();
     this->_mode = glfwGetVideoMode(this->_monitor);
     _glfwInitializations++;

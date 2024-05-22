@@ -7,9 +7,12 @@
 
 #pragma once
 
+#include "Camera.hpp"
 #include "Color.hpp"
 #include "Shader.hpp"
 #include "Window.hpp"
+#include "Texture.hpp"
+#include "Model.hpp"
 
 #include <iostream>
 #include <memory>

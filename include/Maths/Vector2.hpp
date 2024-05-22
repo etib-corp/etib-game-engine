@@ -8,10 +8,12 @@
 #pragma once
 
 // Engine include
+#include "Error.hpp"
 #include "OpenGL.hpp"
 
 // C++ include
 #include <cmath>
+#include <string>
 
 /**
  * @file Vector2.hpp

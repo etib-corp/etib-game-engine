@@ -28,9 +28,9 @@ EGE::Camera::~Camera()
 {
 }
 
-EGE::Maths::Matrix<4, 4> EGE::Camera::getViewMatrix() const
+EGE::Maths::Matrix<4, 4, double> EGE::Camera::getViewMatrix() const
 {
-    return EGE::Maths::Matrix<4, 4>(glm::lookAt(this->_position.toGlmVec3(), this->_position.toGlmVec3() + this->_front.toGlmVec3(), this->_up.toGlmVec3()));
+    return EGE::Maths::Matrix<4, 4, double>(glm::lookAt(this->_position.toGlmVec3(), this->_position.toGlmVec3() + this->_front.toGlmVec3(), this->_up.toGlmVec3()));
 }
 
 void EGE::Camera::move(Movement direction, float deltaTime)
@@ -45,16 +45,16 @@ void EGE::Camera::move(Movement direction, float deltaTime)
     if (direction == RIGHT)
         this->_position += this->_right * velocity;
     if (direction == UP)
-        this->_position += this->_up * velocity;
-    if (direction == DOWN)
         this->_position -= this->_up * velocity;
+    if (direction == DOWN)
+        this->_position += this->_up * velocity;
     this->updateCameraVectors();
 }
 
 void EGE::Camera::rotate(float xoffset, float yoffset, bool constrainPitch)
 {
-    xoffset *= this->_speed;
-    yoffset *= this->_speed;
+    xoffset *= this->_speed / 10.0f;
+    yoffset *= this->_speed / 10.0f;
 
     this->_yaw += xoffset;
     this->_pitch += yoffset;

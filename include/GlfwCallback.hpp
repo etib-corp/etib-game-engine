@@ -1127,3 +1127,93 @@ class GlfwWindowRefreshedCallbackFunction {
         static GlfwWindowRefreshedCallbackFunction *_instance;                  /**< The singleton instance of the callback function. */
         std::function<void(GLFWwindow *)> _callback;                            /**< The callback function to be called when the window is refreshed. */
 };
+
+/**
+ * @class GlfwCursorCallbackFunction
+ * @brief Represents a singleton callback function for GLFW window focus events.
+ *
+ * This class provides a singleton implementation for a callback function that is invoked when a GLFW window gains or loses focus.
+ * It allows registering a callback function that takes a GLFWwindow pointer and an integer as arguments.
+ * The callback function can be set using the `getInstance` method.
+ * The `call` method is used to invoke the registered callback function.
+ */
+class GlfwCursorCallbackFunction {
+    public:
+        /**
+         * @brief Deleted copy constructor.
+         */
+        GlfwCursorCallbackFunction(const GlfwCursorCallbackFunction &) = delete;
+
+        /**
+         * @brief Deleted copy assignment operator.
+         */
+        GlfwCursorCallbackFunction &operator=(const GlfwCursorCallbackFunction &) = delete;
+
+        /**
+         * Returns an instance of the GlfwCursorCallbackFunction with the specified callback function.
+         *
+         * @tparam F The type of the callback function.
+         * @param callback The callback function to be invoked when the window focus changes.
+         * @param force If set to true, forces the creation of a new instance even if one already exists.
+         * @return A pointer to the instance of the GlfwCursorCallbackFunction.
+         */
+        template<typename F>
+        static GlfwCursorCallbackFunction *getInstance(F &&callback, bool force = false)
+        {
+            if constexpr(std::invocable<F, GLFWwindow *, double, double>) {
+                if (force && _instance) {
+                    delete _instance;
+                    _instance = nullptr;
+                }
+                if (!_instance)
+                    _instance = new GlfwCursorCallbackFunction(callback);
+            }
+            return _instance;
+        }
+
+        /**
+         * Returns the instance of the GlfwCursorCallbackFunction.
+         *
+         * @return A pointer to the instance of the GlfwCursorCallbackFunction.
+         */
+        static GlfwCursorCallbackFunction *getInstance()
+        {
+            return _instance;
+        }
+
+        /**
+         * @brief Calls the callback function with the provided arguments.
+         *
+         * This function checks if a callback function is set and then calls it with the provided arguments.
+         *
+         * @tparam _ArgTypes The types of the arguments.
+         * @param args The arguments to be passed to the callback function.
+         */
+        template<typename... _ArgTypes>
+        void call(_ArgTypes... args)
+        {
+            if (this->_callback)
+                this->_callback(args...);
+        }
+    private:
+        /**
+         * @brief Constructor for the GlfwCursorCallbackFunction class.
+         *
+         * This constructor takes a callable object as a parameter and initializes the _callback member variable.
+         * The callable object must be invocable with GLFWwindow* and int arguments.
+         *
+         * @tparam F The type of the callable object.
+         * @param callback The callable object to be stored as the callback function.
+         */
+        template<typename F>
+        requires std::invocable<F, GLFWwindow *, double, double>
+        GlfwCursorCallbackFunction(F &&callback) : _callback(callback) {}
+
+        /**
+         * @brief Destructor for the GlfwCursorCallbackFunction class.
+         */
+        ~GlfwCursorCallbackFunction() {}
+
+        static GlfwCursorCallbackFunction *_instance;                      /**< The instance of the GlfwCursorCallbackFunction class. */
+        std::function<void(GLFWwindow *, double, double)> _callback;                       /**< The callback function to be called when the window focus changes. */
+};
