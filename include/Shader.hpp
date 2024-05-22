@@ -9,6 +9,7 @@
 
 // Engine include
 #include "Error.hpp"
+#include "Maths/Matrix.hpp"
 #include "Maths/Vector2.hpp"
 #include "Maths/Vector3.hpp"
 #include "Maths/Vector4.hpp"
@@ -129,7 +130,36 @@ namespace EGE {
             template<typename T>
             void setVec4(const std::string &name, const EGE::Maths::Vector4<T> &value) const;
 
-            // TODO: Add matrix uniforms when the matrix class will be implemented
+            /**
+             * @brief Set a mat uniform value in the shader
+             *
+             * @param name The name of the uniform
+             * @param value The value of the uniform
+             * @tparam DIMENSION The dimension of the matrix
+             * @note The matrix must be square
+             */
+            template <int DIMENSION>
+            void setMat(const std::string &name, const EGE::Maths::Matrix<DIMENSION, DIMENSION, float> &value) const
+            {
+                unsigned int location = glGetUniformLocation(this->_ID, name.c_str());
+                float *values = value.value_ptr();
+
+                if (location == -1)
+                    throw ShaderError("ERROR\n\tUNIFORM NOT FOUND\n\t\twhile trying to set " + name + "\n");
+                switch (DIMENSION) {
+                    case 2:
+                        glUniformMatrix2fv(location, 1, GL_FALSE, values);
+                        break;
+                    case 3:
+                        glUniformMatrix3fv(location, 1, GL_FALSE, values);
+                        break;
+                    case 4:
+                        glUniformMatrix4fv(location, 1, GL_FALSE, values);
+                        break;
+                    default:
+                        throw ShaderError("ERROR\n\tINVALID MATRIX DIMENSION\n\t\twhile trying to set " + name + "\n");
+                }
+            }
 
         private:
 

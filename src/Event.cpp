@@ -19,6 +19,7 @@ EGE::Event::GlfwWindowMaximizedCallbackFunction *EGE::Event::GlfwWindowMaximized
 EGE::Event::GlfwWindowMovedCallbackFunction *EGE::Event::GlfwWindowMovedCallbackFunction::_instance = nullptr;
 EGE::Event::GlfwWindowResizedCallbackFunction *EGE::Event::GlfwWindowResizedCallbackFunction::_instance = nullptr;
 EGE::Event::GlfwWindowRefreshedCallbackFunction *EGE::Event::GlfwWindowRefreshedCallbackFunction::_instance = nullptr;
+EGE::Event::GlfwCursorCallbackFunction *EGE::Event::GlfwCursorCallbackFunction::_instance = nullptr;
 
 EGE::Event::Trigger::Trigger(EGE::Event::Type type, std::uint32_t trigger, EGE::Event::Mode mode, std::function<void()> callback, std::uint8_t joystickId)
     : _type(type), _trigger(trigger), _mode(mode), _callback(callback), _joystickId(joystickId)
@@ -119,7 +120,10 @@ void EGE::Event::pollEvents()
         if (trigger.getType() == EGE::Event::Type::Keyboard) {
             keyValue = glfwGetKey(this->_window, trigger.getTrigger());
         } else if (trigger.getType() == EGE::Event::Type::Mouse) {
-            keyValue = glfwGetMouseButton(this->_window, trigger.getTrigger());
+            if (trigger.getTrigger() != EGE::Event::Mouse::Cursor)
+                keyValue = glfwGetMouseButton(this->_window, trigger.getTrigger());
+            else
+                keyValue = -1;
         } else if (trigger.getType() == EGE::Event::Type::JoystickButton) {
             keyValue = -1;
         } else if (trigger.getType() == EGE::Event::Type::JoystickAxis) {

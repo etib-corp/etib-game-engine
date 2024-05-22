@@ -70,7 +70,7 @@ namespace EGE {
          *
          * @return The view matrix.
          */
-        Maths::Matrix<4, 4> getViewMatrix() const;
+        Maths::Matrix<4, 4, double> getViewMatrix() const;
 
         /**
          * @brief Moves the camera based on the specified direction.

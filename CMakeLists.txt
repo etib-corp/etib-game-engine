@@ -8,6 +8,8 @@ find_package(PkgConfig REQUIRED)
 
 pkg_search_module(GLFW REQUIRED glfw3)
 
+find_package(assimp REQUIRED)
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -23,6 +25,8 @@ set(GL_LIBS
     "glfw"
 )
 target_link_libraries(EGE PUBLIC ${GL_LIBS})
+
+target_link_libraries(EGE PUBLIC assimp::assimp)
 
 set_target_properties(EGE PROPERTIES OUTPUT_NAME "EGE-OpenGL")
 set_target_properties(EGE PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")

@@ -16,6 +16,7 @@
 // C++ include
 #include <array>
 #include <iostream>
+#include <type_traits>
 
 /**
  * @file Matrix.hpp
@@ -38,10 +39,12 @@ namespace EGE {
          * The Matrix class represents a matrix with the specified width and height.
          * @tparam WIDTH The width of the matrix.
          * @tparam HEIGHT The height of the matrix.
+         * @tparam T The type of the elements in the matrix.
          * @note The width and height must be greater than 0.
+         * @note The type T must be an arithmetic type.
         */
-        template<int WIDTH, int HEIGHT>
-        requires (WIDTH > 0 && HEIGHT > 0)
+        template<int WIDTH, int HEIGHT, typename T>
+        requires (WIDTH > 0 && HEIGHT > 0 && std::is_arithmetic<T>::value)
         class Matrix {
             public:
                 /**
@@ -66,7 +69,7 @@ namespace EGE {
                 {
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
-                            this->_matrix[i][j] = 0.0;
+                            this->_matrix[i][j] = static_cast<T>(0);
                         }
                     }
                 }
@@ -77,7 +80,7 @@ namespace EGE {
                  * The constructor initializes the matrix with the specified elements.
                  * @param matrix The elements to initialize the matrix with.
                 */
-                Matrix(std::array<std::array<double, WIDTH>, HEIGHT>& matrix)
+                Matrix(std::array<std::array<T, WIDTH>, HEIGHT>& matrix)
                 {
                     this->_matrix = matrix;
                 }
@@ -88,7 +91,7 @@ namespace EGE {
                  * The constructor initializes the matrix from a glm::mat.
                  * @param matrix The glm::mat to initialize the matrix with.
                 */
-                Matrix(glm::mat<WIDTH, HEIGHT, double> matrix)
+                Matrix(glm::mat<WIDTH, HEIGHT, T> matrix)
                 {
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
@@ -123,14 +126,35 @@ namespace EGE {
                 }
 
                 /**
+                 * @brief Returns the values of the matrix.
+                 *
+                 * The function returns the values of the matrix as a pointer to a C-style array.
+                 * @return The values of the matrix.
+                 * @note The caller is responsible for freeing the memory allocated for the array using delete[].
+                */
+                T *value_ptr() const
+                {
+                    T *ptr = new T[WIDTH * HEIGHT];
+
+                    if (!ptr)
+                        throw MatrixError("Failed to allocate memory for matrix values.");
+                    for (int i = 0; i < HEIGHT; i++) {
+                        for (int j = 0; j < WIDTH; j++) {
+                            ptr[i * WIDTH + j] = this->_matrix[i][j];
+                        }
+                    }
+                    return ptr;
+                }
+
+                /**
                  * @brief Returns the transpose of the matrix.
                  *
                  * The function returns the transpose of the matrix.
                  * @return The transpose of the matrix.
                 */
-                Matrix<HEIGHT, WIDTH> transpose() const
+                Matrix<HEIGHT, WIDTH, T> transpose() const
                 {
-                    Matrix<HEIGHT, WIDTH> result;
+                    Matrix<HEIGHT, WIDTH, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[j][i] = this->_matrix[i][j];
@@ -155,7 +179,7 @@ namespace EGE {
                     }
                     double det = 0;
                     for (int i = 0; i < WIDTH; i++) {
-                        Matrix<WIDTH - 1, HEIGHT - 1> submatrix;
+                        Matrix<WIDTH - 1, HEIGHT - 1, T> submatrix;
                         for (int j = 1; j < HEIGHT; j++) {
                             for (int k = 0; k < WIDTH; k++) {
                                 if (k < i) {
@@ -175,9 +199,9 @@ namespace EGE {
                  *
                  * @return The Matrix as a glm::mat.
                 */
-                glm::mat<WIDTH, HEIGHT, double> toGlm() const
+                glm::mat<WIDTH, HEIGHT, T> toGlm() const
                 {
-                    glm::mat<WIDTH, HEIGHT, double> result;
+                    glm::mat<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result[i][j] = this->_matrix[i][j];
@@ -192,9 +216,9 @@ namespace EGE {
                  * @param other The matrix to add to this matrix.
                  * @return The sum of all elements in the matrix.
                 */
-                Matrix<WIDTH, HEIGHT> operator+(const Matrix<WIDTH, HEIGHT>& other) const
+                Matrix<WIDTH, HEIGHT, T> operator+(const Matrix<WIDTH, HEIGHT, T>& other) const
                 {
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = this->_matrix[i][j] + other._matrix[i][j];
@@ -208,7 +232,7 @@ namespace EGE {
                  *
                  * @param other The matrix to add to this matrix.
                 */
-                void operator+=(const Matrix<WIDTH, HEIGHT>& other)
+                void operator+=(const Matrix<WIDTH, HEIGHT, T>& other)
                 {
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
@@ -224,9 +248,9 @@ namespace EGE {
                  * @param other The matrix to subtract from this matrix.
                  * @return The difference of all elements in the matrix.
                 */
-                Matrix<WIDTH, HEIGHT> operator-(const Matrix<WIDTH, HEIGHT>& other) const
+                Matrix<WIDTH, HEIGHT, T> operator-(const Matrix<WIDTH, HEIGHT, T>& other) const
                 {
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = this->_matrix[i][j] - other._matrix[i][j];
@@ -240,9 +264,9 @@ namespace EGE {
                  *
                  * @return A matrix with all elements negated.
                 */
-                Matrix<WIDTH, HEIGHT> operator-() const
+                Matrix<WIDTH, HEIGHT, T> operator-() const
                 {
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = -this->_matrix[i][j];
@@ -256,7 +280,7 @@ namespace EGE {
                  *
                  * @param other The matrix to subtract from this matrix.
                 */
-                void operator-=(const Matrix<WIDTH, HEIGHT>& other)
+                void operator-=(const Matrix<WIDTH, HEIGHT, T>& other)
                 {
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
@@ -271,9 +295,9 @@ namespace EGE {
                  * @param other The matrix to multiply with this matrix.
                  * @return The product of all elements in the matrix.
                 */
-                Matrix<WIDTH, HEIGHT> operator*(const Matrix<WIDTH, HEIGHT>& other) const
+                Matrix<WIDTH, HEIGHT, T> operator*(const Matrix<WIDTH, HEIGHT, T>& other) const
                 {
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = 0;
@@ -290,7 +314,7 @@ namespace EGE {
                  *
                  * @param other The matrix to multiply with this matrix.
                 */
-                void operator*=(const Matrix<WIDTH, HEIGHT>& other)
+                void operator*=(const Matrix<WIDTH, HEIGHT, T>& other)
                 {
                     *this = *this * other;
                 }
@@ -301,9 +325,9 @@ namespace EGE {
                  * @param scalar The scalar to multiply with this matrix.
                  * @return The product of all elements in the matrix.
                 */
-                Matrix<WIDTH, HEIGHT> operator*(double scalar) const
+                Matrix<WIDTH, HEIGHT, T> operator*(double scalar) const
                 {
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = this->_matrix[i][j] * scalar;
@@ -332,12 +356,12 @@ namespace EGE {
                  * @param scalar The scalar to divide with this matrix.
                  * @return The quotient of all elements in the matrix.
                 */
-                Matrix<WIDTH, HEIGHT> operator/(double scalar) const
+                Matrix<WIDTH, HEIGHT, T> operator/(double scalar) const
                 {
                     if (scalar == 0) {
                         throw MatrixError("Cannot divide by zero.");
                     }
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = this->_matrix[i][j] / scalar;
@@ -370,7 +394,7 @@ namespace EGE {
                  * @param other The matrix to compare with.
                  * @return True if the matrix is equal to the specified matrix, false otherwise.
                 */
-                bool operator==(const Matrix<WIDTH, HEIGHT>& other) const
+                bool operator==(const Matrix<WIDTH, HEIGHT, T>& other) const
                 {
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
@@ -389,7 +413,7 @@ namespace EGE {
                  * @param other The matrix to compare with.
                  * @return True if the matrix is not equal to the specified matrix, false otherwise.
                 */
-                bool operator!=(const Matrix<WIDTH, HEIGHT>& other) const
+                bool operator!=(const Matrix<WIDTH, HEIGHT, T>& other) const
                 {
                     return !(*this == other);
                 }
@@ -426,9 +450,9 @@ namespace EGE {
                     return _matrix[pos];
                 }
 
-                static Matrix<WIDTH, HEIGHT> identity()
+                static Matrix<WIDTH, HEIGHT, T> identity()
                 {
-                    Matrix<WIDTH, HEIGHT> result;
+                    Matrix<WIDTH, HEIGHT, T> result;
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             result._matrix[i][j] = i == j ? 1 : 0;
@@ -437,13 +461,13 @@ namespace EGE {
                     return result;
                 }
             private:
-                std::array<std::array<double, WIDTH>, HEIGHT> _matrix;      ///< The matrix.
+                std::array<std::array<T, WIDTH>, HEIGHT> _matrix;      ///< The matrix.
         };
     }
 }
 
-template<int WIDTH, int HEIGHT>
-std::ostream& operator<<(std::ostream& os, const EGE::Maths::Matrix<WIDTH, HEIGHT>& matrix)
+template<int WIDTH, int HEIGHT, typename T>
+std::ostream& operator<<(std::ostream& os, const EGE::Maths::Matrix<WIDTH, HEIGHT, T>& matrix)
 {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {

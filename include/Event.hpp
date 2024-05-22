@@ -231,6 +231,7 @@ namespace EGE {
                 Mouse6 = GLFW_MOUSE_BUTTON_6,                       /**< Mouse button code for the sixth mouse button. */
                 Mouse7 = GLFW_MOUSE_BUTTON_7,                       /**< Mouse button code for the seventh mouse button. */
                 Mouse8 = GLFW_MOUSE_BUTTON_8,                       /**< Mouse button code for the eighth mouse button. */
+                Cursor,                                          /**< Mouse button code for mouse movement. */
             };
 
             /**
@@ -285,6 +286,7 @@ namespace EGE {
                 WindowMoved,                                        /**< Window event for moving the window. */
                 WindowResized,                                      /**< Window event for resizing the window. */
                 WindowRefreshed,                                    /**< Window event for refreshing the window. */
+                WindowCursorMoved,                                  /**< Window event for moving the cursor. */
             };
 
             #include "GlfwCallback.hpp"
@@ -510,6 +512,12 @@ namespace EGE {
                         GlfwWindowRefreshedCallbackFunction::getInstance()->call(window);
                     });
                     return true;
+                case EGE::Event::WindowTrigger::WindowCursorMoved:
+                    GlfwCursorCallbackFunction::getInstance(callback, true);
+                    glfwSetCursorPosCallback(this->_window, [](GLFWwindow *window, double xpos, double ypos) {
+                        // std::cout << "Cursor moved to (" << xpos << ", " << ypos << ")" << std::endl;
+                        GlfwCursorCallbackFunction::getInstance()->call(window, xpos, ypos);
+                    });
                 default:
                     return false;
                 }
