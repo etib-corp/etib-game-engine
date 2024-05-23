@@ -31,17 +31,17 @@ target_link_libraries(EGE PUBLIC assimp::assimp)
 set_target_properties(EGE PROPERTIES OUTPUT_NAME "EGE-OpenGL")
 set_target_properties(EGE PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
+if (NOT CMAKE_BUILD_TYPE STREQUAL "Release")
+    message("Building tests")
+    file(GLOB_RECURSE TEST_SOURCES "tests/functional/src/*.cpp")
 
+    include_directories("tests/functional/include")
 
-file(GLOB_RECURSE TEST_SOURCES "tests/functional/src/*.cpp")
+    add_executable(EGE-Test ${TEST_SOURCES})
 
-include_directories("tests/functional/include")
+    target_link_libraries(EGE-Test EGE)
 
-add_executable(EGE-Test ${TEST_SOURCES})
+    set_target_properties(EGE-Test PROPERTIES OUTPUT_NAME "example")
 
-target_link_libraries(EGE-Test EGE)
-
-set_target_properties(EGE-Test PROPERTIES OUTPUT_NAME "example")
-
-set_target_properties(EGE-Test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../")
-
+    set_target_properties(EGE-Test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../")
+endif()
