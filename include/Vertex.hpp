@@ -59,5 +59,4 @@ namespace EGE {
     //         std::array<int, 4> _boneIDs;
     //         std::array<float, 4> _boneWeights;
     // };
-}
 
