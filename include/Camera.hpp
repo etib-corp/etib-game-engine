@@ -11,6 +11,7 @@
 #include "OpenGL.hpp"
 #include "Maths/Matrix.hpp"
 #include "Maths/Vector3.hpp"
+#include "Shader.hpp"
 
 // C++ include
 
@@ -79,6 +80,8 @@ namespace EGE {
          * @param deltaTime The time between the last frame and the current frame.
          */
         void move(Movement direction, float deltaTime);
+
+        void update(EGE::Shader& shader, float aspect);
 
         /**
          * @brief Rotates the camera based on the specified offset values.

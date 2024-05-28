@@ -51,6 +51,14 @@ void EGE::Camera::move(Movement direction, float deltaTime)
     this->updateCameraVectors();
 }
 
+void EGE::Camera::update(EGE::Shader &shader, float aspect)
+{
+    glm::mat4 projection = glm::perspective(glm::radians(this->getZoom()), aspect, 0.1f, 100.0f);
+    glm::mat4 view = this->getViewMatrix().toGlm();
+    shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(projection));
+    shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(view));
+}
+
 void EGE::Camera::rotate(float xoffset, float yoffset, bool constrainPitch)
 {
     xoffset *= this->_speed / 10.0f;
