@@ -7,8 +7,10 @@
 
 #include "Model.hpp"
 
-EGE::Model::Model(const std::string &path)
+EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale)
 {
+    this->_position = position;
+    this->_scale = scale;
     this->loadModel(path);
 }
 
@@ -18,6 +20,10 @@ EGE::Model::~Model()
 
 void EGE::Model::draw(Shader &shader)
 {
+    glm::mat4 modelMat = glm::mat4(1.0f);
+    modelMat = glm::translate(modelMat, this->_position.toGlmVec3());
+    modelMat = glm::scale(modelMat, this->_scale.toGlmVec3());
+    shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat));
     for (auto &mesh : this->_meshes) {
         mesh.draw(shader);
     }
@@ -121,4 +127,24 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
         }
     }
     return textures;
+}
+
+void EGE::Model::setPosition(const EGE::Maths::Vector3<float>& position)
+{
+    this->_position = position;
+}
+
+EGE::Maths::Vector3<float> EGE::Model::getPosition() const
+{
+    return this->_position;
+}
+
+void EGE::Model::setScale(const EGE::Maths::Vector3<float>& scale)
+{
+    this->_scale = scale;
+}
+
+EGE::Maths::Vector3<float> EGE::Model::getScale() const
+{
+    return this->_scale;
 }
