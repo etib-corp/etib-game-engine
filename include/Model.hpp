@@ -50,7 +50,7 @@ namespace EGE {
              * @brief Constructor for Model.
              * @param path The path to the model file.
              */
-            Model(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f));
+            Model(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
 
             /**
              * @brief Destructor for Model.
@@ -68,14 +68,14 @@ namespace EGE {
              * @brief Loads a model from a file.
              * @param path The path to the model file.
              */
-            void loadModel(const std::string& path);
+            void loadModel(const std::string& path, bool flipTexture = false);
 
             /**
              * @brief Processes a node in the model.
              * @param node The node to process.
              * @param scene The scene containing the node.
              */
-            void processNode(aiNode *node, const aiScene *scene);
+            void processNode(aiNode *node, const aiScene *scene, bool flipTexture = false);
 
             /**
              * @brief Processes a mesh in the model.
@@ -83,7 +83,7 @@ namespace EGE {
              * @param scene The scene containing the mesh.
              * @return The processed mesh.
              */
-            Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+            Mesh processMesh(aiMesh *mesh, const aiScene *scene, bool flipTexture = false);
 
             /**
              * @brief Loads the textures for a material.
@@ -92,7 +92,7 @@ namespace EGE {
              * @param typeName The name of the type of textures to load.
              * @return A vector of the loaded textures.
              */
-            std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName);
+            std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture = false);
 
             /**
              * @brief Set the position og the model

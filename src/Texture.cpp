@@ -23,9 +23,9 @@ EGE::Texture::~Texture()
 {
 }
 
-void EGE::Texture::loadFromFile(const std::string& path)
+void EGE::Texture::loadFromFile(const std::string& path, bool flip)
 {
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(flip);
     GLenum format;
     glGenTextures(1, &this->_id);
 

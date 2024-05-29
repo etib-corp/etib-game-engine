@@ -70,7 +70,7 @@ namespace EGE {
              * @brief Loads a texture from a file.
              * @param path The path to the texture file.
              */
-            void loadFromFile(const std::string& path);
+            void loadFromFile(const std::string& path, bool flip = false);
 
             /**
              * @brief Gets the id of the texture.
