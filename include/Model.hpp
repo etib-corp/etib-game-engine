@@ -16,6 +16,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <map>
 #include <thread>
 #include <vector>
 
@@ -127,5 +128,6 @@ namespace EGE {
             std::vector<Texture> _texturesLoaded; ///< The textures loaded for the model.
             EGE::Maths::Vector3<float> _position; ///< The position of the model.
             EGE::Maths::Vector3<float> _scale; ///< The scale of the model.
+            static std::map<std::string, Model *> _modelsLoaded; ///< The loaded models.
     };
 }

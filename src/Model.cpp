@@ -7,11 +7,20 @@
 
 #include "Model.hpp"
 
+std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
+
 EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
 {
+    if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
+        *this = *Model::_modelsLoaded[path];
+        this->_position = position;
+        this->_scale = scale;
+        return;
+    }
     this->_position = position;
     this->_scale = scale;
     this->loadModel(path, flipTexture);
+    Model::_modelsLoaded[path] = this;
 }
 
 EGE::Model::~Model()
