@@ -44,9 +44,9 @@ void EGE::Camera::move(Movement direction, float deltaTime)
         this->_position -= this->_right * velocity;
     if (direction == RIGHT)
         this->_position += this->_right * velocity;
-    if (direction == UP)
-        this->_position -= this->_up * velocity;
     if (direction == DOWN)
+        this->_position -= this->_up * velocity;
+    if (direction == UP)
         this->_position += this->_up * velocity;
     this->updateCameraVectors();
 }
