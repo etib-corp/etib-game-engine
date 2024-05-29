@@ -50,7 +50,7 @@ void EGE::Model::processNode(aiNode *node, const aiScene *scene, bool flipTextur
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
         // std::thread(&Model::processNode, this, node->mChildren[i], scene).detach();
-        this->processNode(node->mChildren[i], scene);
+        this->processNode(node->mChildren[i], scene, flipTexture);
     }
 }
 
