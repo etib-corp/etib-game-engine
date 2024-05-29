@@ -35,28 +35,3 @@ namespace EGE {
         float _boneWeights[4]; ///< The weights of the influences of the bones on this vertex.
     };
 }
-
-    // class Vertex {
-    //     public:
-    //         Vertex();
-    //         Vertex(Maths::Vector3<double> position, Maths::Vector3<double> normal, Maths::Vector2<double> texCoords, Maths::Vector3<double> tangent, Maths::Vector3<double> bitangent, const std::array<int, 4>& boneIDs, const std::array<float, 4>& boneWeights);
-    //         ~Vertex();
-
-    //         Maths::Vector3<double> getPosition() const;
-    //         Maths::Vector3<double> getNormal() const;
-    //         Maths::Vector2<double> getTexCoords() const;
-    //         Maths::Vector3<double> getTangent() const;
-    //         Maths::Vector3<double> getBitangent() const;
-    //         std::array<int, 4> getBoneIDs();
-    //         std::array<float, 4> getBoneWeights();
-
-    //         Maths::Vector3<double> _position;
-    //         Maths::Vector3<double> _normal;
-    //         Maths::Vector2<double> _texCoords;
-    //         Maths::Vector3<double> _tangent;
-    //         Maths::Vector3<double> _bitangent;
-
-    //         std::array<int, 4> _boneIDs;
-    //         std::array<float, 4> _boneWeights;
-    // };
-

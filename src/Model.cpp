@@ -7,11 +7,11 @@
 
 #include "Model.hpp"
 
-EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale)
+EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
 {
     this->_position = position;
     this->_scale = scale;
-    this->loadModel(path);
+    this->loadModel(path, flipTexture);
 }
 
 EGE::Model::~Model()
@@ -29,7 +29,7 @@ void EGE::Model::draw(Shader &shader)
     }
 }
 
-void EGE::Model::loadModel(const std::string& path)
+void EGE::Model::loadModel(const std::string& path, bool flipTexture)
 {
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -38,23 +38,23 @@ void EGE::Model::loadModel(const std::string& path)
         throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
     }
     this->_directory = path.substr(0, path.find_last_of('/'));
-    this->processNode(scene->mRootNode, scene);
+    this->processNode(scene->mRootNode, scene, flipTexture);
 }
 
-void EGE::Model::processNode(aiNode *node, const aiScene *scene)
+void EGE::Model::processNode(aiNode *node, const aiScene *scene, bool flipTexture)
 {
     // both loop could be parallelized
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        this->_meshes.push_back(this->processMesh(mesh, scene));
+        this->_meshes.push_back(this->processMesh(mesh, scene, flipTexture));
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
         // std::thread(&Model::processNode, this, node->mChildren[i], scene).detach();
-        this->processNode(node->mChildren[i], scene);
+        this->processNode(node->mChildren[i], scene, flipTexture);
     }
 }
 
-EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene)
+EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipTexture)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -91,7 +91,7 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene)
     }
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture> diffuses = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        std::vector<Texture> diffuses = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", flipTexture);
         textures.insert(textures.end(), diffuses.begin(), diffuses.end());
         // std::vector<Texture> speculars = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         // textures.insert(textures.end(), speculars.begin(), speculars.end());
@@ -103,7 +103,7 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene)
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName)
+std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture)
 {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
@@ -119,7 +119,7 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
         }
         if (!skip) {
             Texture texture;
-            texture.loadFromFile(this->_directory + "/" + str.C_Str());
+            texture.loadFromFile(this->_directory + "/" + str.C_Str(), flipTexture);
             texture.setType(typeName);
             texture.setPath(str.C_Str());
             textures.push_back(texture);
