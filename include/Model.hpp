@@ -63,6 +63,34 @@ namespace EGE {
              */
             void draw(Shader& shader);
 
+            /**
+             * @brief Set the position og the model
+             *
+             * @param position Vector3 of float that is the new position of the model
+            */
+            void setPosition(const EGE::Maths::Vector3<float>& position);
+
+            /**
+             * @brief Returns the position of the model
+             *
+             * @return Vector3 of float that is the position of the model
+            */
+            EGE::Maths::Vector3<float> getPosition() const;
+
+            /**
+             * @brief Set the scale of the model
+             *
+             * @param scale Vector3 of float that is the new scale of the model
+            */
+            void setScale(const EGE::Maths::Vector3<float>& scale);
+
+            /**
+             * @brief Returns the scale of the model
+             *
+             * @return Vector3 of float that is the scale of the model
+            */
+            EGE::Maths::Vector3<float> getScale() const;
+
         private:
             /**
              * @brief Loads a model from a file.
@@ -93,34 +121,6 @@ namespace EGE {
              * @return A vector of the loaded textures.
              */
             std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture = false);
-
-            /**
-             * @brief Set the position og the model
-             *
-             * @param position Vector3 of float that is the new position of the model
-            */
-            void setPosition(const EGE::Maths::Vector3<float>& position);
-
-            /**
-             * @brief Returns the position of the model
-             *
-             * @return Vector3 of float that is the position of the model
-            */
-            EGE::Maths::Vector3<float> getPosition() const;
-
-            /**
-             * @brief Set the scale of the model
-             *
-             * @param scale Vector3 of float that is the new scale of the model
-            */
-            void setScale(const EGE::Maths::Vector3<float>& scale);
-
-            /**
-             * @brief Returns the scale of the model
-             *
-             * @return Vector3 of float that is the scale of the model
-            */
-            EGE::Maths::Vector3<float> getScale() const;
 
             std::vector<Mesh> _meshes; ///< The meshes in the model.
             std::string _directory; ///< The directory of the model file.
