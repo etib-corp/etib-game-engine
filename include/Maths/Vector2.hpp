@@ -9,7 +9,7 @@
 
 // Engine include
 #include "Error.hpp"
-#include "OpenGL.hpp"
+#include "glm.hpp"
 
 // C++ include
 #include <cmath>

@@ -38,3 +38,4 @@ build
 # Development files
 .vscode
 TODO
+tests/vr/debug.keystore

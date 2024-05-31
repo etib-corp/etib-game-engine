@@ -8,7 +8,7 @@
 #pragma once
 
 // Engine include
-#include "OpenGL.hpp"
+#include "glm.hpp"
 
 // C++ include
 #include <cmath>

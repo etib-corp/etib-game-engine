@@ -9,9 +9,7 @@
 
 // Engine include
 #include "Error.hpp"
-#include "Maths/Vector2.hpp"
-#include "Maths/Vector3.hpp"
-#include "Maths/Vector4.hpp"
+#include "glm.hpp"
 
 // C++ include
 #include <array>
