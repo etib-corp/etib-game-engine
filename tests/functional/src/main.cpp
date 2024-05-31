@@ -22,7 +22,7 @@ int main()
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
         EGE::Model backpack("/home/julithein/delivery/etib/etib-game-engine/assets/models/backpack/backpack.obj");
-        EGE::Model mars("/home/julithein/delivery/etib/etib-game-engine/assets/models/cube/Mars_2K.obj");
+        EGE::Model mars("/home/julithein/delivery/etib/etib-game-engine/assets/models/cube/Grass_Block.obj");
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
