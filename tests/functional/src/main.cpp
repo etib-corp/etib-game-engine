@@ -20,9 +20,7 @@ int main()
         glEnable(GL_DEPTH_TEST);
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
-        EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
-        EGE::Model backpack("/home/julithein/delivery/etib/etib-game-engine/assets/models/backpack/backpack.obj");
-        EGE::Model mars("/home/julithein/delivery/etib/etib-game-engine/assets/models/cube/Mars_2K.obj");
+        EGE::Shader shader("/home/neisan/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/neisan/ETIB/etib-game-engine/assets/shader/fragment.frag");
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
@@ -73,21 +71,18 @@ int main()
             modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
             modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
-            backpack.draw(shader);
 
             shader.use();
             glm::mat4 modelMat2 = glm::mat4(1.0f);
             modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
             modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
-            backpack.draw(shader);
 
             shader.use();
             glm::mat4 modelMat3 = glm::mat4(1.0f);
             modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
             modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
-            mars.draw(shader);
 
             window->display();
             window->pollEvents();
