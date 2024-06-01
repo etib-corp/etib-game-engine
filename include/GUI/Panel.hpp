@@ -16,6 +16,8 @@ namespace EGE {
             Panel(const std::string &title);
             ~Panel();
 
+            void draw() override;
+
     };
 }
 

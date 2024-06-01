@@ -13,7 +13,7 @@
 namespace EGE {
     class Item : public Interactable {
         public:
-            Item(const std::string &title, std::function<void(void *)> callback = nullptr);
+            Item(const std::string &title, std::function<void()> callback = nullptr);
             ~Item();
 
             void draw() override;

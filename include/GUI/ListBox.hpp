@@ -13,7 +13,7 @@
 namespace EGE {
     class ListBox : public Container<GUI> {
         public:
-            ListBox();
+            ListBox(const std::string &title);
             ~ListBox();
 
             void draw() override;

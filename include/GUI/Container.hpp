@@ -16,8 +16,15 @@ namespace EGE {
         public:
             virtual ~Container() = default;
 
-            void add(T *gui);
-            void remove(T *gui);
+            void add(T *gui)
+            {
+                this->_elements.push_back(gui);
+            }
+
+            void remove(T *gui)
+            {
+                this->_elements.erase(std::remove(this->_elements.begin(), this->_elements.end(), gui), this->_elements.end());
+            }
 
         protected:
             std::vector<T *> _elements;

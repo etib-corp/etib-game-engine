@@ -16,6 +16,8 @@ namespace EGE {
             Text(const std::string &content);
             ~Text();
 
+            void draw() override;
+
     };
 }
 

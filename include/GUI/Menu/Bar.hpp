@@ -18,6 +18,8 @@ namespace EGE {
             Bar();
             ~Bar();
 
+            void draw() override;
+
             void hideBar();
             void showBar();
     };

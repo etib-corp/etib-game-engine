@@ -18,7 +18,6 @@ namespace EGE {
 
             void draw();
 
-        protected:
             std::vector<Panel *> _panels;
             Bar *_menuBar;
     };

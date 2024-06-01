@@ -19,6 +19,9 @@ namespace EGE {
 
             void draw() override;
 
+        private:
+            int _lastChecked;
+
     };
 }
 

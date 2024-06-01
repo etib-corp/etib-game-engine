@@ -35,6 +35,9 @@ example
 # Build directory
 build
 
+# ImGui directory
+imgui
+
 # Development files
 .vscode
 TODO

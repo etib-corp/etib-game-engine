@@ -13,7 +13,7 @@
 namespace EGE {
     class Button : public Interactable {
         public:
-            Button(const std::string &title, std::function<void(void *)> callback);
+            Button(const std::string &title, std::function<void()> callback);
             ~Button();
 
             void draw() override;

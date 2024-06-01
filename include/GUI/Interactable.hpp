@@ -19,10 +19,10 @@ namespace EGE {
 
             void perform();
 
-            void setCallback(std::function<void(void *)> callback);
+            void setCallback(std::function<void()> callback);
 
         protected:
-            std::function<void(void *)> _callback;
+            std::function<void()> _callback;
 
     };
 }

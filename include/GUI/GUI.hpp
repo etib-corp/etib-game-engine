@@ -9,7 +9,10 @@
 #define GUI_HPP_
 
 #include "Window.hpp"
+
 #include <memory>
+
+#include "imgui.h"
 
 namespace EGE {
     class GUI {
