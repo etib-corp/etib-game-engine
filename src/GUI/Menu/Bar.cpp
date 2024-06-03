@@ -9,6 +9,7 @@
 
 EGE::Bar::Bar()
 {
+    this->_visible = true;
 }
 
 EGE::Bar::~Bar()

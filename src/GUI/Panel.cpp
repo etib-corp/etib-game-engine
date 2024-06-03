@@ -10,6 +10,7 @@
 EGE::Panel::Panel(const std::string &title)
 {
     this->_name = title;
+    this->_visible = true;
 }
 
 EGE::Panel::~Panel()

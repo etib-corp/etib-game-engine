@@ -11,6 +11,7 @@ EGE::Item::Item(const std::string &title, std::function<void()> callback)
 {
     this->_name = title;
     this->_callback = callback;
+    this->_visible = true;
 }
 
 EGE::Item::~Item()

@@ -12,6 +12,7 @@ EGE::String::String(const std::string &title)
     this->_name = title;
     this->_content = "Text";
     this->_callback = []() {};
+    this->_visible = true;
 }
 
 EGE::String::~String()

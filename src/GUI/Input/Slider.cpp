@@ -14,6 +14,7 @@ EGE::Slider::Slider(const std::string &title, float min, float max)
     this->_max = max;
     this->_value = 0.0;
     this->_callback = []() {};
+    this->_visible = true;
 }
 
 EGE::Slider::~Slider()

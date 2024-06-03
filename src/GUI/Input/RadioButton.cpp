@@ -11,6 +11,7 @@ EGE::RadioButton::RadioButton(const std::string &title) : Button(title, []() {})
 {
     this->_checked = false;
     this->_callback = []() {};
+    this->_visible = true;
 }
 
 EGE::RadioButton::~RadioButton()

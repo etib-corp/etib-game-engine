@@ -10,6 +10,7 @@
 EGE::Menu::Menu(const std::string &title)
 {
     this->_name = title;
+    this->_visible = true;
 }
 
 EGE::Menu::~Menu()

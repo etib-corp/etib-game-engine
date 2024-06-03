@@ -12,6 +12,7 @@ EGE::Number::Number(const std::string &title)
     this->_name = title;
     this->_value = 0.0;
     this->_callback = []() {};
+    this->_visible = true;
 }
 
 EGE::Number::~Number()

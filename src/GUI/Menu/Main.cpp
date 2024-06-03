@@ -9,6 +9,7 @@
 
 EGE::Main::Main()
 {
+    this->_visible = true;
 }
 
 EGE::Main::~Main()
