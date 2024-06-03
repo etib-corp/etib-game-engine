@@ -32,6 +32,7 @@ int main()
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         // EGE::Shader shader("/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/fragment.frag");
 
+
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
         }));
