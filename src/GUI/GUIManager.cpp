@@ -23,14 +23,8 @@ void EGE::GUIManager::clear()
 
 void EGE::GUIManager::display()
 {
-    ImGuiIO& io = ImGui::GetIO();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(this->_window->getWindow());
-    }
 }
 
 void EGE::GUIManager::draw()
@@ -45,9 +39,11 @@ void EGE::GUIManager::init(Window *win)
 {
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;
-    ImGui_ImplOpenGL3_Init();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui_ImplGlfw_InitForOpenGL(win->getWindow(), true);
+    ImGui_ImplOpenGL3_Init();
     this->_window = win;
     this->_menuBar->init(win);
     for (auto &gui : this->_panels) {

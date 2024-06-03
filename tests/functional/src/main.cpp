@@ -28,7 +28,6 @@ int main()
         gui->_panels.at(0)->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}));
         gui->_panels.at(0)->add(new EGE::Text("Salut a tous bande de gentilles personnes..."));
 
-        gui->init(window.get());
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         EGE::Shader shader("/home/neisan/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/neisan/ETIB/etib-game-engine/assets/shader/fragment.frag");
@@ -65,9 +64,11 @@ int main()
             double yoffset = lastY - ypos;
             lastX = xpos;
             lastY = ypos;
-            camera.rotate(xoffset, yoffset, true);
+            camera.rotate(xoffset, yoffset, true);\
             // glfwSetCursorPos(glfwWindow, window->getSize().x / 2, window->getSize().y / 2);
         });
+
+        gui->init(window.get());
 
         while (window->isOpen()) {
             window->clear(color);
