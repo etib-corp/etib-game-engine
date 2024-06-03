@@ -26,11 +26,11 @@ void EGE::GUIManager::display()
     ImGuiIO& io = ImGui::GetIO();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(this->_window->getWindow());
-    }
+    // if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    //     ImGui::UpdatePlatformWindows();
+    //     ImGui::RenderPlatformWindowsDefault();
+    //     glfwMakeContextCurrent(this->_window->getWindow());
+    // }
 }
 
 void EGE::GUIManager::draw()
