@@ -18,6 +18,16 @@ int main()
             window->close();
         }));
         glEnable(GL_DEPTH_TEST);
+        TestGUI *gui = new TestGUI();
+
+        gui->_menuBar->add(new EGE::Menu("File"));
+        gui->_menuBar->add(new EGE::Menu("Edit"));
+        gui->_menuBar->add(new EGE::Menu("View"));
+        gui->_menuBar->add(new EGE::Menu("Help"));
+
+        gui->_panels.at(0)->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}));
+        gui->_panels.at(0)->add(new EGE::Text("Salut a tous bande de gentilles personnes..."));
+
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
@@ -56,12 +66,15 @@ int main()
             double yoffset = lastY - ypos;
             lastX = xpos;
             lastY = ypos;
-            camera.rotate(xoffset, yoffset, true);
+            camera.rotate(xoffset, yoffset, true);\
             // glfwSetCursorPos(glfwWindow, window->getSize().x / 2, window->getSize().y / 2);
         });
 
+        gui->init(window.get());
+
         while (window->isOpen()) {
             window->clear(color);
+            gui->clear();
 
             shader.use();
             glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y), 0.1f, 100.0f);
@@ -73,22 +86,21 @@ int main()
             modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
             modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
-            backpack.draw(shader);
 
             shader.use();
             glm::mat4 modelMat2 = glm::mat4(1.0f);
             modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
             modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
-            backpack.draw(shader);
 
             shader.use();
             glm::mat4 modelMat3 = glm::mat4(1.0f);
             modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
             modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
-            mars.draw(shader);
 
+            gui->draw();
+            gui->display();
             window->display();
             window->pollEvents();
         }
