@@ -19,7 +19,7 @@
 #include <android/native_activity.h>
 
 #include "Error.hpp"
-#include <cstring>
+#include <string.h>
 
 #define XR_USE_PLATFORM_ANDROID
 #define XR_USE_GRAPHICS_API_OPENGL_ES
@@ -53,6 +53,14 @@ namespace EGE {
 
             bool isRunning();
 
+            bool isSessionReady();
+
+            // void setSessionReady(bool is_ready);
+
+            bool isShouldRender();
+
+            void draw();
+
         private:
             void _appSetCallbacksAndWait();
             void _appInitEgl();
@@ -63,7 +71,7 @@ namespace EGE {
             void _appInitXrCreateStageSpace();
             void _appInitXrCreateActions();
             void _appInitXrCreateSwapchains();
-            void _appInitOpenglFramebuffers();
+            void _appInitOpengl();
             void _appUpdateBeginSession();
             void appUpdateSessionStateChange(XrSessionState state);
             // void _appInitOpenglShaders();
