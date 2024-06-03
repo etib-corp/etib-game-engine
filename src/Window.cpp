@@ -179,6 +179,11 @@ EGE::Maths::Vector2<int> EGE::Window::getMousePosition()
     return EGE::Maths::Vector2<int>(0, 0);
 }
 
+GLFWwindow *EGE::Window::getWindow() const
+{
+    return this->_window;
+}
+
 void EGE::Window::_initializeGlfw()
 {
     if (!glfwInit())

@@ -13,6 +13,16 @@
 #include "Window.hpp"
 #include "Texture.hpp"
 #include "Model.hpp"
+#include "GUI/GUIManager.hpp"
 
 #include <iostream>
 #include <memory>
+
+class TestGUI : public EGE::GUIManager {
+    public:
+        TestGUI() {
+            this->_menuBar = new EGE::Main();
+            this->_panels.push_back(new EGE::Panel("Test"));
+        }
+        ~TestGUI() {}
+};

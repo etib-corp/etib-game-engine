@@ -18,6 +18,17 @@ int main()
             window->close();
         }));
         glEnable(GL_DEPTH_TEST);
+        TestGUI *gui = new TestGUI();
+
+        gui->_menuBar->add(new EGE::Menu("File"));
+        gui->_menuBar->add(new EGE::Menu("Edit"));
+        gui->_menuBar->add(new EGE::Menu("View"));
+        gui->_menuBar->add(new EGE::Menu("Help"));
+
+        gui->_panels.at(0)->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}));
+        gui->_panels.at(0)->add(new EGE::Text("Salut a tous bande de gentilles personnes..."));
+
+        gui->init(window.get());
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         EGE::Shader shader("/home/neisan/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/neisan/ETIB/etib-game-engine/assets/shader/fragment.frag");
@@ -60,6 +71,7 @@ int main()
 
         while (window->isOpen()) {
             window->clear(color);
+            gui->clear();
 
             shader.use();
             glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y), 0.1f, 100.0f);
@@ -84,6 +96,8 @@ int main()
             modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
             shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
 
+            gui->draw();
+            gui->display();
             window->display();
             window->pollEvents();
         }

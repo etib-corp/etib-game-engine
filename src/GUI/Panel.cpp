@@ -23,6 +23,7 @@ void EGE::Panel::draw()
     if (ImGui::Begin(this->_name.c_str())) {
         for (auto &item : this->_elements) {
             item->draw();
+            ImGui::Spacing();
         }
         ImGui::End();
     }

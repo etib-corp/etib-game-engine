@@ -284,6 +284,13 @@ namespace EGE {
              */
             EGE::Maths::Vector2<int> getMousePosition();
 
+            /**
+             * @brief Gets the GLFW window object.
+             *
+             * @return The GLFWwindow pointer representing the window object.
+             */
+            GLFWwindow *getWindow() const;
+
         private:
             /**
              * @brief Initializes the GLFW library.
