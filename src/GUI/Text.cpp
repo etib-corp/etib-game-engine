@@ -10,6 +10,7 @@
 EGE::Text::Text(const std::string &content)
 {
     this->_name = content;
+    this->_visible = true;
 }
 
 EGE::Text::~Text()

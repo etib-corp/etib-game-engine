@@ -30,7 +30,7 @@ int main()
 
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
-        EGE::Shader shader("/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/fragment.frag");
+        // EGE::Shader shader("/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/fragment.frag");
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
@@ -74,28 +74,28 @@ int main()
             window->clear(color);
             gui->clear();
 
-            shader.use();
-            glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y), 0.1f, 100.0f);
-            glm::mat4 view = camera.getViewMatrix().toGlm();
-            shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(projection));
-            shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(view));
+            // shader.use();
+            // glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y), 0.1f, 100.0f);
+            // glm::mat4 view = camera.getViewMatrix().toGlm();
+            // shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(projection));
+            // shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(view));
 
-            glm::mat4 modelMat1 = glm::mat4(1.0f);
-            modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
-            modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
-            shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
+            // glm::mat4 modelMat1 = glm::mat4(1.0f);
+            // modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
+            // modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
+            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
 
-            shader.use();
-            glm::mat4 modelMat2 = glm::mat4(1.0f);
-            modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
-            modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
-            shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
+            // shader.use();
+            // glm::mat4 modelMat2 = glm::mat4(1.0f);
+            // modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
+            // modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
+            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
 
-            shader.use();
-            glm::mat4 modelMat3 = glm::mat4(1.0f);
-            modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
-            modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
-            shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
+            // shader.use();
+            // glm::mat4 modelMat3 = glm::mat4(1.0f);
+            // modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
+            // modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
+            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
 
             gui->draw();
             gui->display();

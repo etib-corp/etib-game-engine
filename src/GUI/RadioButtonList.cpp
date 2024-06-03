@@ -10,6 +10,7 @@
 EGE::RadioButtonList::RadioButtonList()
 {
     this->_lastChecked = 0;
+    this->_visible = true;
 }
 
 EGE::RadioButtonList::~RadioButtonList()

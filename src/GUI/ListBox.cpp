@@ -10,6 +10,7 @@
 EGE::ListBox::ListBox(const std::string &title)
 {
     this->_name = title;
+    this->_visible = true;
 }
 
 EGE::ListBox::~ListBox()

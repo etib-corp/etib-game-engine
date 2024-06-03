@@ -15,6 +15,7 @@ EGE::ColorEditor::ColorEditor(const std::string &title)
     this->_blue = 0;
     this->_alpha = 1;
     this->_callback = []() {};
+    this->_visible = true;
 }
 
 EGE::ColorEditor::~ColorEditor()
