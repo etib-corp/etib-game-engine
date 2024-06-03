@@ -11,24 +11,42 @@
 #include "GUI/GUI.hpp"
 
 namespace EGE {
+    /**
+     * @brief A container class that holds GUI elements.
+     * 
+     * This class is a template class that can hold any type of GUI element.
+     * It provides methods to add and remove GUI elements from the container.
+     */
     template<typename T>
     class Container : public GUI {
-        public:
-            virtual ~Container() = default;
+    public:
+        /**
+         * @brief Destructor for the Container class.
+         */
+        virtual ~Container() = default;
 
-            void add(T *gui)
-            {
-                this->_elements.push_back(gui);
-            }
+        /**
+         * @brief Adds a GUI element to the container.
+         * 
+         * @param gui A pointer to the GUI element to be added.
+         */
+        void add(T *gui)
+        {
+            this->_elements.push_back(gui);
+        }
 
-            void remove(T *gui)
-            {
-                this->_elements.erase(std::remove(this->_elements.begin(), this->_elements.end(), gui), this->_elements.end());
-            }
+        /**
+         * @brief Removes a GUI element from the container.
+         * 
+         * @param gui A pointer to the GUI element to be removed.
+         */
+        void remove(T *gui)
+        {
+            this->_elements.erase(std::remove(this->_elements.begin(), this->_elements.end(), gui), this->_elements.end());
+        }
 
-        protected:
-            std::vector<T *> _elements;
-
+    protected:
+        std::vector<T *> _elements;
     };
 }
 

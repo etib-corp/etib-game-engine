@@ -24,21 +24,43 @@
 #include "backends/imgui_impl_opengl3.h"
 
 namespace EGE {
+    
+    /**
+     * @brief The GUIManager class handles the management and rendering of GUI elements.
+     */
     class GUIManager {
         public:
+            /**
+             * @brief Destructor for the GUIManager class.
+             */
             ~GUIManager();
 
-
+            /**
+             * @brief Initializes the GUIManager with the specified window.
+             * 
+             * @param win The window to be associated with the GUIManager.
+             */
             void init(Window *win);
 
+            /**
+             * @brief Clears all GUI elements from the GUIManager.
+             */
             void clear();
+
+            /**
+             * @brief Draws all GUI elements on the screen.
+             */
             void draw();
+
+            /**
+             * @brief Displays the rendered GUI elements on the screen.
+             */
             void display();
 
-            std::vector<Panel *> _panels;
-            Main *_menuBar;
+            std::vector<Panel *> _panels; /**< The vector of panels managed by the GUIManager. */
+            Main *_menuBar; /**< The main menu bar managed by the GUIManager. */
 
-            Window *_window;
+            Window *_window; /**< The window associated with the GUIManager. */
     };
 }
 
