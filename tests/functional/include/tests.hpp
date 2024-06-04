@@ -22,7 +22,7 @@ class TestGUI : public EGE::GUIManager {
     public:
         TestGUI() {
             this->_menuBar = new EGE::Main();
-            this->_panels.push_back(new EGE::Panel("Test"));
+            this->_panels["Main"] = new EGE::Panel("Main");
         }
         ~TestGUI() {}
 };

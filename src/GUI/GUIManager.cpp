@@ -31,7 +31,7 @@ void EGE::GUIManager::draw()
 {
     this->_menuBar->draw();
     for (auto &gui : this->_panels) {
-        gui->draw();
+        this->_panels[gui.first]->draw();
     }
 }
 
@@ -46,7 +46,7 @@ void EGE::GUIManager::init(Window *win)
     ImGui_ImplOpenGL3_Init();
     this->_window = win;
     this->_menuBar->init(win);
-    for (auto &gui : this->_panels) {
-        gui->init(win);
+    for (auto &elm : this->_panels) {
+        this->_panels[elm.first]->init(win);
     }
 }

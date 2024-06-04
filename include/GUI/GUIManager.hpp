@@ -26,8 +26,9 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-namespace EGE {
+#include <map>
 
+namespace EGE {
     /**
      * @brief The GUIManager class handles the management and rendering of GUI elements.
      */
@@ -60,7 +61,7 @@ namespace EGE {
              */
             void display();
 
-            std::vector<Panel *> _panels; /**< The vector of panels managed by the GUIManager. */
+            std::map<std::string, Panel *> _panels; /**< The vector of panels managed by the GUIManager. */
             Main *_menuBar; /**< The main menu bar managed by the GUIManager. */
 
             Window *_window; /**< The window associated with the GUIManager. */
