@@ -298,10 +298,87 @@ EGE::WindowVR::WindowVR(android_app *app)
 {
     LOGV("WindowVR Constructor hello\n");
     this->_app = app;
-    this->_isRunning = true;
     this->_isWindowInit = false;
-    this->_isSessionReady = false;
+
+    this->_eglDisplay = EGL_NO_DISPLAY;
+    this->_eglConfig = 0;
+    this->_eglContext = EGL_NO_CONTEXT;
+    this->_eglSurface = EGL_NO_SURFACE;
+
+    this->_instance = XR_NULL_HANDLE;
+    this->_system = 0;
+    this->_session = XR_NULL_HANDLE;
+
+    this->_viewCount = 0;
+    this->_viewConfigs[0] = {};
+    this->_viewConfigs[1] = {};
+    this->_viewConfigs[2] = {};
+    this->_viewConfigs[3] = {};
+
+    this->_stageSpace = XR_NULL_HANDLE;
+    this->_handSpaces[0] = XR_NULL_HANDLE;
+    this->_handSpaces[1] = XR_NULL_HANDLE;
+
+    this->_touchControllerPath = 0;
+    this->_handPaths[0] = 0;
+    this->_handPaths[1] = 0;
+    this->_squeezeValuePaths[0] = 0;
+    this->_squeezeValuePaths[1] = 0;
+    this->_triggerValuePaths[0] = 0;
+    this->_triggerValuePaths[1] = 0;
+    this->_posePaths[0] = 0;
+    this->_posePaths[1] = 0;
+    this->_hapticPaths[0] = 0;
+    this->_hapticPaths[1] = 0;
+    this->_menuClickPaths[0] = 0;
+    this->_menuClickPaths[1] = 0;
+
+    this->_actionSet = XR_NULL_HANDLE;
+    this->_grabAction = XR_NULL_HANDLE;
+    this->_triggerAction = XR_NULL_HANDLE;
+    this->_triggerClickAction = XR_NULL_HANDLE;
+    this->_poseAction = XR_NULL_HANDLE;
+    this->_menuAction = XR_NULL_HANDLE;
+
+    this->_swapchainHeights[0] = 0;
+    this->_swapchainHeights[1] = 0;
+    this->_swapchainHeights[2] = 0;
+    this->_swapchainHeights[3] = 0;
+    this->_swapchainWidths[0] = 0;
+    this->_swapchainWidths[1] = 0;
+    this->_swapchainWidths[2] = 0;
+    this->_swapchainWidths[3] = 0;
+    this->_swapchains[0] = XR_NULL_HANDLE;
+    this->_swapchains[1] = XR_NULL_HANDLE;
+    this->_swapchains[2] = XR_NULL_HANDLE;
+    this->_swapchains[3] = XR_NULL_HANDLE;
+    this->_swapchainLengths[0] = {0};
+    this->_swapchainLengths[1] = {0};
+    this->_swapchainLengths[2] = {0};
+    this->_swapchainLengths[3] = {0};
+
+    this->_handLocations[0] = {};
+    this->_handLocations[1] = {};
+    this->_triggerStates[0] = {};
+    this->_triggerStates[1] = {};
+    this->_triggerClickStates[0] = {};
+    this->_triggerClickStates[1] = {};
+
+    this->_sessionState = XR_SESSION_STATE_UNKNOWN;
+    this->_frameState = {};
+
     this->_shouldRender = false;
+    this->_isRunning = true;
+    this->_session = XR_NULL_HANDLE;
+    this->_isSessionReady = false;
+    this->_isSessionBeginEver = false;
+
+    this->_viewSubmitCount = 0;
+    this->_projectionLayer = {};
+    this->_projectionLayerViews[0] = {};
+    this->_projectionLayerViews[1] = {};
+    this->_projectionLayerViews[2] = {};
+    this->_projectionLayerViews[3] = {};
 }
 
 EGE::WindowVR::~WindowVR()
@@ -666,6 +743,7 @@ void EGE::WindowVR::_appInitXrCreateStageSpace()
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrCreateReferenceSpace failed");
     }
+    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "REFERENCE SPACE RESULT %d\n", result);
 }
 
 void EGE::WindowVR::_appInitXrCreateActions()
@@ -813,11 +891,13 @@ void EGE::WindowVR::_appInitXrCreateActions()
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrCreateActionSpace failed");
     }
+    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XRCREATE ACTION SPACE 1 RESULT %d\n", result);
 	action_space_desc.subactionPath = this->_handPaths[1];
 	result = xrCreateActionSpace(this->_session, &action_space_desc, &this->_handSpaces[1]);
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrCreateActionSpace failed");
     }
+    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XRCREATE ACTION SPACE 2 RESULT %d\n", result);
 
     // Attach Action Set
 	XrSessionActionSetsAttachInfo session_actions_desc;
@@ -893,6 +973,12 @@ void EGE::WindowVR::_appInitXrCreateSwapchains()
             throw EGE::WindowVRError("xrEnumerateSwapchainImages() failed");
         }
 	}
+    printf("Swapchains:\n");
+    for (int i = 0; i < this->_viewCount; i++) {
+            printf("        width: %d\n", this->_swapchainWidths[i]);
+            printf("        height: %d\n", this->_swapchainHeights[i]);
+            printf("        length: %d\n", this->_swapchainLengths[i]);
+    }
 }
 
 void EGE::WindowVR::_appInitOpengl()
@@ -1140,7 +1226,9 @@ void EGE::WindowVR::appUpdateBeginFrame()
     frame_wait.next = NULL;
     result = xrWaitFrame(this->_session, &frame_wait, &this->_frameState);
     this->_shouldRender = this->_frameState.shouldRender;
-
+    if (XR_FAILED(result)) {
+        throw EGE::WindowVRError("xrWaitFrame failed");
+    }
     // TODO: Different code paths for focussed vs. not focussed
 
     // Get Action States and Spaces (i.e. current state of the controller inputs)
@@ -1149,14 +1237,11 @@ void EGE::WindowVR::appUpdateBeginFrame()
             this->_triggerStates[i].type = XR_TYPE_ACTION_STATE_FLOAT;
             this->_triggerClickStates[i].type = XR_TYPE_ACTION_STATE_BOOLEAN;
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "HAND SPACE: %p\n", this->_handSpaces[0]);
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "BEGIN LOCATE SPACE\n");
-    // result = xrLocateSpace(this->_handSpaces[0], this->_stageSpace, this->_frameState.predictedDisplayTime, &this->_handLocations[0]);
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "END LOCATE SPACE\n");
+    result = xrLocateSpace(this->_handSpaces[0], this->_stageSpace, this->_frameState.predictedDisplayTime, &this->_handLocations[0]);
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrLocateSpace failed");
     }
-    // result = xrLocateSpace(this->_handSpaces[1], this->_stageSpace, this->_frameState.predictedDisplayTime, &this->_handLocations[1]);
+    result = xrLocateSpace(this->_handSpaces[1], this->_stageSpace, this->_frameState.predictedDisplayTime, &this->_handLocations[1]);
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrLocateSpace failed");
     }
@@ -1321,6 +1406,7 @@ void EGE::WindowVR::appUpdateEndFrame()
 
     __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "HERE\n");
     XrResult result = xrEndFrame(this->_session, &frame_end);
+    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "HERE\n");
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrEndFrame failed");
     }

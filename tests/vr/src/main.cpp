@@ -17,7 +17,7 @@ extern "C" void android_main(android_app *app) {
         if (!a.isSessionReady()) { continue; }
         a.appUpdateBeginFrame();
         if (a.isShouldRender())
-            a.draw();
+            // a.draw();
         // tout draw
         a.appUpdateEndFrame();
     }
