@@ -17,6 +17,9 @@
 #include "GUI/Input/Number.hpp"
 #include "GUI/Input/Slider.hpp"
 #include "GUI/Input/String.hpp"
+#include "GUI/ListBox.hpp"
+#include "GUI/RadioButtonList.hpp"
+
 
 #include "GUI/Text.hpp"
 
@@ -24,7 +27,7 @@
 #include "backends/imgui_impl_opengl3.h"
 
 namespace EGE {
-    
+
     /**
      * @brief The GUIManager class handles the management and rendering of GUI elements.
      */
