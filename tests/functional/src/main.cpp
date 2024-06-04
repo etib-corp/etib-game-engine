@@ -19,13 +19,13 @@ int main()
         }));
         TestGUI *gui = new TestGUI();
 
-        gui->_menuBar->add(new EGE::Menu("File"));
-        gui->_menuBar->add(new EGE::Menu("Edit"));
-        gui->_menuBar->add(new EGE::Menu("View"));
-        gui->_menuBar->add(new EGE::Menu("Help"));
+        gui->_menuBar->add(new EGE::Menu("File"), "file");
+        gui->_menuBar->add(new EGE::Menu("Edit"), "edit");
+        gui->_menuBar->add(new EGE::Menu("View"), "view");
+        gui->_menuBar->add(new EGE::Menu("Help"), "help");
 
-        gui->_panels["Main"]->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}));
-        gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."));
+        gui->_panels["Main"]->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}), "button");
+        gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."), "text");
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
@@ -96,7 +96,7 @@ int main()
             // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
             player.draw(shader);
 
-            // gui->draw();
+            gui->draw();
             gui->display();
             window->display();
             window->pollEvents();

@@ -22,7 +22,7 @@ void EGE::ListBox::draw()
     if (!this->isVisible())
         return;
     if (ImGui::BeginListBox(this->_name.c_str())) {
-        for (auto &item : this->_elements) {
+        for (auto &[name, item] : this->_elements) {
             item->draw();
         }
         ImGui::EndListBox();
