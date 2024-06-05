@@ -9,7 +9,8 @@
 
 EGE::RadioButtonList::RadioButtonList()
 {
-    this->_lastChecked = 0;
+    // key of the fisrt element
+    this->_lastChecked = this->_elements.begin()->first;
     this->_visible = true;
 }
 
@@ -22,17 +23,17 @@ void EGE::RadioButtonList::draw()
     if (!this->isVisible())
         return;
 
-    int index = 0;
+    std::string current = this->_elements.begin()->first;
 
-    for (auto &radioButton : this->_elements) {
+    for (auto &[name, radioButton] : this->_elements) {
         if (radioButton->isChecked()) {
             if (this->_elements[this->_lastChecked]->isChecked()) {
                 this->_elements[this->_lastChecked]->setChecked(false);
             }
-            this->_lastChecked = index;
+            this->_lastChecked = name;
         }
         radioButton->draw();
-        index++;
+        current = name;
     }
-    this->_elements[index]->setChecked(true);
+    this->_elements[current]->setChecked(true);
 }

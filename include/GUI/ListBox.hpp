@@ -14,14 +14,14 @@ namespace EGE {
 
     /**
      * @brief ListBox class represents a GUI component that displays a list of items.
-     * 
+     *
      * ListBox is a subclass of Container<GUI> and provides functionality to draw and manage a list of items.
      */
     class ListBox : public Container<GUI> {
         public:
             /**
              * @brief Constructs a ListBox object with the specified title.
-             * 
+             *
              * @param title The title of the ListBox.
              */
             ListBox(const std::string &title);
@@ -33,7 +33,7 @@ namespace EGE {
 
             /**
              * @brief Draws the ListBox on the screen.
-             * 
+             *
              * This function overrides the draw() function of the base class Container<GUI>.
              */
             void draw() override;

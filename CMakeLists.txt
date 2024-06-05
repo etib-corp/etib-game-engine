@@ -58,13 +58,13 @@ target_link_libraries(EGE PUBLIC ${GL_LIBS})
 
 target_link_libraries(EGE PUBLIC assimp::assimp)
 
-target_link_libraries(EGE PRIVATE imgui_glfw)
+target_link_libraries(EGE PUBLIC imgui_glfw)
 
 set_target_properties(EGE PROPERTIES OUTPUT_NAME "EGE-OpenGL")
 set_target_properties(EGE PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 
-if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Building tests")
     file(GLOB_RECURSE TEST_SOURCES "tests/functional/src/*.cpp")
 

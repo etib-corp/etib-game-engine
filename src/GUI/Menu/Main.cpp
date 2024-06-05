@@ -21,7 +21,7 @@ void EGE::Main::draw()
     if (!this->isVisible())
         return;
     if (ImGui::BeginMainMenuBar()) {
-        for (auto &menu : this->_elements) {
+        for (auto &[name, menu] : this->_elements) {
             menu->draw();
         }
         ImGui::EndMainMenuBar();

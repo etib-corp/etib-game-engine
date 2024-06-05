@@ -13,23 +13,24 @@ int main()
         // make a EGE init funciton so there is no more than one call to glfwInit and it can be usefull later
         std::shared_ptr<EGE::Window> window = std::make_shared<EGE::Window>("Test", EGE::Maths::Vector2<int>(1920, 1080), EGE::Window::Styles::Titlebar | EGE::Window::Styles::Close);
         window->create();
-        EGE::Color color(1.0f, 0.0f, 0.0f, 1.0f);
+        EGE::Color color(0.0f, 0.0f, 0.0f, 1.0f);
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyEscape, EGE::Event::Pressed, [&window]() {
             window->close();
         }));
-        glEnable(GL_DEPTH_TEST);
         TestGUI *gui = new TestGUI();
 
-        gui->_menuBar->add(new EGE::Menu("File"));
-        gui->_menuBar->add(new EGE::Menu("Edit"));
-        gui->_menuBar->add(new EGE::Menu("View"));
-        gui->_menuBar->add(new EGE::Menu("Help"));
+        gui->_menuBar->add(new EGE::Menu("File"), "file");
+        gui->_menuBar->add(new EGE::Menu("Edit"), "edit");
+        gui->_menuBar->add(new EGE::Menu("View"), "view");
+        gui->_menuBar->add(new EGE::Menu("Help"), "help");
 
-        gui->_panels["Main"]->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}));
-        gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."));
+        gui->_panels["Main"]->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}), "button");
+        gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."), "text");
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
-        // EGE::Shader shader("/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/vertex.vert", "/home/rStraif/delivery/TEK2/ETIB/etib-game-engine/assets/shader/fragment.frag");
+        EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
+
+        EGE::Model player("./assets/models/team1/Mecha01.obj");
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
@@ -69,15 +70,13 @@ int main()
 
         gui->init(window.get());
 
+        float aspect = window->getSize().x / window->getSize().y;
+
         while (window->isOpen()) {
             window->clear(color);
             gui->clear();
 
-            // shader.use();
-            // glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y), 0.1f, 100.0f);
-            // glm::mat4 view = camera.getViewMatrix().toGlm();
-            // shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(projection));
-            // shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(view));
+            camera.update(shader, aspect);
 
             // glm::mat4 modelMat1 = glm::mat4(1.0f);
             // modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
@@ -95,6 +94,7 @@ int main()
             // modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
             // modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
             // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
+            player.draw(shader);
 
             gui->draw();
             gui->display();

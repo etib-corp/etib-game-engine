@@ -10,10 +10,12 @@
 
 #include "GUI/GUI.hpp"
 
+#include <map>
+
 namespace EGE {
     /**
      * @brief A container class that holds GUI elements.
-     * 
+     *
      * This class is a template class that can hold any type of GUI element.
      * It provides methods to add and remove GUI elements from the container.
      */
@@ -27,26 +29,38 @@ namespace EGE {
 
         /**
          * @brief Adds a GUI element to the container.
-         * 
+         *
          * @param gui A pointer to the GUI element to be added.
          */
-        void add(T *gui)
+        void add(T *gui, const std::string& name)
         {
-            this->_elements.push_back(gui);
+            this->_elements[name] = gui;
+        }
+
+        /**
+         * @brief Gets a GUI element from the container.
+         *
+         * @param name The name of the GUI element to get.
+         * @return A pointer to the GUI element.
+        */
+        T *get(const std::string& name)
+        {
+            return this->_elements[name];
         }
 
         /**
          * @brief Removes a GUI element from the container.
-         * 
+         *
          * @param gui A pointer to the GUI element to be removed.
          */
-        void remove(T *gui)
+        void remove(const std::string& name)
         {
-            this->_elements.erase(std::remove(this->_elements.begin(), this->_elements.end(), gui), this->_elements.end());
+            this->_elements.erase(name);
         }
 
+
     protected:
-        std::vector<T *> _elements;
+        std::map<std::string, T *> _elements;
     };
 }
 

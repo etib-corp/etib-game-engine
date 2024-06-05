@@ -17,6 +17,9 @@
 #include "GUI/Input/Number.hpp"
 #include "GUI/Input/Slider.hpp"
 #include "GUI/Input/String.hpp"
+#include "GUI/ListBox.hpp"
+#include "GUI/RadioButtonList.hpp"
+
 
 #include "GUI/Text.hpp"
 
