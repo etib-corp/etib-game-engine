@@ -13,16 +13,24 @@ int main()
         // make a EGE init funciton so there is no more than one call to glfwInit and it can be usefull later
         std::shared_ptr<EGE::Window> window = std::make_shared<EGE::Window>("Test", EGE::Maths::Vector2<int>(1920, 1080), EGE::Window::Styles::Titlebar | EGE::Window::Styles::Close);
         window->create();
-        EGE::Color color(1.0f, 0.0f, 0.0f, 1.0f);
+        EGE::Color color(0.0f, 0.0f, 0.0f, 1.0f);
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyEscape, EGE::Event::Pressed, [&window]() {
             window->close();
         }));
-        glEnable(GL_DEPTH_TEST);
+        TestGUI *gui = new TestGUI();
+
+        gui->_menuBar->add(new EGE::Menu("File"), "file");
+        gui->_menuBar->add(new EGE::Menu("Edit"), "edit");
+        gui->_menuBar->add(new EGE::Menu("View"), "view");
+        gui->_menuBar->add(new EGE::Menu("Help"), "help");
+
+        gui->_panels["Main"]->add(new EGE::Button("Button", [](){std::cout << "PD" << std::endl;}), "button");
+        gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."), "text");
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
         EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
-        EGE::Model backpack("/home/julithein/delivery/etib/etib-game-engine/assets/models/backpack/backpack.obj");
-        EGE::Model mars("/home/julithein/delivery/etib/etib-game-engine/assets/models/cube/Grass_Block.obj");
+
+        EGE::Model player("./assets/models/team1/Mecha01.obj");
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
@@ -56,39 +64,40 @@ int main()
             double yoffset = lastY - ypos;
             lastX = xpos;
             lastY = ypos;
-            camera.rotate(xoffset, yoffset, true);
+            camera.rotate(xoffset, yoffset, true);\
             // glfwSetCursorPos(glfwWindow, window->getSize().x / 2, window->getSize().y / 2);
         });
 
+        gui->init(window.get());
+
+        float aspect = window->getSize().x / window->getSize().y;
+
         while (window->isOpen()) {
             window->clear(color);
+            gui->clear();
 
-            shader.use();
-            glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), static_cast<float>(window->getSize().x) / static_cast<float>(window->getSize().y), 0.1f, 100.0f);
-            glm::mat4 view = camera.getViewMatrix().toGlm();
-            shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(projection));
-            shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(view));
+            camera.update(shader, aspect);
 
-            glm::mat4 modelMat1 = glm::mat4(1.0f);
-            modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
-            modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
-            shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
-            backpack.draw(shader);
+            // glm::mat4 modelMat1 = glm::mat4(1.0f);
+            // modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
+            // modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
+            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
 
-            shader.use();
-            glm::mat4 modelMat2 = glm::mat4(1.0f);
-            modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
-            modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
-            shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
-            backpack.draw(shader);
+            // shader.use();
+            // glm::mat4 modelMat2 = glm::mat4(1.0f);
+            // modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
+            // modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
+            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
 
-            shader.use();
-            glm::mat4 modelMat3 = glm::mat4(1.0f);
-            modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
-            modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
-            shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
-            mars.draw(shader);
+            // shader.use();
+            // glm::mat4 modelMat3 = glm::mat4(1.0f);
+            // modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
+            // modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
+            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
+            player.draw(shader);
 
+            gui->draw();
+            gui->display();
             window->display();
             window->pollEvents();
         }
