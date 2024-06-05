@@ -21,7 +21,7 @@ void EGE::Panel::draw()
 {
     if (!this->isVisible())
         return;
-    if (ImGui::Begin(this->_name.c_str())) {
+    if (ImGui::Begin(this->_name.c_str(), nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))) {
         for (auto &[name, item] : this->_elements) {
             item->draw();
             ImGui::Spacing();
