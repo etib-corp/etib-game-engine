@@ -13,7 +13,7 @@ int main()
         // make a EGE init funciton so there is no more than one call to glfwInit and it can be usefull later
         std::shared_ptr<EGE::Window> window = std::make_shared<EGE::Window>("Test", EGE::Maths::Vector2<int>(1920, 1080), EGE::Window::Styles::Titlebar | EGE::Window::Styles::Close);
         window->create();
-        EGE::Color color(0.0f, 0.0f, 0.0f, 1.0f);
+        EGE::Color color(0.0f, 1.0f, 0.0f, 1.0f);
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyEscape, EGE::Event::Pressed, [&window]() {
             window->close();
         }));
@@ -28,9 +28,13 @@ int main()
         gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."), "text");
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
-        EGE::Shader shader("/home/julithein/delivery/etib/etib-game-engine/assets/shader/vertex.vert", "/home/julithein/delivery/etib/etib-game-engine/assets/shader/fragment.frag");
+        EGE::Shader shader("./assets/shader/player.vert", "./assets/shader/fragment.frag");
 
-        EGE::Model player("./assets/models/team1/Mecha01.obj");
+        EGE::Model player("./assets/models/vampire/dancing_vampire.dae");
+        EGE::Animation anim("./assets/models/vampire/dancing_vampire.dae", &player);
+        // EGE::Model player("./assets/models/team1/player.dae");
+        // EGE::Animation anim("./assets/models/team1/player.dae", &player);
+        EGE::Animator2000 animator(&anim);
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
@@ -72,30 +76,28 @@ int main()
 
         float aspect = window->getSize().x / window->getSize().y;
 
+        float deltaTime = 0.0f;
+        float lastFrame = 0.0f;
+
         while (window->isOpen()) {
+            float currentTime = glfwGetTime();
+            deltaTime = currentTime - lastFrame;
+            lastFrame = currentTime;
+
+            animator.updateAnimation(deltaTime);
+
             window->clear(color);
             gui->clear();
 
+            shader.use();
+
             camera.update(shader, aspect);
 
-            // glm::mat4 modelMat1 = glm::mat4(1.0f);
-            // modelMat1 = glm::translate(modelMat1, glm::vec3(-2.0f, 0.0f, 0.0f));
-            // modelMat1 = glm::scale(modelMat1, glm::vec3(1.0f, 1.0f, 1.0f));
-            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat1));
-
-            // shader.use();
-            // glm::mat4 modelMat2 = glm::mat4(1.0f);
-            // modelMat2 = glm::translate(modelMat2, glm::vec3(2.0f, 0.0f, 0.0f));
-            // modelMat2 = glm::scale(modelMat2, glm::vec3(1.0f, 1.0f, 1.0f));
-            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat2));
-
-            // shader.use();
-            // glm::mat4 modelMat3 = glm::mat4(1.0f);
-            // modelMat3 = glm::translate(modelMat3, glm::vec3(0.0f, 0.0f, 0.0f));
-            // modelMat3 = glm::scale(modelMat3, glm::vec3(0.1f, 0.1f, 0.1f));
-            // shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat3));
+            auto transforms = animator.getFinalBoneMatrices();
+            for (int i = 0; i < transforms.size(); i++) {
+                shader.setMat("bones[" + std::to_string(i) + "]", EGE::Maths::Matrix<4, 4, float>(transforms[i]));
+            }
             player.draw(shader);
-
             gui->draw();
             gui->display();
             window->display();

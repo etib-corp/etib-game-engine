@@ -100,6 +100,15 @@ namespace EGE {
                     }
                 }
 
+                Matrix(T f)
+                {
+                    for (int i = 0; i < HEIGHT; i++) {
+                        for (int j = 0; j < WIDTH; j++) {
+                            this->_matrix[i][j] = f;
+                        }
+                    }
+                }
+
                 /**
                  * @brief Destroys the Matrix object.
                 */
