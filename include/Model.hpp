@@ -51,7 +51,7 @@ namespace EGE {
              * @brief Constructor for Model.
              * @param path The path to the model file.
              */
-            Model(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
+            Model(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float> &rotation = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
 
             /**
              * @brief Destructor for Model.
@@ -77,6 +77,22 @@ namespace EGE {
              * @return Vector3 of float that is the position of the model
             */
             EGE::Maths::Vector3<float> getPosition() const;
+
+            /**
+             * @brief Set the rotation of the model
+             *
+             * @param rotation Vector3 of float that is the new rotation of the model
+             * @note The rotation is in degrees
+            */
+            void setRotation(const EGE::Maths::Vector3<float>& rotation);
+
+            /**
+             * @brief Returns the rotation of the model
+             *
+             * @return Vector3 of float that is the rotation of the model
+             * @note The rotation is in degrees
+            */
+            EGE::Maths::Vector3<float> getRotation() const;
 
             /**
              * @brief Set the scale of the model
@@ -136,6 +152,7 @@ namespace EGE {
             std::string _directory; ///< The directory of the model file.
             std::vector<Texture> _texturesLoaded; ///< The textures loaded for the model.
             EGE::Maths::Vector3<float> _position; ///< The position of the model.
+            EGE::Maths::Vector3<float> _rotation; ///< The rotation of the model.
             EGE::Maths::Vector3<float> _scale; ///< The scale of the model.
             static std::map<std::string, Model *> _modelsLoaded; ///< The loaded models.
             std::map<std::string, BoneInfo> _boneInfoMap; ///< The boneInfo of the model.

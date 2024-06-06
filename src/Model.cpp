@@ -9,7 +9,7 @@
 
 std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
 
-EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
+EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &rotation, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
 {
     if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
         *this = *Model::_modelsLoaded[path];
@@ -18,6 +18,7 @@ EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &pos
         return;
     }
     this->_position = position;
+    this->_rotation = rotation;
     this->_scale = scale;
     this->loadModel(path, flipTexture);
     Model::_modelsLoaded[path] = this;
@@ -31,6 +32,9 @@ void EGE::Model::draw(Shader &shader)
 {
     glm::mat4 modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, this->_position.toGlmVec3());
+    modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     modelMat = glm::scale(modelMat, this->_scale.toGlmVec3());
     shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat));
     for (auto &mesh : this->_meshes) {
@@ -152,6 +156,16 @@ EGE::Maths::Vector3<float> EGE::Model::getPosition() const
     return this->_position;
 }
 
+void EGE::Model::setRotation(const EGE::Maths::Vector3<float>& rotation)
+{
+    this->_rotation = rotation;
+}
+
+EGE::Maths::Vector3<float> EGE::Model::getRotation() const
+{
+    return this->_rotation;
+}
+
 void EGE::Model::setScale(const EGE::Maths::Vector3<float>& scale)
 {
     this->_scale = scale;
@@ -230,6 +244,8 @@ void EGE::Model::extractBoneWeightForVertices(std::vector<EGE::Vertex>& vertices
         }
         if (id == -1)
             throw ModelError("ERROR\n\tBONE\n\t\tBone not found");
+        if (id > mesh->mNumBones)
+            continue;
         aiVertexWeight *weight = mesh->mBones[id]->mWeights;
         int nWeights = mesh->mBones[id]->mNumWeights;
         for (int wid = 0; wid < nWeights; ++wid) {
