@@ -1426,6 +1426,7 @@ void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
         matrix_inverse(inverse_view_proj, view_proj);
 
         // // Model
+        shader.use();
         model.draw(shader);
 
         // // Left MVP

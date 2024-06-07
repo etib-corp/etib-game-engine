@@ -61,10 +61,9 @@ julien:
 
 leo:
 	rm temp.apk questxrexample.apk || true
-	$(CLANG_LEO) -flto --target=aarch64-linux-android29 -ffunction-sections -Os -fdata-sections -fvisibility=hidden -m64 -Os -fPIC -DANDROIDVERSION=29 -DANDROID -I./include -I./../../imgui/ -I./../../imgui/backends/ -I../../include -I../../include/external/vr/include -I./src -I$(ANDROID_LIBS_LEO) -I$(ANDROID_LIBS_LEO)/android $(SRC) ../../include/external/vr/src/android_native_app_glue.c -L../../include/external/vr/lib -lopenxr_loader -L$(ANDROID_LIBS_LINK_LEO) -s -lm -lGLESv3 -lEGL -landroid -llog -lc++_shared -L/tmp/assimp/build/bin/ -lassimp -lassimp -shared -uANativeActivity_onCreate -o build/lib/arm64-v8a/libquestxrexample.so
+	$(CLANG_LEO) -flto --target=aarch64-linux-android29 -ffunction-sections -Os -fdata-sections -fvisibility=hidden -m64 -Os -fPIC -DANDROIDVERSION=29 -DANDROID -I./include -I./../../imgui/ -I./../../imgui/backends/ -I../../include -I../../include/external/vr/include -I./src -I$(ANDROID_LIBS_LEO) -I$(ANDROID_LIBS_LEO)/android $(SRC) ../../include/external/vr/src/android_native_app_glue.c -L../../include/external/vr/lib -lopenxr_loader -L$(ANDROID_LIBS_LINK_LEO) -s -lm -lGLESv3 -lEGL -landroid -llog -lc++_shared -L./build/lib/arm64-v8a -lassimp -shared -uANativeActivity_onCreate -o build/lib/arm64-v8a/libquestxrexample.so
 	mkdir -p build/lib/arm64-v8a
 	cp /home/pepito/Android/Sdk/ndk/27.0.11718014/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so build/lib/arm64-v8a/
-	cp /tmp/assimp/build/bin/libassimp.so build/lib/arm64-v8a/
 	$(AAPT_LEO) package -f -F temp.apk -I $(ANDROID_JAR_LEO) -M src/AndroidManifest.xml -S resources -v --target-sdk-version 29 build
 	$(JARSIGNER_LEO) -sigalg SHA1withRSA -digestalg SHA1 -verbose -keystore debug.keystore -storepass android temp.apk androiddebugkey
 	$(ZIPALIGN_LEO) -f -v 4 temp.apk questxrexample.apk

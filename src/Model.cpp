@@ -6,10 +6,11 @@
 */
 
 #include "Model.hpp"
+#include <android/log.h>
 
 std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
 
-EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
+EGE::Model::Model(const std::string &path, bool isContent, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
 {
     if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
         *this = *Model::_modelsLoaded[path];
@@ -19,7 +20,7 @@ EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &pos
     }
     this->_position = position;
     this->_scale = scale;
-    this->loadModel(path, flipTexture);
+    this->loadModel(path, isContent, flipTexture);
     Model::_modelsLoaded[path] = this;
 }
 
@@ -38,15 +39,17 @@ void EGE::Model::draw(Shader &shader)
     }
 }
 
-void EGE::Model::loadModel(const std::string& path, bool flipTexture)
+void EGE::Model::loadModel(const std::string& path, bool isContent, bool flipTexture)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-    if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
-    }
-    this->_directory = path.substr(0, path.find_last_of('/'));
+    const aiScene *scene = importer.ReadFileFromMemory(path.c_str(), path.size(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    // if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+    //     __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Scene loaded\n");
+    //     throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
+    // }
+    if (!isContent)
+        this->_directory = path.substr(0, path.find_last_of('/'));
     this->processNode(scene->mRootNode, scene, flipTexture);
 }
 
@@ -100,6 +103,7 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipT
     }
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+        // __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Material %s\n", material->GetTextureCount(aiTextureType_DIFFUSE));
         std::vector<Texture> diffuses = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse", flipTexture);
         textures.insert(textures.end(), diffuses.begin(), diffuses.end());
         // std::vector<Texture> speculars = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
@@ -115,6 +119,7 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipT
 std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture)
 {
     std::vector<Texture> textures;
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Texture Count %d\n", mat->GetTextureCount(type));
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
         mat->GetTexture(type, i, &str);
@@ -127,8 +132,11 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
             }
         }
         if (!skip) {
+            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Texture loaded %s\n", str.C_Str());
             Texture texture;
-            texture.loadFromFile(this->_directory + "/" + str.C_Str(), flipTexture);
+            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Texture loaded\n");
+            texture.loadFromFile(str.C_Str(), flipTexture);
+            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Texture loaded\n");
             texture.setType(typeName);
             texture.setPath(str.C_Str());
             textures.push_back(texture);

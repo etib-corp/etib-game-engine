@@ -7,21 +7,23 @@
 
 #include "Shader.hpp"
 
+#include <android/log.h>
+
 EGE::Shader::Shader()
 {
-    std::string vertexShader = "#version 330 core\n"
-                               "layout (location = 0) in vec3 aPos;\n"
-                               "void main()\n"
-                               "{\n"
-                               "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                               "}\0";
-    std::string fragmentShader = "#version 330 core\n"
-                                 "out vec4 FragColor;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                 "}\0";
-    this->compile(vertexShader, fragmentShader);
+    // std::string vertexShader = "#version 330 core\n"
+    //                            "layout (location = 0) in vec3 aPos;\n"
+    //                            "void main()\n"
+    //                            "{\n"
+    //                            "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    //                            "}\0";
+    // std::string fragmentShader = "#version 330 core\n"
+    //                              "out vec4 FragColor;\n"
+    //                              "void main()\n"
+    //                              "{\n"
+    //                              "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    //                              "}\0";
+    // this->compile(vertexShader, fragmentShader);
 }
 
 EGE::Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
@@ -53,7 +55,9 @@ void EGE::Shader::compile(const std::string& vertexSource, const std::string& fr
 {
     const char *vertexShaderSource = NULL;
     const char *fragmentShaderSource = NULL;
-    int succes = 0;
+    GLint succes = 0;
+    GLint length = 0;
+    GLenum error;
     char infoLog[512] = {0};
 
     this->_vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -61,7 +65,7 @@ void EGE::Shader::compile(const std::string& vertexSource, const std::string& fr
     glShaderSource(this->_vertex, 1, &vertexShaderSource, NULL);
     glCompileShader(this->_vertex);
     glGetShaderiv(this->_vertex, GL_COMPILE_STATUS, &succes);
-    if (!succes) {
+    if (succes == GL_FALSE) {
         glGetShaderInfoLog(this->_vertex, 512, NULL, infoLog);
         throw ShaderError("ERROR\n\tVERTEX SHADER COMPILATION_FAILED\n\t\t" + std::string(infoLog));
     }

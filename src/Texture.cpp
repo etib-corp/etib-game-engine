@@ -11,6 +11,8 @@
     #include "external/stb_image.hpp"
 #endif
 
+#include <android/log.h>
+
 EGE::Texture::Texture()
 {
 }
@@ -29,7 +31,9 @@ void EGE::Texture::loadFromFile(const std::string& path, bool flip)
     GLenum format;
     glGenTextures(1, &this->_id);
 
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading texture : %s", path.c_str());
     unsigned char *data = stbi_load(path.c_str(), &this->_width, &this->_height, &this->_nrChannels, STBI_default);
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Texture loaded : %s", path.c_str());
     if (data) {
         if (this->_nrChannels == 1)
             format = GL_RED;

@@ -19,11 +19,36 @@
 #include "Shader.hpp"
 
 extern "C" void android_main(android_app *app) {
-    EGE::WindowVR a(app);
 
-    EGE::Shader s("assets/shader/vertex.vert", "assets/shader/fragment.frag");
-    EGE::Model m("assets/models/backpack/backpack.obj");
+    EGE::WindowVR a(app);
+    // How to get the file "assets/shader/vertex.vert" in the android project
+    AAssetManager *mgr = app->activity->assetManager;
+    AAsset *file = AAssetManager_open(mgr, "shader/vertex.vert", AASSET_MODE_UNKNOWN);
+    off_t fileLength = AAsset_getLength(file);
+    char *vertexSource = (char *)malloc(fileLength + 1);
+    AAsset_read(file, vertexSource, fileLength);
+    vertexSource[fileLength] = '\0';
+
+    file = AAssetManager_open(mgr, "shader/fragment.frag", AASSET_MODE_UNKNOWN);
+    fileLength = AAsset_getLength(file);
+    char *fragmentSource = (char *)malloc(fileLength + 1);
+    AAsset_read(file, fragmentSource, fileLength);
+    fragmentSource[fileLength] = '\0';
+
     a.create();
+
+    EGE::Shader s;
+    s.compile(vertexSource, fragmentSource);
+
+    file = AAssetManager_open(mgr, "models/cube/Grass_Block.obj", AASSET_MODE_UNKNOWN);
+    fileLength = AAsset_getLength(file);
+    char *modelSource = (char *)malloc(fileLength + 1);
+    AAsset_read(file, modelSource, fileLength);
+    modelSource[fileLength] = '\0';
+
+    EGE::Model m(modelSource, true);
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Model loaded\n");
+
     // ImGuiContext &ctx = *ImGui::CreateContext();
     // ImGuiIO &io = ImGui::GetIO();
     // ImGui_ImplOpenGL3_Init();
