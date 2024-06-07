@@ -7,6 +7,9 @@
 
 #include "tests.hpp"
 
+#include "Sound/Device.hpp"
+#include "Sound/Sound.hpp"
+
 int main()
 {
     try {
