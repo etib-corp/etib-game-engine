@@ -9,9 +9,9 @@
 
 std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
 
-EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &rotation, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
+EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &rotation, const EGE::Maths::Vector3<float> &scale, bool flipTexture, bool forceReload)
 {
-    if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
+    if (!forceReload && Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
         *this = *Model::_modelsLoaded[path];
         this->_position = position;
         this->_rotation = rotation;
