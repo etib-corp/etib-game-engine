@@ -14,6 +14,7 @@ EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &pos
     if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
         *this = *Model::_modelsLoaded[path];
         this->_position = position;
+        this->_rotation = rotation;
         this->_scale = scale;
         return;
     }
