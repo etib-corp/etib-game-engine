@@ -9,15 +9,17 @@
 
 std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
 
-EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
+EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &rotation, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
 {
     if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
         *this = *Model::_modelsLoaded[path];
         this->_position = position;
+        this->_rotation = rotation;
         this->_scale = scale;
         return;
     }
     this->_position = position;
+    this->_rotation = rotation;
     this->_scale = scale;
     this->loadModel(path, flipTexture);
     Model::_modelsLoaded[path] = this;
@@ -31,6 +33,9 @@ void EGE::Model::draw(Shader &shader)
 {
     glm::mat4 modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, this->_position.toGlmVec3());
+    modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     modelMat = glm::scale(modelMat, this->_scale.toGlmVec3());
     shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat));
     for (auto &mesh : this->_meshes) {
@@ -72,6 +77,8 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipT
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
 
+        this->setVertexBoneDataToDefault(vertex);
+
         EGE::Maths::Vector3<double> position;
         position.x = mesh->mVertices[i].x;
         position.y = mesh->mVertices[i].y;
@@ -109,6 +116,8 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipT
         // std::vector<Texture> heights = this->loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
         // textures.insert(textures.end(), heights.begin(), heights.end());
     }
+
+    this->extractBoneWeightForVertices(vertices, mesh, scene);
     return Mesh(vertices, indices, textures);
 }
 
@@ -148,6 +157,16 @@ EGE::Maths::Vector3<float> EGE::Model::getPosition() const
     return this->_position;
 }
 
+void EGE::Model::setRotation(const EGE::Maths::Vector3<float>& rotation)
+{
+    this->_rotation = rotation;
+}
+
+EGE::Maths::Vector3<float> EGE::Model::getRotation() const
+{
+    return this->_rotation;
+}
+
 void EGE::Model::setScale(const EGE::Maths::Vector3<float>& scale)
 {
     this->_scale = scale;
@@ -156,4 +175,86 @@ void EGE::Model::setScale(const EGE::Maths::Vector3<float>& scale)
 EGE::Maths::Vector3<float> EGE::Model::getScale() const
 {
     return this->_scale;
+}
+
+std::map<std::string, EGE::BoneInfo>& EGE::Model::getBoneInfoMap()
+{
+    return this->_boneInfoMap;
+}
+
+int& EGE::Model::getBoneNumber()
+{
+    return this->_boneNumber;
+}
+
+void EGE::Model::setVertexBoneDataToDefault(Vertex& vertex)
+{
+    for (int i = 0; i < MAX_BONE; i++) {
+        vertex._boneIDs[i] = -1;
+        vertex._boneWeights[i] = 0.0f;
+    }
+}
+
+void EGE::Model::setVertexBoneData(Vertex& vertex, int boneID, float weight)
+{
+    for (int i = 0; i < MAX_BONE; i++) {
+        if (vertex._boneIDs[i] < 0) {
+            vertex._boneIDs[i] = boneID;
+            vertex._boneWeights[i] = weight;
+            break;
+        }
+    }
+}
+
+static inline glm::mat4 matrixToGlmFormat(const aiMatrix4x4& from)
+{
+    glm::mat4 to;
+    to[0][0] = from.a1;
+    to[1][0] = from.a2;
+    to[2][0] = from.a3;
+    to[3][0] = from.a4;
+    to[0][1] = from.b1;
+    to[1][1] = from.b2;
+    to[2][1] = from.b3;
+    to[3][1] = from.b4;
+    to[0][2] = from.c1;
+    to[1][2] = from.c2;
+    to[2][2] = from.c3;
+    to[3][2] = from.c4;
+    to[0][3] = from.d1;
+    to[1][3] = from.d2;
+    to[2][3] = from.d3;
+    to[3][3] = from.d4;
+    return to;
+}
+
+void EGE::Model::extractBoneWeightForVertices(std::vector<EGE::Vertex>& vertices, aiMesh *mesh, const aiScene *scene)
+{
+    for (int i = 0; i < mesh->mNumBones; ++i) {
+        int id = -1;
+        std::string name(mesh->mBones[i]->mName.C_Str());
+        if (this->_boneInfoMap.find(name) == this->_boneInfoMap.end()) {
+            BoneInfo info;
+            info._id = this->_boneNumber;
+            info._offset = matrixToGlmFormat(mesh->mBones[i]->mOffsetMatrix);
+            this->_boneInfoMap[name] = info;
+            id = this->_boneNumber;
+            this->_boneNumber++;
+        } else {
+            id = this->_boneInfoMap[name]._id;
+        }
+        if (id == -1)
+            throw ModelError("ERROR\n\tBONE\n\t\tBone not found");
+        if (id > mesh->mNumBones)
+            continue;
+        aiVertexWeight *weight = mesh->mBones[id]->mWeights;
+        int nWeights = mesh->mBones[id]->mNumWeights;
+        for (int wid = 0; wid < nWeights; ++wid) {
+            int vid = weight[wid].mVertexId;
+            float w = weight[wid].mWeight;
+            if (vid > vertices.size())
+                throw ModelError("ERROR\n\tVERTEX\n\t\tVertex not found");
+            this->setVertexBoneData(vertices[vid], id, w);
+        }
+    }
 }
