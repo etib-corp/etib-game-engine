@@ -17,9 +17,14 @@
 #include <jni.h>
 #include <android/log.h>
 #include <android/native_activity.h>
+#include "Model.hpp"
+#include "Shader.hpp"
+
 
 #include "Error.hpp"
 #include <string.h>
+#include <vector>
+#include <tuple>
 
 #define XR_USE_PLATFORM_ANDROID
 #define XR_USE_GRAPHICS_API_OPENGL_ES
@@ -59,7 +64,9 @@ namespace EGE {
 
             bool isShouldRender();
 
-            void draw();
+            // void draw();
+
+            void display(EGE::Model &model, EGE::Shader &shader);
 
         private:
             void _appSetCallbacksAndWait();
@@ -127,7 +134,10 @@ namespace EGE {
             // OpenGL state
             uint32_t _boxProgram;
             uint32_t _backgroundProgram;
+            uint32_t _screenProgram;
             uint32_t _framebuffer;
+            uint32_t _screenFramebuffer;
+            uint32_t _screenTexture;
             uint32_t _depthTargets[MAX_VIEWS];
 
             // Current Controller Inputs
@@ -147,5 +157,6 @@ namespace EGE {
             uint32_t _viewSubmitCount;
             XrCompositionLayerProjection _projectionLayer;
             XrCompositionLayerProjectionView _projectionLayerViews[MAX_VIEWS];
+
     };
 }

@@ -37,7 +37,7 @@ namespace EGE {
          * @note The template parameter T must be an arithmetic type.
          */
         template <typename T>
-        requires std::is_arithmetic<T>::value
+        // requires std::is_arithmetic<T>::value
         class Vector2 {
             public:
                 /**

@@ -89,7 +89,6 @@ void main() {
 }
 )glsl";
 
-
 const char *BOX_FRAG_SRC = R"glsl(
 #version 320 es
 precision highp float;
@@ -102,6 +101,54 @@ void main() {
 }
 )glsl";
 
+const char *SCREEN_VERT_SRC = R"glsl(
+#version 320 es
+precision highp float;
+
+layout(location = 0) uniform mat4 mvp;
+layout(location = 0) out vec2 screen_uv;
+
+void main() {
+        const vec2 screen_pos[4] = vec2[4](
+                vec2(-0.11, 0.12),
+                vec2( 0.11, 0.12),
+                vec2(-0.11, 0.32),
+                vec2(0.11, 0.32)
+        );
+
+        const vec2 screen_tex[4] = vec2[4](
+                vec2(0.0, 0.0),
+                vec2(1.0, 0.0),
+                vec2(0.0, 1.0),
+                vec2(1.0, 1.0)
+        );
+
+        const int screen_indices[6] = int[6](
+                0, 1, 2,
+                1, 3, 2
+        );
+
+        int element = screen_indices[gl_VertexID];
+        vec2 pos = screen_pos[element];
+
+        gl_Position = vec4(mvp * vec4(pos.x, 0.0, -pos.y, 1.0));
+        screen_uv = screen_tex[element];
+}
+)glsl";
+
+const char *SCREEN_FRAG_SRC = R"glsl(
+#version 320 es
+precision highp float;
+
+layout(location = 1) uniform sampler2D tex;
+
+layout(location = 0) in vec2 screen_uv;
+layout(location = 0) out vec4 outColor;
+
+void main() {
+        outColor = texture(tex, screen_uv);
+}
+)glsl";
 
 void matrix_identity(float *result) {
 	result[0] = (1.0);
@@ -464,7 +511,6 @@ void EGE::WindowVR::_appSetCallbacksAndWait()
                     }
             }
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "END OF SETCALLBACKANDWAIT\n");
 }
 
 void EGE::WindowVR::_appInitEgl()
@@ -743,7 +789,6 @@ void EGE::WindowVR::_appInitXrCreateStageSpace()
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrCreateReferenceSpace failed");
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "REFERENCE SPACE RESULT %d\n", result);
 }
 
 void EGE::WindowVR::_appInitXrCreateActions()
@@ -891,13 +936,11 @@ void EGE::WindowVR::_appInitXrCreateActions()
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrCreateActionSpace failed");
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XRCREATE ACTION SPACE 1 RESULT %d\n", result);
 	action_space_desc.subactionPath = this->_handPaths[1];
 	result = xrCreateActionSpace(this->_session, &action_space_desc, &this->_handSpaces[1]);
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrCreateActionSpace failed");
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XRCREATE ACTION SPACE 2 RESULT %d\n", result);
 
     // Attach Action Set
 	XrSessionActionSetsAttachInfo session_actions_desc;
@@ -995,49 +1038,69 @@ void EGE::WindowVR::_appInitOpengl()
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this->_depthTargets[i], 0);
     }
 
+
+    // glGenFramebuffers(1, &this->_screenFramebuffer);
+    // glBindFramebuffer(GL_FRAMEBUFFER, this->_screenFramebuffer);
+
+    // glGenTextures(1, &this->_screenTexture);
+    // glBindTexture(GL_TEXTURE_2D, this->_screenTexture);
+    // glBindTexture(GL_TEXTURE_2D, this->_screenTexture);
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 200, 200, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->_screenTexture, 0);
+
+    // GLenum draw_buffers[1] = {GL_COLOR_ATTACHMENT0};
+    // glDrawBuffers(1, draw_buffers);
+
+    // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    // }
+
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glDisable(GL_BLEND);
 
     // Box Program
-    uint32_t vert_shd = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vert_shd, 1, &BOX_VERT_SRC, NULL);
-    glCompileShader(vert_shd);
+    // uint32_t vert_shd = glCreateShader(GL_VERTEX_SHADER);
+    // glShaderSource(vert_shd, 1, &BOX_VERT_SRC, NULL);
+    // glCompileShader(vert_shd);
 
     int success;
-    glGetShaderiv(vert_shd, GL_COMPILE_STATUS, &success);
-    if (!success) {
-            char info_log[512];
-            glGetShaderInfoLog(vert_shd, 512, NULL, info_log);
-            printf("Vertex shader compilation failed:\n %s\n", info_log);
-    }
+    // glGetShaderiv(vert_shd, GL_COMPILE_STATUS, &success);
+    // if (!success) {
+    //         char info_log[512];
+    //         glGetShaderInfoLog(vert_shd, 512, NULL, info_log);
+    // }
 
-    uint32_t frag_shd = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(frag_shd, 1, &BOX_FRAG_SRC, NULL);
-    glCompileShader(frag_shd);
+    // uint32_t frag_shd = glCreateShader(GL_FRAGMENT_SHADER);
+    // glShaderSource(frag_shd, 1, &BOX_FRAG_SRC, NULL);
+    // glCompileShader(frag_shd);
 
-    glGetShaderiv(frag_shd, GL_COMPILE_STATUS, &success);
-    if (!success) {
-            char info_log[512];
-            glGetShaderInfoLog(frag_shd, 512, NULL, info_log);
-            printf("Fragment shader compilation failed:\n %s\n", info_log);
-    }
+    // glGetShaderiv(frag_shd, GL_COMPILE_STATUS, &success);
+    // if (!success) {
+    //         char info_log[512];
+    //         glGetShaderInfoLog(frag_shd, 512, NULL, info_log);
+    // }
 
-    this->_boxProgram = glCreateProgram();
-    glAttachShader(this->_boxProgram, vert_shd);
-    glAttachShader(this->_boxProgram, frag_shd);
-    glLinkProgram(this->_boxProgram);
+    // this->_boxProgram = glCreateProgram();
+    // glAttachShader(this->_boxProgram, vert_shd);
+    // glAttachShader(this->_boxProgram, frag_shd);
+    // glLinkProgram(this->_boxProgram);
 
-    glGetProgramiv(this->_boxProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-            char info_log[512];
-            glGetProgramInfoLog(this->_boxProgram, 512, NULL, info_log);
-            printf("Program Linking failed:\n %s\n", info_log);
-    }
+    // glGetProgramiv(this->_boxProgram, GL_LINK_STATUS, &success);
+    // if (!success) {
+    //         char info_log[512];
+    //         glGetProgramInfoLog(this->_boxProgram, 512, NULL, info_log);
+    // }
 
-    glDeleteShader(vert_shd);
-    glDeleteShader(frag_shd);
+    // glDeleteShader(vert_shd);
+    // glDeleteShader(frag_shd);
 
     // Background Program
-    vert_shd = glCreateShader(GL_VERTEX_SHADER);
+    uint32_t vert_shd = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vert_shd, 1, &BACKGROUND_VERT_SRC, NULL);
     glCompileShader(vert_shd);
 
@@ -1045,10 +1108,9 @@ void EGE::WindowVR::_appInitOpengl()
     if (!success) {
             char info_log[512];
             glGetShaderInfoLog(vert_shd, 512, NULL, info_log);
-            printf("Vertex shader compilation failed:\n %s\n", info_log);
     }
 
-    frag_shd = glCreateShader(GL_FRAGMENT_SHADER);
+    uint32_t frag_shd = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(frag_shd, 1, &BACKGROUND_FRAG_SRC, NULL);
     glCompileShader(frag_shd);
 
@@ -1056,7 +1118,6 @@ void EGE::WindowVR::_appInitOpengl()
     if (!success) {
             char info_log[512];
             glGetShaderInfoLog(frag_shd, 512, NULL, info_log);
-            printf("Fragment shader compilation failed:\n %s\n", info_log);
     }
 
     this->_backgroundProgram = glCreateProgram();
@@ -1068,34 +1129,58 @@ void EGE::WindowVR::_appInitOpengl()
     if (!success) {
             char info_log[512];
             glGetProgramInfoLog(this->_backgroundProgram, 512, NULL, info_log);
-            printf("Program Linking failed:\n %s\n", info_log);
     }
 
     glDeleteShader(vert_shd);
     glDeleteShader(frag_shd);
+
+    // vert_shd = glCreateShader(GL_VERTEX_SHADER);
+    // glShaderSource(vert_shd, 1, &SCREEN_VERT_SRC, NULL);
+    // glCompileShader(vert_shd);
+
+    // glGetShaderiv(vert_shd, GL_COMPILE_STATUS, &success);
+    // if (!success) {
+    //         char info_log[512];
+    //         glGetShaderInfoLog(vert_shd, 512, NULL, info_log);
+    // }
+
+    // frag_shd = glCreateShader(GL_FRAGMENT_SHADER);
+    // glShaderSource(frag_shd, 1, &SCREEN_FRAG_SRC, NULL);
+    // glCompileShader(frag_shd);
+
+    // glGetShaderiv(frag_shd, GL_COMPILE_STATUS, &success);
+    // if (!success) {
+    //         char info_log[512];
+    //         glGetShaderInfoLog(frag_shd, 512, NULL, info_log);
+    // }
+
+    // this->_screenProgram = glCreateProgram();
+    // glAttachShader(this->_screenProgram, vert_shd);
+    // glAttachShader(this->_screenProgram, frag_shd);
+    // glLinkProgram(this->_screenProgram);
+
+    // glGetProgramiv(this->_screenProgram, GL_LINK_STATUS, &success);
+    // if (!success) {
+    //         char info_log[512];
+    //         glGetProgramInfoLog(this->_screenProgram, 512, NULL, info_log);
+    // }
+
+    // glDeleteShader(vert_shd);
+    // glDeleteShader(frag_shd);
 }
 
 void EGE::WindowVR::create()
 {
     this->_appSetCallbacksAndWait();
     this->_appInitEgl();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "EGL INITIALIZED\n");
     this->_appInitXrCreateInstance();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR INSTANCE CREATED\n");
     this->_appInitXrGetSystem();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR SYSTEM CREATED\n");
     this->_appInitXrEnumViews();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR VIEWS ENUMERATED\n");
     this->_appInitXrCreateSession();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR SESSION CREATED\n");
     this->_appInitXrCreateStageSpace();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR STAGE SPACE CREATED\n");
     this->_appInitXrCreateActions();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR ACTIONS CREATED\n");
     this->_appInitXrCreateSwapchains();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "XR SWAPCHAINS CREATED\n");
     this->_appInitOpengl();
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "OPENGL FRAMEBUFFERS CREATED\n");
 }
 
 void EGE::WindowVR::_appUpdateBeginSession()
@@ -1158,7 +1243,6 @@ void EGE::WindowVR::appUpdatePumpEvents()
                     source->process(this->_app, source);
             }
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "PUMPED EVENTS\n");
 
     // Pump OpenXR Event Loop
     bool is_remaining_events = true;
@@ -1198,7 +1282,6 @@ void EGE::WindowVR::appUpdatePumpEvents()
                     break;
             }
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "END PUMPED EVENTS\n");
 }
 
 void EGE::WindowVR::appUpdateBeginFrame()
@@ -1265,10 +1348,14 @@ void EGE::WindowVR::appUpdateBeginFrame()
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrBeginFrame failed");
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "END FRAME BEGUN\n");
 }
 
-void EGE::WindowVR::draw()
+// void EGE::WindowVR::draw(EGE::Model *model, EGE::Shader *shader)
+// {
+//     this->_drawables.push_back({model, shader});
+// }
+
+void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
 {
     XrResult result;
 
@@ -1338,29 +1425,32 @@ void EGE::WindowVR::draw()
         matrix_multiply(view_proj, proj, view);
         matrix_inverse(inverse_view_proj, view_proj);
 
-        // Left MVP
-        float left_translation[16];
-        float left_rotation[16];
-        float left_model[16];
-        float left_mvp[16];
-        matrix_identity(left_translation);
-        matrix_translate(left_translation, left_translation, (float *)&this->_handLocations[0].pose.position);
-        matrix_rotation_from_quat(left_rotation, (float *)&this->_handLocations[0].pose.orientation);
-        matrix_multiply(left_model, left_translation, left_rotation);
-        matrix_multiply(left_mvp, view_proj, left_model);
+        // // Model
+        model.draw(shader);
 
-        // Right Model
-        float right_translation[16];
-        float right_rotation[16];
-        float right_model[16];
-        float right_mvp[16];
-        matrix_identity(right_translation);
-        matrix_translate(right_translation, right_translation, (float *)&this->_handLocations[1].pose.position);
-        matrix_rotation_from_quat(right_rotation, (float *)&this->_handLocations[1].pose.orientation);
-        matrix_multiply(right_model, right_translation, right_rotation);
-        matrix_multiply(right_mvp, view_proj, right_model);
+        // // Left MVP
+        // float left_translation[16];
+        // float left_rotation[16];
+        // float left_model[16];
+        // float left_mvp[16];
+        // matrix_identity(left_translation);
+        // matrix_translate(left_translation, left_translation, (float *)&this->_handLocations[0].pose.position);
+        // matrix_rotation_from_quat(left_rotation, (float *)&this->_handLocations[0].pose.orientation);
+        // matrix_multiply(left_model, left_translation, left_rotation);
+        // matrix_multiply(left_mvp, view_proj, left_model);
 
-        // Render into the swapchain directly
+        // // Right Model
+        // float right_translation[16];
+        // float right_rotation[16];
+        // float right_model[16];
+        // float right_mvp[16];
+        // matrix_identity(right_translation);
+        // matrix_translate(right_translation, right_translation, (float *)&this->_handLocations[1].pose.position);
+        // matrix_rotation_from_quat(right_rotation, (float *)&this->_handLocations[1].pose.orientation);
+        // matrix_multiply(right_model, right_translation, right_rotation);
+        // matrix_multiply(right_mvp, view_proj, right_model);
+
+        // Render into the swapchain directlyleft_model
         glBindFramebuffer(GL_FRAMEBUFFER, this->_framebuffer);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colour_tex, 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this->_depthTargets[v], 0);
@@ -1368,23 +1458,33 @@ void EGE::WindowVR::draw()
         glClearColor(0.4, 0.4, 0.8, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Render Left Hand
-        glUseProgram(this->_boxProgram);
-        glUniformMatrix4fv(0, 1, GL_FALSE, left_mvp);
-        glUniform2f(1, this->_triggerStates[0].currentState, (float)(this->_triggerClickStates[0].currentState));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-
-        // Render Right Hand
-        glUseProgram(this->_boxProgram);
-        glUniformMatrix4fv(0, 1, GL_FALSE, right_mvp);
-        glUniform2f(1, this->_triggerStates[1].currentState, (float)(this->_triggerClickStates[1].currentState));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-
         // Render Background
         glUseProgram(this->_backgroundProgram);
         glUniformMatrix4fv(0, 1, GL_FALSE, view_proj);
         glUniform3fv(1, 1, (float *)&this->_handLocations[0].pose.position);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // // Render Left Hand
+        // glUseProgram(this->_boxProgram);
+        // glUniformMatrix4fv(0, 1, GL_FALSE, left_mvp);
+        // glUniform2f(1, this->_triggerStates[0].currentState, (float)(this->_triggerClickStates[0].currentState));
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // // Render Right Hand
+        // glUseProgram(this->_boxProgram);
+        // glUniformMatrix4fv(0, 1, GL_FALSE, right_mvp);
+        // glUniform2f(1, this->_triggerStates[1].currentState, (float)(this->_triggerClickStates[1].currentState));
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // // Bind Screen Texture
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, this->_screenTexture);
+
+        // // Render Screen
+        // glUseProgram(this->_screenProgram);
+        // glUniformMatrix4fv(0, 1, GL_FALSE, left_mvp);
+        // glUniform1i(1, 0);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // Release Image
         XrSwapchainImageReleaseInfo release_info = { XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO };
@@ -1393,6 +1493,12 @@ void EGE::WindowVR::draw()
 
     this->_projectionLayer.viewCount = this->_viewSubmitCount;
     this->_projectionLayer.views = &this->_projectionLayerViews[0];
+
+    // glBindFramebuffer(GL_FRAMEBUFFER, this->_screenFramebuffer);
+    // glViewport(0, 0, 200, 200);
+
+    // glClearColor(0.0, 0.0, 0.0, 0.0);
+    // glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void EGE::WindowVR::appUpdateEndFrame()
@@ -1404,13 +1510,10 @@ void EGE::WindowVR::appUpdateEndFrame()
     frame_end.layerCount = this->_shouldRender ? 1 : 0;
     frame_end.layers = this->_shouldRender ? layers : NULL;
 
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "HERE\n");
     XrResult result = xrEndFrame(this->_session, &frame_end);
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "HERE\n");
     if (XR_FAILED(result)) {
         throw EGE::WindowVRError("xrEndFrame failed");
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, "MYTAG", "END FRAME ENDED\n");
 }
 
 bool EGE::WindowVR::isRunning()

@@ -119,7 +119,7 @@ void EGE::Shader::setDouble(const std::string& name, double value) const
 
     if (location == -1)
         throw ShaderError("ERROR\n\tUNIFORM NOT FOUND\n\t\twhile trying to set " + name + " to " + std::to_string(value) + "\n");
-    glUniform1d(location, value);
+    // glUniform1d(location, value);
 }
 
 void EGE::Shader::setFloat(const std::string& name, float value) const
@@ -166,7 +166,7 @@ void EGE::Shader::setVec2(const std::string& name, const EGE::Maths::Vector2<dou
 
     if (location == -1)
         throw ShaderError("ERROR\n\tUNIFORM NOT FOUND\n\t\twhile trying to set " + name + " to " + std::to_string(value.x) + ", " + std::to_string(value.y) + "\n");
-    glUniform2d(location, value.x, value.y);
+    // glUniform2d(location, value.x, value.y);
 }
 
 template<>
@@ -216,7 +216,7 @@ void EGE::Shader::setVec3(const std::string& name, const EGE::Maths::Vector3<dou
 
     if (location == -1)
         throw ShaderError("ERROR\n\tUNIFORM NOT FOUND\n\t\twhile trying to set " + name + " to " + std::to_string(value.x) + ", " + std::to_string(value.y) + "\n");
-    glUniform3d(location, value.x, value.y, value.z);
+    // glUniform3d(location, value.x, value.y, value.z);
 }
 
 template<>
@@ -266,7 +266,7 @@ void EGE::Shader::setVec4(const std::string& name, const EGE::Maths::Vector4<dou
 
     if (location == -1)
         throw ShaderError("ERROR\n\tUNIFORM NOT FOUND\n\t\twhile trying to set " + name + " to " + std::to_string(value.x) + ", " + std::to_string(value.y) + "\n");
-    glUniform4d(location, value.x, value.y, value.z, value.w);
+    // glUniform4d(location, value.x, value.y, value.z, value.w);
 }
 
 template<>

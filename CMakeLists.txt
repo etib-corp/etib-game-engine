@@ -41,6 +41,10 @@ pkg_search_module(GLFW REQUIRED glfw3)
 find_package(assimp REQUIRED)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE VR_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*VR.cpp")
+list(REMOVE_ITEM SOURCES ${VR_SOURCES})
+
+message(SOURCES ${SOURCES})
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_options(-g3 -ggdb)
