@@ -8,19 +8,19 @@
 #include "tests.hpp"
 
 #include "Sound/Device.hpp"
-#include "Sound/Sound.hpp"
+#include "Sound/Playlist.hpp"
 
 int main()
 {
     try {
-        // make a EGE init funciton so there is no more than one call to glfwInit and it can be usefull later
         std::shared_ptr<EGE::Window> window = std::make_shared<EGE::Window>("Test", EGE::Maths::Vector2<int>(1920, 1080), EGE::Window::Styles::Titlebar | EGE::Window::Styles::Close);
         window->create();
-        EGE::Color color(0.0f, 1.0f, 0.0f, 1.0f);
-        window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyEscape, EGE::Event::Pressed, [&window]() {
-            window->close();
-        }));
+        EGE::Sound::Device device;
+        EGE::Sound::Playlist playlist("tests/assets/");
+        std::string input;
+
         TestGUI *gui = new TestGUI();
+        EGE::Color color(0.0f, 1.0f, 0.0f, 1.0f);
 
         gui->_menuBar->add(new EGE::Menu("File"), "file");
         gui->_menuBar->add(new EGE::Menu("Edit"), "edit");
@@ -70,7 +70,9 @@ int main()
         }));
 
 
-
+        window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyEscape, EGE::Event::Pressed, [&window]() {
+            window->close();
+        }));
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
         }));
@@ -127,6 +129,22 @@ int main()
             gui->display();
             window->display();
             window->pollEvents();
+        // playlist.play();
+        // while (std::getline(std::cin, input)) {
+        //     if (input == "next") {
+        //         playlist.next();
+        //     } else if (input == "previous") {
+        //         playlist.previous();
+        //     } else if (input == "pause") {
+        //         playlist.pause();
+        //     } else if (input == "play") {
+        //         playlist.play();
+        //     } else if (input == "stop") {
+        //         playlist.stop();
+        //     } else if (input == "exit") {
+        //         break;
+        //     }
+        // }
         }
         return 0;
     } catch (const std::exception &e) {

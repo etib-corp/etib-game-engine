@@ -5,12 +5,7 @@
 ** Sound
 */
 
-#ifndef SOUND_HPP_
-#define SOUND_HPP_
-
-#define DR_MP3_IMPLEMENTATION
-#define DR_WAV_IMPLEMENTATION
-
+#pragma once
 
 #include "Sound/dr_mp3.h"
 #include "Sound/dr_wav.h"
@@ -100,5 +95,3 @@ namespace EGE {
         };
     }
 }
-
-#endif /* !SOUND_HPP_ */
