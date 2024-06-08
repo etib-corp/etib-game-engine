@@ -5,8 +5,7 @@
 ** Device
 */
 
-#ifndef DEVICE_HPP_
-#define DEVICE_HPP_
+#pragma once
 
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -108,5 +107,3 @@ namespace EGE {
         };
     }
 }
-
-#endif /* !DEVICE_HPP_ */
