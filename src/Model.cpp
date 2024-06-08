@@ -16,11 +16,25 @@ EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &pos
         this->_position = position;
         this->_rotation = rotation;
         this->_scale = scale;
+        this->_shear = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f);
+        this->_originalModelMatrix = EGE::Maths::Matrix<4, 4, float>({
+            {rotation.x, scale.x, 0.0f, position.x},
+            {rotation.y, scale.y, 0.0f, position.y},
+            {rotation.z, scale.z, 0.0f, position.z},
+            {0.0f, 0.0f, 0.0f, 1.0f}
+        });
         return;
     }
     this->_position = position;
     this->_rotation = rotation;
+    this->_shear = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f);
     this->_scale = scale;
+    this->_originalModelMatrix = EGE::Maths::Matrix<4, 4, float>({
+        {rotation.x, scale.x, 0.0f, position.x},
+        {rotation.y, scale.y, 0.0f, position.y},
+        {rotation.z, scale.z, 0.0f, position.z},
+        {0.0f, 0.0f, 0.0f, 1.0f}
+    });
     this->loadModel(path, flipTexture);
     Model::_modelsLoaded[path] = this;
 }
@@ -36,6 +50,7 @@ void EGE::Model::draw(Shader &shader)
     modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
     modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
     modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelMat = glm::shear(modelMat, this->_position.toGlmVec3(), glm::vec2(this->_shear.x, this->_shear.z), glm::vec2(this->_shear.y, this->_shear.z), glm::vec2(this->_shear.x, this->_shear.y));
     modelMat = glm::scale(modelMat, this->_scale.toGlmVec3());
     shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat));
     for (auto &mesh : this->_meshes) {
@@ -147,6 +162,27 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
     return textures;
 }
 
+void EGE::Model::setOriginalModelMatrix(const EGE::Maths::Matrix<4, 4, float>& originalModelMatrix)
+{
+    this->_originalModelMatrix = originalModelMatrix;
+}
+
+void EGE::Model::setOriginalModelMatrix()
+{
+    this->_originalModelMatrix = EGE::Maths::Matrix<4, 4, float>({
+        {this->_rotation.x, this->_scale.x, 0.0f, this->_position.x},
+        {this->_rotation.y, this->_scale.y, 0.0f, this->_position.y},
+        {this->_rotation.z, this->_scale.z, 0.0f, this->_position.z},
+        {0.0f, 0.0f, 0.0f, 1.0f}
+    });
+}
+
+EGE::Maths::Matrix<4, 4, float> EGE::Model::getOriginalModelMatrix() const
+{
+    return this->_originalModelMatrix;
+}
+
+
 void EGE::Model::setPosition(const EGE::Maths::Vector3<float>& position)
 {
     this->_position = position;
@@ -175,6 +211,16 @@ void EGE::Model::setScale(const EGE::Maths::Vector3<float>& scale)
 EGE::Maths::Vector3<float> EGE::Model::getScale() const
 {
     return this->_scale;
+}
+
+void EGE::Model::setShear(const EGE::Maths::Vector3<float>& shear)
+{
+    this->_shear = shear;
+}
+
+EGE::Maths::Vector3<float> EGE::Model::getShear() const
+{
+    return this->_shear;
 }
 
 std::map<std::string, EGE::BoneInfo>& EGE::Model::getBoneInfoMap()

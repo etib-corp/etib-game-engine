@@ -65,6 +65,26 @@ namespace EGE {
             void draw(Shader& shader);
 
             /**
+             * @brief Set the original model matrix of the model
+             *
+             * @param originalModelMatrix Matrix<4, 4, float> that is the new original model matrix of the model
+            */
+            void setOriginalModelMatrix(const EGE::Maths::Matrix<4, 4, float>& originalModelMatrix);
+
+            /**
+             * @brief Set the original model matrix of the model
+             * @note The current rotation, scale, shear and position of the model will be used
+            */
+            void setOriginalModelMatrix();
+
+            /**
+             * @brief Returns the original model matrix of the model
+             *
+             * @return Matrix<4, 4, float> that is the original model matrix of the model
+            */
+            EGE::Maths::Matrix<4, 4, float> getOriginalModelMatrix() const;
+
+            /**
              * @brief Set the position og the model
              *
              * @param position Vector3 of float that is the new position of the model
@@ -107,6 +127,20 @@ namespace EGE {
              * @return Vector3 of float that is the scale of the model
             */
             EGE::Maths::Vector3<float> getScale() const;
+
+            /**
+             * @brief Set the shear of the model
+             *
+             * @param shear Vector3 of float that is the new shear of the model
+            */
+            void setShear(const EGE::Maths::Vector3<float>& shear);
+
+            /**
+             * @brief Returns the shear of the model
+             *
+             * @return Vector3 of float that is the shear of the model
+            */
+            EGE::Maths::Vector3<float> getShear() const;
 
             std::map<std::string, BoneInfo>& getBoneInfoMap();
 
@@ -153,9 +187,11 @@ namespace EGE {
             std::vector<Texture> _texturesLoaded; ///< The textures loaded for the model.
             EGE::Maths::Vector3<float> _position; ///< The position of the model.
             EGE::Maths::Vector3<float> _rotation; ///< The rotation of the model.
+            EGE::Maths::Vector3<float> _shear; ///< The shear of the model.
             EGE::Maths::Vector3<float> _scale; ///< The scale of the model.
             static std::map<std::string, Model *> _modelsLoaded; ///< The loaded models.
             std::map<std::string, BoneInfo> _boneInfoMap; ///< The boneInfo of the model.
             int _boneNumber;
+            EGE::Maths::Matrix<4, 4, float> _originalModelMatrix;
     };
 }

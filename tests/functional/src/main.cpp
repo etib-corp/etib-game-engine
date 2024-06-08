@@ -31,13 +31,45 @@ int main()
         gui->_panels["Main"]->add(new EGE::Text("Salut a tous bande de gentilles personnes..."), "text");
 
         EGE::Camera camera(EGE::Maths::Vector3<float>(6.0f, 0.0f, 6.0f), EGE::Maths::Vector3<float>(0.0f, 1.0f, 0.0f), -135.0f, 0.0f);
-        EGE::Shader shader("./assets/shader/player.vert", "./assets/shader/fragment.frag");
+        EGE::Shader shader("./assets/shader/vertex.vert", "./assets/shader/fragment.frag");
 
-        EGE::Model player("./assets/models/vampire/dancing_vampire.dae");
-        EGE::Animation anim("./assets/models/vampire/dancing_vampire.dae", &player);
+        // EGE::Model player("./assets/models/vampire/dancing_vampire.dae");
+        // EGE::Animation anim("./assets/models/vampire/dancing_vampire.dae", &player);
         // EGE::Model player("./assets/models/team1/player.dae");
         // EGE::Animation anim("./assets/models/team1/player.dae", &player);
-        EGE::Animator2000 animator(&anim);
+        // EGE::Animator2000 animator(&anim);
+
+        std::shared_ptr<EGE::Model> player = std::make_shared<EGE::Model>("./assets/models/backpack/backpack.obj", EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), true);
+
+        EGE::Movement movement(5000);
+        movement.addModel("player", player);
+
+        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f}
+        }));
+        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f}
+        }));
+        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f}
+        }));
+        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 1.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f, 0.0f}
+        }));
+
+
 
         window->bindTrigger(EGE::Event::Trigger(EGE::Event::Keyboard, EGE::Event::Key::KeyW, EGE::Event::Pressed, [&camera]() {
             camera.move(EGE::Camera::FORWARD, 0.1f);
@@ -58,21 +90,10 @@ int main()
             camera.move(EGE::Camera::DOWN, 0.1f);
         }));
         window->bindWindowTrigger<GLFWwindow *, double, double>(EGE::Event::WindowTrigger::WindowCursorMoved, [&camera, &window](GLFWwindow *glfwWindow, double xpos, double ypos) {
-            // get the direction of the mouse and rotate the camera in the direction
-            static double lastX = 0.0;
-            static double lastY = 0.0;
-            static bool firstMouse = true;
-            if (firstMouse) {
-                lastX = xpos;
-                lastY = ypos;
-                firstMouse = false;
-            }
-            double xoffset = xpos - lastX;
-            double yoffset = lastY - ypos;
-            lastX = xpos;
-            lastY = ypos;
-            camera.rotate(xoffset, yoffset, true);\
-            // glfwSetCursorPos(glfwWindow, window->getSize().x / 2, window->getSize().y / 2);
+            glfwSetCursorPos(window->getWindow(), window->getSize().x / 2, window->getSize().y / 2);
+            float xoffset = xpos - window->getSize().x / 2;
+            float yoffset = window->getSize().y / 2 - ypos;
+            camera.rotate(xoffset, yoffset, true);
         });
 
         gui->init(window.get());
@@ -87,7 +108,7 @@ int main()
             deltaTime = currentTime - lastFrame;
             lastFrame = currentTime;
 
-            animator.updateAnimation(deltaTime);
+            // animator.updateAnimation(deltaTime);
 
             window->clear(color);
             gui->clear();
@@ -96,11 +117,12 @@ int main()
 
             camera.update(shader, aspect);
 
-            auto transforms = animator.getFinalBoneMatrices();
-            for (int i = 0; i < transforms.size(); i++) {
-                shader.setMat("bones[" + std::to_string(i) + "]", EGE::Maths::Matrix<4, 4, float>(transforms[i]));
-            }
-            player.draw(shader);
+            // auto transforms = animator.getFinalBoneMatrices();
+            // for (int i = 0; i < transforms.size(); i++) {
+                // shader.setMat("bones[" + std::to_string(i) + "]", EGE::Maths::Matrix<4, 4, float>(transforms[i]));
+            // }
+            movement.move();
+            player->draw(shader);
             gui->draw();
             gui->display();
             window->display();
