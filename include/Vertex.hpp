@@ -14,6 +14,8 @@
 // C++ include
 #include <array>
 
+#define MAX_BONE 4
+
 /**
  * @file Vertex.hpp
  * @brief File containing the Vertex struct and its related functions.
@@ -31,7 +33,12 @@ namespace EGE {
         glm::vec2 _texCoords; ///< The texture coordinates of the vertex.
         glm::vec3 _tangent; ///< The tangent vector at the vertex.
         glm::vec3 _bitangent; ///< The bitangent vector at the vertex.
-        int _boneIDs[4]; ///< The IDs of the bones that influence this vertex.
-        float _boneWeights[4]; ///< The weights of the influences of the bones on this vertex.
+        int _boneIDs[MAX_BONE]; ///< The IDs of the bones that influence this vertex.
+        float _boneWeights[MAX_BONE]; ///< The weights of the influences of the bones on this vertex.
+    };
+
+    struct BoneInfo {
+        int _id;
+        glm::mat4 _offset;
     };
 }
