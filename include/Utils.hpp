@@ -24,39 +24,57 @@
  * for common operations such as string manipulation, file handling, and command line argument validation.
  * It also includes exception classes for handling specific error conditions.
  */
+/**
+ * @file Utils.hpp
+ * @brief Contains the declaration of the Utils class and its member functions.
+ */
+
+/**
+ * @class Utils
+ * @brief A utility class that provides various helper functions.
+ */
 class Utils {
     public:
         /**
+         * @class IsDirectoryException
          * @brief Exception class thrown when attempting to parse a directory.
+         * @extends EGE::Error
          */
         class IsDirectoryException : public EGE::Error {
             public:
+                /**
+                 * @brief Constructs an IsDirectoryException object with the given error message.
+                 * @param msg The error message associated with the exception.
+                 */
                 IsDirectoryException(const std::string& msg) : Error(msg) {}
         };
 
         /**
+         * @class FileNotFoundException
          * @brief Exception class for file not found errors.
+         * @extends EGE::Error
          */
         class FileNotFoundException : public EGE::Error {
             public:
                 /**
                  * @brief Constructs a FileNotFoundException object with the default error message.
                  * The default error message is "File not found".
+                 * @param msg The error message associated with the exception.
                 */
                 FileNotFoundException(const std::string& msg = "File not found") : Error(msg) {};
         };
 
         /**
+         * @class InvalidArgumentsException
          * @brief Exception class for invalid arguments.
+         * @extends EGE::Error
          *
          * This exception is thrown when invalid arguments are provided.
-         * It is derived from the base class Error.
          */
         class InvalidArgumentsException : public EGE::Error {
             public:
                 /**
                  * @brief Constructs an InvalidArgumentsException object with the given error message.
-                 *
                  * @param msg The error message associated with the exception.
                  */
                 InvalidArgumentsException(const std::string& msg) : Error(msg) {}
@@ -80,7 +98,7 @@ class Utils {
         static std::vector<std::string> split(const std::string &str, char sep);
 
         /**
-         * Retrieves the content of a file.
+         * @brief Retrieves the content of a file.
          *
          * @param filename The name of the file to read.
          * @return The content of the file as a string.
@@ -88,7 +106,7 @@ class Utils {
         static std::string getFileContent(const std::string &filename);
 
         /**
-         * Writes content to a file.
+         * @brief Writes content to a file.
          *
          * @param filename The name of the file to write to.
          * @param content The content to write to the file.
@@ -98,7 +116,7 @@ class Utils {
         static void setFileContent(const std::string &filename, const std::string &content, bool append = false);
 
         /**
-         * Converts a vector of strings to a single string.
+         * @brief Converts a vector of strings to a single string.
          *
          * @param container The vector of strings to be converted.
          * @return The concatenated string.
@@ -106,20 +124,36 @@ class Utils {
         static std::string vectorToString(const std::vector<std::string> &container);
 
         /**
-         * @brief Checks the command line arguments.
+         * @brief Retrieves the files in a directory.
          *
-         * This function is responsible for validating the command line arguments passed to the program.
-         *
-         * @param argc The number of command line arguments.
-         * @param argv An array of C-style strings representing the command line arguments.
+         * @param directory The directory path.
+         * @return std::vector<std::string> A vector containing the names of the files in the directory.
          */
-        static void checkArgs(int argc, char **argv);
-
         static std::vector<std::string> getDirectoryFiles(const std::string &directory);
+
+        /**
+         * @brief Retrieves the files in a directory with a specific extension.
+         *
+         * @param directory The directory path.
+         * @param extension The file extension to filter by.
+         * @return std::vector<std::string> A vector containing the names of the files with the specified extension in the directory.
+         */
         static std::vector<std::string> getDirectoryFiles(const std::string &directory, const std::string &extension);
 
+        /**
+         * @brief Retrieves the subdirectories in a directory.
+         *
+         * @param directory The directory path.
+         * @return std::vector<std::string> A vector containing the names of the subdirectories in the directory.
+         */
         static std::vector<std::string> getDirectorySubDirectories(const std::string &directory);
 
+        /**
+         * @brief Retrieves the content of a directory (files and subdirectories).
+         *
+         * @param directory The directory path.
+         * @return std::vector<std::string> A vector containing the names of the files and subdirectories in the directory.
+         */
         static std::vector<std::string> getDirectoryContent(const std::string &directory);
 };
 

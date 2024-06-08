@@ -5,6 +5,9 @@
 ** Sound
 */
 
+#define DR_MP3_IMPLEMENTATION
+#define DR_WAV_IMPLEMENTATION
+
 #include "Sound/Sound.hpp"
 
 EGE::Sound::Sound::Sound(const std::string &path, FileType type)

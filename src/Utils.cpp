@@ -77,16 +77,6 @@ std::string Utils::vectorToString(const std::vector<std::string> &container)
     return result;
 }
 
-void Utils::checkArgs(int argc, char **argv)
-{
-    if (argc != 4) {
-        throw InvalidArgumentsException("Invalid arguments.");
-    }
-    if (std::stoi(argv[1]) <= 0 || std::stoi(argv[2]) <= 0 || std::stoi(argv[3]) <= 0){
-        throw InvalidArgumentsException("Invalid arguments.");
-    }
-}
-
 std::vector<std::string> Utils::getDirectoryFiles(const std::string &directory)
 {
     std::vector<std::string> files;
