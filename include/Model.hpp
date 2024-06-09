@@ -11,6 +11,7 @@
 #include "Error.hpp"
 #include "Mesh.hpp"
 #include "Maths/Vector3.hpp"
+#include "MemoryIOSystem.hpp"
 
 // C++ include
 #include <assimp/Importer.hpp>
@@ -19,6 +20,8 @@
 #include <map>
 #include <thread>
 #include <vector>
+
+extern MemoryIOSystem *gMemoryIOSystem;
 
 /**
  * @file Model.hpp
@@ -51,7 +54,7 @@ namespace EGE {
              * @brief Constructor for Model.
              * @param path The path to the model file.
              */
-            Model(const std::string& path, bool isContent = false, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
+            Model(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
 
             /**
              * @brief Destructor for Model.
@@ -97,7 +100,7 @@ namespace EGE {
              * @brief Loads a model from a file.
              * @param path The path to the model file.
              */
-            void loadModel(const std::string& path, bool isContent = false, bool flipTexture = false);
+            void loadModel(const std::string& path, bool flipTexture = false);
 
             /**
              * @brief Processes a node in the model.

@@ -1426,8 +1426,6 @@ void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
         matrix_inverse(inverse_view_proj, view_proj);
 
         // // Model
-        shader.use();
-        model.draw(shader);
 
         // // Left MVP
         // float left_translation[16];
@@ -1480,6 +1478,13 @@ void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
         // // Bind Screen Texture
         // glActiveTexture(GL_TEXTURE0);
         // glBindTexture(GL_TEXTURE_2D, this->_screenTexture);
+
+        shader.use();
+        unsigned int proj_loc = glGetUniformLocation(shader.getID(), "projection");
+        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, proj);
+        unsigned int view_loc = glGetUniformLocation(shader.getID(), "view");
+        glUniformMatrix4fv(view_loc, 1, GL_FALSE, view);
+        model.draw(shader);
 
         // // Render Screen
         // glUseProgram(this->_screenProgram);

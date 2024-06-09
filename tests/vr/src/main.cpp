@@ -18,10 +18,11 @@
 #include "Model.hpp"
 #include "Shader.hpp"
 
+MemoryIOSystem *gMemoryIOSystem;
+
 extern "C" void android_main(android_app *app) {
 
     EGE::WindowVR a(app);
-    // How to get the file "assets/shader/vertex.vert" in the android project
     AAssetManager *mgr = app->activity->assetManager;
     AAsset *file = AAssetManager_open(mgr, "shader/vertex.vert", AASSET_MODE_UNKNOWN);
     off_t fileLength = AAsset_getLength(file);
@@ -39,16 +40,16 @@ extern "C" void android_main(android_app *app) {
 
     EGE::Shader s;
     s.compile(vertexSource, fragmentSource);
+    gMemoryIOSystem = new MemoryIOSystem();
+    gMemoryIOSystem->setAssetManager(mgr);
 
-    file = AAssetManager_open(mgr, "models/cube/Grass_Block.obj", AASSET_MODE_UNKNOWN);
-    fileLength = AAsset_getLength(file);
-    char *modelSource = (char *)malloc(fileLength + 1);
-    AAsset_read(file, modelSource, fileLength);
-    modelSource[fileLength] = '\0';
+    gMemoryIOSystem->addFile("models/cube/Grass_Block.obj");
+    gMemoryIOSystem->addFile("models/cube/Grass_Block.mtl");
 
-    EGE::Model m(modelSource, true);
+    EGE::Model m("models/cube/Grass_Block.obj");
     __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Model loaded\n");
-
+    m.setPosition(EGE::Maths::Vector3<float>(0, 1, 0));
+    m.setScale(EGE::Maths::Vector3<float>(0.5, 0.5, 0.5));
     // ImGuiContext &ctx = *ImGui::CreateContext();
     // ImGuiIO &io = ImGui::GetIO();
     // ImGui_ImplOpenGL3_Init();

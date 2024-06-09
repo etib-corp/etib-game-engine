@@ -19,7 +19,8 @@
 #include <android/native_activity.h>
 #include "Model.hpp"
 #include "Shader.hpp"
-
+#include "Maths/Vector3.hpp"
+#include "Maths/Matrix.hpp"
 
 #include "Error.hpp"
 #include <string.h>

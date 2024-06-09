@@ -41,6 +41,8 @@ SRC = 	src/main.cpp \
 		../../src/Shader.cpp \
 		../../src/Model.cpp \
 		../../src/Texture.cpp \
+		../../src/MemoryIOSystem.cpp \
+		../../src/MemoryIOStream.cpp \
 
 all:
 	@echo "Compiling for $(USER)"

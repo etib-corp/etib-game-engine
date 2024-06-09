@@ -31,9 +31,9 @@ void EGE::Texture::loadFromFile(const std::string& path, bool flip)
     GLenum format;
     glGenTextures(1, &this->_id);
 
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading texture : %s", path.c_str());
+
     unsigned char *data = stbi_load(path.c_str(), &this->_width, &this->_height, &this->_nrChannels, STBI_default);
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Texture loaded : %s", path.c_str());
+
     if (data) {
         if (this->_nrChannels == 1)
             format = GL_RED;
@@ -58,6 +58,40 @@ void EGE::Texture::loadFromFile(const std::string& path, bool flip)
     } else {
         stbi_image_free(data);
         throw TextureError("Failed to load texture : " + path);
+    }
+}
+
+void EGE::Texture::loadFromFile(const unsigned char *buffer, off_t size, bool flip)
+{
+    stbi_set_flip_vertically_on_load(flip);
+    GLenum format;
+    glGenTextures(1, &this->_id);
+
+    unsigned char *data = stbi_load_from_memory(buffer, size, &this->_width, &this->_height, &this->_nrChannels, STBI_default);
+    if (data) {
+        if (this->_nrChannels == 1)
+            format = GL_RED;
+        else if (this->_nrChannels == 3)
+            format = GL_RGB;
+        else if (this->_nrChannels == 4)
+            format = GL_RGBA;
+        else {
+            stbi_image_free(data);
+            throw TextureError("Texture format with " + std::to_string(format) + " channels are not supported");
+        }
+        glBindTexture(GL_TEXTURE_2D, this->_id);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, this->_width, this->_height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    } else {
+        stbi_image_free(data);
+        throw TextureError("Failed to load texture");
     }
 }
 
