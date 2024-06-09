@@ -7,8 +7,6 @@
 
 #include "Shader.hpp"
 
-#include <android/log.h>
-
 EGE::Shader::Shader()
 {
     // std::string vertexShader = "#version 330 core\n"
