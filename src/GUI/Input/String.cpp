@@ -24,10 +24,10 @@ void EGE::String::draw()
     if (!this->isVisible())
         return;
 
-    char *value = nullptr;
+    char *value = strdup(this->_content.c_str());
 
-    ImGui::InputText(this->_name.c_str(), value, 50);
-    this->_content = value;
+    if (ImGui::InputText(this->_name.c_str(), value, 50))
+        this->_content = value;
 }
 
 void EGE::String::setContent(const std::string &content)

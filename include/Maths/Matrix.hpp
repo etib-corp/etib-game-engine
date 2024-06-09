@@ -98,6 +98,15 @@ namespace EGE {
                     }
                 }
 
+                Matrix(T f)
+                {
+                    for (int i = 0; i < HEIGHT; i++) {
+                        for (int j = 0; j < WIDTH; j++) {
+                            this->_matrix[i][j] = f;
+                        }
+                    }
+                }
+
                 /**
                  * @brief Destroys the Matrix object.
                 */
@@ -424,7 +433,7 @@ namespace EGE {
                  * @return The element at the specified position.
                  * @throw MatrixError if the position is out of bounds.
                 */
-                std::array<double, WIDTH> operator[](int pos) const
+                std::array<T, WIDTH> operator[](int pos) const
                 {
                     if (pos < 0 || pos >= HEIGHT) {
                         throw MatrixError("Position out of range");
@@ -440,7 +449,7 @@ namespace EGE {
                  * @return The element at the specified position.
                  * @throw MatrixError if the position is out of bounds.
                 */
-                std::array<double, WIDTH>& operator[](int pos)
+                std::array<T, WIDTH>& operator[](int pos)
                 {
                     if (pos < 0 || pos >= HEIGHT) {
                         throw MatrixError("Position out of range");
