@@ -11,7 +11,6 @@
     #include "external/stb_image.hpp"
 #endif
 
-#include <android/log.h>
 
 EGE::Texture::Texture()
 {
