@@ -21,5 +21,5 @@ void EGE::Text::draw()
 {
     if (!this->isVisible())
         return;
-    ImGui::Text(this->_name.c_str());
+    ImGui::Text("%s", this->_name.c_str());
 }

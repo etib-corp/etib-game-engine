@@ -40,29 +40,31 @@ int main()
         // EGE::Animator2000 animator(&anim);
 
         std::shared_ptr<EGE::Model> player = std::make_shared<EGE::Model>("./assets/models/backpack/backpack.obj", EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), true);
+        std::shared_ptr<EGE::Model> player2 = std::make_shared<EGE::Model>("./assets/models/backpack/backpack.obj", EGE::Maths::Vector3<float>(5.0f, 0.0f, 0.0f), EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), true);
 
-        EGE::Movement movement(5000);
+        EGE::Movement movement(1000);
         movement.addModel("player", player);
+        movement.addModel("player2", player2);
 
         movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 0.0f}
-        }));
-        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+        }))
+        .pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 0.0f}
-        }));
-        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+        }))
+        .pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 0.0f}
-        }));
-        movement.pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
+        }))
+        .pushBackKeyFrame(EGE::Maths::Matrix<4, 4, float>({
             {0.0f, 0.0f, 0.0f, 0.0f},
             {0.0f, 0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 0.0f, 0.0f},
@@ -104,11 +106,17 @@ int main()
 
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
+        float lastTime = 0.0f;
 
         while (window->isOpen()) {
             float currentTime = glfwGetTime();
             deltaTime = currentTime - lastFrame;
             lastFrame = currentTime;
+            // wait one second to dispaly the FPS
+            if (currentTime - lastTime >= 1.0f) {
+                std::cout << "FPS: " << 1 / deltaTime << std::endl;
+                lastTime = currentTime;
+            }
 
             // animator.updateAnimation(deltaTime);
 
@@ -123,8 +131,9 @@ int main()
             // for (int i = 0; i < transforms.size(); i++) {
                 // shader.setMat("bones[" + std::to_string(i) + "]", EGE::Maths::Matrix<4, 4, float>(transforms[i]));
             // }
-            movement.move();
+            movement.move(deltaTime);
             player->draw(shader);
+            player2->draw(shader);
             gui->draw();
             gui->display();
             window->display();

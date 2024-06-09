@@ -20,7 +20,7 @@ namespace EGE {
             Movement(int duration);
             ~Movement();
 
-            void move();
+            void move(float deltaTime);
 
             EGE::Movement& addModel(const std::string &name, const std::shared_ptr<EGE::Model>& model);
             EGE::Movement& removeModel(const std::string &name);

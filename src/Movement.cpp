@@ -21,18 +21,14 @@ EGE::Movement::~Movement()
 {
 }
 
-void EGE::Movement::move()
+void EGE::Movement::move(float deltaTime)
 {
-    std::cout << "Current: " << this->_currentKeyFrame << " | Last: " << this->_lastKeyFrame << std::endl;
-    if (this->_lastKeyFrame != this->_currentKeyFrame) {
-        this->_lastKeyFrame = this->_currentKeyFrame;
-        for (auto &[name, model] : _models) {
-            model->setPosition(model->getPosition() + this->getTranslation(this->_keyFrames[_currentKeyFrame]));
-            model->setRotation(model->getRotation() + this->getRotation(this->_keyFrames[_currentKeyFrame]));
-            model->setScale(model->getScale() + this->getScale(this->_keyFrames[_currentKeyFrame]));
-            model->setShear(model->getShear() + this->getShear(this->_keyFrames[_currentKeyFrame]));
-            std::cout << "Model: " << name << " moved" << std::endl;
-        }
+    float ratio = (deltaTime * 1000.0) / this->_durationPerKeyFrame;
+    for (auto &[name, model] : _models) {
+        model->setPosition(model->getPosition() + this->getTranslation(this->_keyFrames[_currentKeyFrame]) * ratio);
+        model->setRotation(model->getRotation() + this->getRotation(this->_keyFrames[_currentKeyFrame] * ratio));
+        model->setScale(model->getScale() + this->getScale(this->_keyFrames[_currentKeyFrame] * ratio));
+        model->setShear(model->getShear() + this->getShear(this->_keyFrames[_currentKeyFrame] * ratio));
     }
     if (this->_clock.now() - this->_lastTime >= std::chrono::milliseconds(this->_durationPerKeyFrame)) {
         this->_currentKeyFrame = (this->_currentKeyFrame + 1) % this->_keyFrames.size();
@@ -44,7 +40,6 @@ void EGE::Movement::move()
                 model->setRotation(this->getRotation(originalModelMatrix));
                 model->setScale(this->getScale(originalModelMatrix));
                 model->setShear(this->getShear(originalModelMatrix));
-                std::cout << "Model: " << name << " is back to its origin" << std::endl;
             }
         }
     }
