@@ -50,7 +50,7 @@ void EGE::Model::draw(Shader &shader)
     modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
     modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
     modelMat = glm::rotate(modelMat, glm::radians(this->_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    modelMat = glm::shear(modelMat, this->_position.toGlmVec3(), glm::vec2(this->_shear.x, this->_shear.z), glm::vec2(this->_shear.y, this->_shear.z), glm::vec2(this->_shear.x, this->_shear.y));
+    // modelMat = glm::shear(modelMat, this->_position.toGlmVec3(), glm::vec2(this->_shear.x, this->_shear.z), glm::vec2(this->_shear.y, this->_shear.z), glm::vec2(this->_shear.x, this->_shear.y));
     modelMat = glm::scale(modelMat, this->_scale.toGlmVec3());
     shader.setMat("model", EGE::Maths::Matrix<4, 4, float>(modelMat));
     for (auto &mesh : this->_meshes) {
