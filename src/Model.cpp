@@ -6,9 +6,6 @@
 */
 
 #include "Model.hpp"
-#include <android/log.h>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
 
 std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
 
