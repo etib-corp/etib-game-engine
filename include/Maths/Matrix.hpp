@@ -9,9 +9,7 @@
 
 // Engine include
 #include "Error.hpp"
-#include "Maths/Vector2.hpp"
-#include "Maths/Vector3.hpp"
-#include "Maths/Vector4.hpp"
+#include "glm.hpp"
 
 // C++ include
 #include <array>
@@ -44,7 +42,7 @@ namespace EGE {
          * @note The type T must be an arithmetic type.
         */
         template<int WIDTH, int HEIGHT, typename T>
-        requires (WIDTH > 0 && HEIGHT > 0 && std::is_arithmetic<T>::value)
+        // requires (WIDTH > 0 && HEIGHT > 0 && std::is_arithmetic<T>::value)
         class Matrix {
             public:
                 /**

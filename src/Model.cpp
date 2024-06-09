@@ -61,8 +61,7 @@ void EGE::Model::draw(Shader &shader)
 void EGE::Model::loadModel(const std::string& path, bool flipTexture)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
+    const aiScene *scene = importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
     }
@@ -152,7 +151,8 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
         }
         if (!skip) {
             Texture texture;
-            texture.loadFromFile(this->_directory + "/" + str.C_Str(), flipTexture);
+            std::string path = this->_directory + "/" + str.C_Str();
+            texture.loadFromFile(path, flipTexture);
             texture.setType(typeName);
             texture.setPath(str.C_Str());
             textures.push_back(texture);
