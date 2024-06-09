@@ -15,45 +15,41 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "imgui_impl_opengl3.h"
-#include "Model.hpp"
 #include "Shader.hpp"
+#include "UtilsVR.hpp"
+#include "ModelVR.hpp"
 
 MemoryIOSystem *gMemoryIOSystem;
+
+android_app *EGE::UtilsVR::app = nullptr;
 
 extern "C" void android_main(android_app *app) {
 
     EGE::WindowVR a(app);
-    AAssetManager *mgr = app->activity->assetManager;
-    AAsset *file = AAssetManager_open(mgr, "shader/vertex.vert", AASSET_MODE_UNKNOWN);
-    off_t fileLength = AAsset_getLength(file);
-    char *vertexSource = (char *)malloc(fileLength + 1);
-    AAsset_read(file, vertexSource, fileLength);
-    vertexSource[fileLength] = '\0';
+    EGE::UtilsVR::app = app;
 
-    file = AAssetManager_open(mgr, "shader/fragment.frag", AASSET_MODE_UNKNOWN);
-    fileLength = AAsset_getLength(file);
-    char *fragmentSource = (char *)malloc(fileLength + 1);
-    AAsset_read(file, fragmentSource, fileLength);
-    fragmentSource[fileLength] = '\0';
+    std::string vertexSource = EGE::UtilsVR::readAssetFile("shaders/vertex.vert");
+
+    std::string fragmentSource = EGE::UtilsVR::readAssetFile("shaders/fragment.frag");
 
     a.create();
 
-    EGE::Shader s;
-    s.compile(vertexSource, fragmentSource);
+    std::shared_ptr<EGE::Shader> s = std::make_shared<EGE::Shader>();
+    s->compile(vertexSource, fragmentSource);
     gMemoryIOSystem = new MemoryIOSystem();
-    gMemoryIOSystem->setAssetManager(mgr);
+    gMemoryIOSystem->setAssetManager(app->activity->assetManager);
 
-    gMemoryIOSystem->addFile("models/cube/Grass_Block.obj");
-    gMemoryIOSystem->addFile("models/cube/Grass_Block.mtl");
+    gMemoryIOSystem->addFile("models/floor/floor.obj");
+    gMemoryIOSystem->addFile("models/floor/floor.mtl");
 
-    EGE::Model m("models/cube/Grass_Block.obj");
+    std::shared_ptr<EGE::ModelVR> m = std::make_shared<EGE::ModelVR>("models/floor/floor.obj");
     __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Model loaded\n");
-    m.setPosition(EGE::Maths::Vector3<float>(0, 1, 0));
-    m.setScale(EGE::Maths::Vector3<float>(0.5, 0.5, 0.5));
+    m->setPosition(EGE::Maths::Vector3<float>(0, 1, 0));
+    m->setScale(EGE::Maths::Vector3<float>(0.5, 0.5, 0.5));
     // ImGuiContext &ctx = *ImGui::CreateContext();
     // ImGuiIO &io = ImGui::GetIO();
     // ImGui_ImplOpenGL3_Init();
-
+    a.addModel("Cube", m, s);
 
     // GLuint gui_framebuffer;
     // glGenFramebuffers(1, &gui_framebuffer);
@@ -91,7 +87,8 @@ extern "C" void android_main(android_app *app) {
         if (!a.isSessionReady()) { continue; }
         a.appUpdateBeginFrame();
         if (a.isShouldRender()) {
-            a.display(m, s);
+
+            a.display();
             // ImGuiIO& io = ImGui::GetIO();
             // ImGui::Render();
             // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -1,21 +1,18 @@
 /*
 ** EPITECH PROJECT, 2024
-** etib-game-engine
+** Visual Studio Live Share (Workspace)
 ** File description:
-** Model
+** ModelVR
 */
 
-#include "Model.hpp"
-#include <android/log.h>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
+#include "ModelVR.hpp"
 
-std::map<std::string, EGE::Model *> EGE::Model::_modelsLoaded = {};
+std::map<std::string, EGE::ModelVR *> EGE::ModelVR::_modelsLoaded = {};
 
-EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &position, const EGE::Maths::Vector3<float> &scale, bool flipTexture)
+EGE::ModelVR::ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position, const EGE::Maths::Vector3<float>& scale, bool flipTexture)
 {
-    if (Model::_modelsLoaded.find(path) != Model::_modelsLoaded.end()) {
-        *this = *Model::_modelsLoaded[path];
+    if (ModelVR::_modelsLoaded.find(path) != ModelVR::_modelsLoaded.end()) {
+        *this = *ModelVR::_modelsLoaded[path];
         this->_position = position;
         this->_scale = scale;
         return;
@@ -23,14 +20,14 @@ EGE::Model::Model(const std::string &path, const EGE::Maths::Vector3<float> &pos
     this->_position = position;
     this->_scale = scale;
     this->loadModel(path, flipTexture);
-    Model::_modelsLoaded[path] = this;
+    ModelVR::_modelsLoaded[path] = this;
 }
 
-EGE::Model::~Model()
+EGE::ModelVR::~ModelVR()
 {
 }
 
-void EGE::Model::draw(Shader &shader)
+void EGE::ModelVR::draw(Shader &shader)
 {
     glm::mat4 modelMat = glm::mat4(1.0f);
     modelMat = glm::translate(modelMat, this->_position.toGlmVec3());
@@ -41,10 +38,12 @@ void EGE::Model::draw(Shader &shader)
     }
 }
 
-void EGE::Model::loadModel(const std::string& path, bool flipTexture)
+void EGE::ModelVR::loadModel(const std::string& path, bool flipTexture)
 {
     Assimp::Importer importer;
+    importer.SetIOHandler(gMemoryIOSystem);
     const aiScene *scene = importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading model %s\n", path.c_str());
     if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
     }
@@ -52,7 +51,8 @@ void EGE::Model::loadModel(const std::string& path, bool flipTexture)
     this->processNode(scene->mRootNode, scene, flipTexture);
 }
 
-void EGE::Model::processNode(aiNode *node, const aiScene *scene, bool flipTexture)
+
+void EGE::ModelVR::processNode(aiNode *node, const aiScene *scene, bool flipTexture)
 {
     // both loop could be parallelized
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
@@ -65,7 +65,7 @@ void EGE::Model::processNode(aiNode *node, const aiScene *scene, bool flipTextur
     }
 }
 
-EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipTexture)
+EGE::Mesh EGE::ModelVR::processMesh(aiMesh *mesh, const aiScene *scene, bool flipTexture)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -114,7 +114,7 @@ EGE::Mesh EGE::Model::processMesh(aiMesh *mesh, const aiScene *scene, bool flipT
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture)
+std::vector<EGE::Texture> EGE::ModelVR::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture)
 {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
@@ -130,8 +130,15 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
         }
         if (!skip) {
             Texture texture;
-            std::string path = this->_directory + "/" + str.C_Str();
-            texture.loadFromFile(path, flipTexture);
+            AAssetManager *mgr = gMemoryIOSystem->getAssetManager();
+            std::string path = this->_directory + str.C_Str();
+            AAsset *file = AAssetManager_open(mgr, path.c_str(), AASSET_MODE_UNKNOWN);
+            off_t fileLength = AAsset_getLength(file);
+            unsigned char *buffer = (unsigned char *)calloc(fileLength + 1, sizeof(unsigned char));
+            AAsset_read(file, buffer, fileLength);
+            texture.loadFromFile(buffer, fileLength, flipTexture);
+            AAsset_close(file);
+            free(buffer);
             texture.setType(typeName);
             texture.setPath(str.C_Str());
             textures.push_back(texture);
@@ -141,22 +148,22 @@ std::vector<EGE::Texture> EGE::Model::loadMaterialTextures(aiMaterial *mat, aiTe
     return textures;
 }
 
-void EGE::Model::setPosition(const EGE::Maths::Vector3<float>& position)
+void EGE::ModelVR::setPosition(const EGE::Maths::Vector3<float>& position)
 {
     this->_position = position;
 }
 
-EGE::Maths::Vector3<float> EGE::Model::getPosition() const
+EGE::Maths::Vector3<float> EGE::ModelVR::getPosition() const
 {
     return this->_position;
 }
 
-void EGE::Model::setScale(const EGE::Maths::Vector3<float>& scale)
+void EGE::ModelVR::setScale(const EGE::Maths::Vector3<float>& scale)
 {
     this->_scale = scale;
 }
 
-EGE::Maths::Vector3<float> EGE::Model::getScale() const
+EGE::Maths::Vector3<float> EGE::ModelVR::getScale() const
 {
     return this->_scale;
 }

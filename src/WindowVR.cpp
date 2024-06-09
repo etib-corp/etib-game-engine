@@ -1355,7 +1355,7 @@ void EGE::WindowVR::appUpdateBeginFrame()
 //     this->_drawables.push_back({model, shader});
 // }
 
-void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
+void EGE::WindowVR::display()
 {
     XrResult result;
 
@@ -1424,6 +1424,7 @@ void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
         matrix_inverse(view, view);
         matrix_multiply(view_proj, proj, view);
         matrix_inverse(inverse_view_proj, view_proj);
+        
 
         // // Model
 
@@ -1469,6 +1470,15 @@ void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
         // glUniform2f(1, this->_triggerStates[0].currentState, (float)(this->_triggerClickStates[0].currentState));
         // glDrawArrays(GL_TRIANGLES, 0, 36);
 
+        for (auto &[key, value] : this->_models) {
+            auto shader = value.first;
+            auto model = value.second;
+            shader->use();
+            unsigned int location = glGetUniformLocation(shader->getID(), "view_proj");
+            glUniformMatrix4fv(location, 1, GL_FALSE, view_proj);
+            model->draw(*shader);
+        }
+
         // // Render Right Hand
         // glUseProgram(this->_boxProgram);
         // glUniformMatrix4fv(0, 1, GL_FALSE, right_mvp);
@@ -1478,13 +1488,6 @@ void EGE::WindowVR::display(EGE::Model &model, EGE::Shader &shader)
         // // Bind Screen Texture
         // glActiveTexture(GL_TEXTURE0);
         // glBindTexture(GL_TEXTURE_2D, this->_screenTexture);
-
-        shader.use();
-        unsigned int proj_loc = glGetUniformLocation(shader.getID(), "projection");
-        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, proj);
-        unsigned int view_loc = glGetUniformLocation(shader.getID(), "view");
-        glUniformMatrix4fv(view_loc, 1, GL_FALSE, view);
-        model.draw(shader);
 
         // // Render Screen
         // glUseProgram(this->_screenProgram);
@@ -1535,4 +1538,10 @@ bool EGE::WindowVR::isSessionReady()
 bool EGE::WindowVR::isShouldRender()
 {
     return this->_shouldRender;
+}
+
+
+void EGE::WindowVR::addModel(const std::string &key, std::shared_ptr<EGE::ModelVR> &model, std::shared_ptr<EGE::Shader> &shader)
+{
+    this->_models[key] = {shader, model};
 }

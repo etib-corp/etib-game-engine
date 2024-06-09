@@ -9,9 +9,15 @@
 
 #define GL_GLEXT_PROTOTYPES
 
-// #include <GL/gl.h>
-#include <EGL/egl.h>
-#include <GLES3/gl3.h>
+#ifdef VR
+    #include <EGL/egl.h>
+    #include <GLES3/gl3.h>
+#endif
 
-// #include <GLFW/glfw3.h>
 #include "glm.hpp"
+
+#ifndef VR
+#include <GL/gl.h>
+
+#include <GLFW/glfw3.h>
+#endif

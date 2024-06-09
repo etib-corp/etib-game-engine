@@ -17,10 +17,11 @@
 #include <jni.h>
 #include <android/log.h>
 #include <android/native_activity.h>
-#include "Model.hpp"
+#include "ModelVR.hpp"
 #include "Shader.hpp"
 #include "Maths/Vector3.hpp"
 #include "Maths/Matrix.hpp"
+#include <memory>
 
 #include "Error.hpp"
 #include <string.h>
@@ -65,11 +66,13 @@ namespace EGE {
 
             bool isShouldRender();
 
-            // void draw();
+            void addModel(const std::string &key,std::shared_ptr<ModelVR> &model, std::shared_ptr<Shader> &shader);
 
-            void display(EGE::Model &model, EGE::Shader &shader);
+            void display();
 
         private:
+            std::map<std::string, std::pair<std::shared_ptr<Shader>, std::shared_ptr<ModelVR>>> _models;
+
             void _appSetCallbacksAndWait();
             void _appInitEgl();
             void _appInitXrCreateInstance();

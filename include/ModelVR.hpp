@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** etib-game-engine
 ** File description:
-** Model
+** ModelVR
 */
 
 #pragma once
@@ -12,6 +12,7 @@
 #include "Mesh.hpp"
 #include "Maths/Vector3.hpp"
 #include "MemoryIOSystem.hpp"
+#include "UtilsVR.hpp"
 
 // C++ include
 #include <assimp/Importer.hpp>
@@ -21,23 +22,26 @@
 #include <thread>
 #include <vector>
 
+extern MemoryIOSystem *gMemoryIOSystem;
+
+
 /**
- * @file Model.hpp
- * @brief File containing the Model class and its related functions.
+ * @file ModelVR.hpp
+ * @brief File containing the ModelVR class and its related functions.
  */
 
 namespace EGE {
 
     /**
-     * @class Model
+     * @class ModelVR
      * @brief Class representing a 3D model.
      */
-    class Model {
+    class ModelVR {
         public:
 
             /**
              * @class ModelError
-             * @brief Exception class for Model related errors.
+             * @brief Exception class for ModelVR related errors.
              */
             class ModelError : public EGE::Error {
                 public:
@@ -49,15 +53,15 @@ namespace EGE {
             };
 
             /**
-             * @brief Constructor for Model.
+             * @brief Constructor for ModelVR.
              * @param path The path to the model file.
              */
-            Model(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
+            ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
 
             /**
-             * @brief Destructor for Model.
+             * @brief Destructor for ModelVR.
              */
-            ~Model();
+            ~ModelVR();
 
             /**
              * @brief Draws the model using a shader.
@@ -129,6 +133,6 @@ namespace EGE {
             std::vector<Texture> _texturesLoaded; ///< The textures loaded for the model.
             EGE::Maths::Vector3<float> _position; ///< The position of the model.
             EGE::Maths::Vector3<float> _scale; ///< The scale of the model.
-            static std::map<std::string, Model *> _modelsLoaded; ///< The loaded models.
+            static std::map<std::string, ModelVR *> _modelsLoaded; ///< The loaded models.
     };
 }
