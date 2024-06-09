@@ -11,7 +11,6 @@
 #include "Error.hpp"
 #include "Mesh.hpp"
 #include "Maths/Vector3.hpp"
-#include "MemoryIOSystem.hpp"
 
 // C++ include
 #include <assimp/Importer.hpp>
