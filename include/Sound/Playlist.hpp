@@ -49,6 +49,11 @@ namespace EGE {
                 void pause();
 
                 /**
+                * @brief Plays or pauses the currently playing music track, depending on its current state.
+                */
+                void playPause();
+
+                /**
                  * @brief Stops the currently playing music track.
                  */
                 void stop();
@@ -66,6 +71,7 @@ namespace EGE {
             protected:
                 std::vector<EGE::Sound::Sound *> _musics; ///< The collection of music tracks in the playlist.
                 size_t _currentMusic; ///< The index of the currently playing music track.
+                bool _isPlaying; ///< A flag indicating whether the playlist is currently playing.
         };
     }
 }
