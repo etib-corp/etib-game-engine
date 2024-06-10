@@ -66,7 +66,7 @@ namespace EGE {
 
             bool isShouldRender();
 
-            void addModel(const std::string &key,std::shared_ptr<ModelVR> &model, std::shared_ptr<Shader> &shader);
+            void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model, const std::shared_ptr<Shader> &shader);
 
             void display();
 

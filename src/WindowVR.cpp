@@ -1541,7 +1541,7 @@ bool EGE::WindowVR::isShouldRender()
 }
 
 
-void EGE::WindowVR::addModel(const std::string &key, std::shared_ptr<EGE::ModelVR> &model, std::shared_ptr<EGE::Shader> &shader)
+void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model, const std::shared_ptr<EGE::Shader> &shader)
 {
     this->_models[key] = {shader, model};
 }

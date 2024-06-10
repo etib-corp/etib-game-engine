@@ -17,7 +17,6 @@ class MemoryIOStream : public Assimp::IOStream {
     public:
         MemoryIOStream(const unsigned char* buffer, size_t length)
         : buffer(buffer), length(length), pos(0) {
-            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Creating MemoryIOStream\n");
         }
 
         ~MemoryIOStream() = default;

@@ -43,7 +43,6 @@ void EGE::ModelVR::loadModel(const std::string& path, bool flipTexture)
     Assimp::Importer importer;
     importer.SetIOHandler(gMemoryIOSystem);
     const aiScene *scene = importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading model %s\n", path.c_str());
     if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
     }
@@ -131,7 +130,7 @@ std::vector<EGE::Texture> EGE::ModelVR::loadMaterialTextures(aiMaterial *mat, ai
         if (!skip) {
             Texture texture;
             AAssetManager *mgr = gMemoryIOSystem->getAssetManager();
-            std::string path = this->_directory + str.C_Str();
+            std::string path = this->_directory + "/" + str.C_Str();
             AAsset *file = AAssetManager_open(mgr, path.c_str(), AASSET_MODE_UNKNOWN);
             off_t fileLength = AAsset_getLength(file);
             unsigned char *buffer = (unsigned char *)calloc(fileLength + 1, sizeof(unsigned char));
