@@ -22,6 +22,7 @@ EGE::Sound::Playlist::Playlist(const std::string &path)
     }
 
     this->_currentMusic = 0;
+    this->_isPlaying = false;
 }
 
 EGE::Sound::Playlist::~Playlist()
@@ -31,16 +32,27 @@ EGE::Sound::Playlist::~Playlist()
 void EGE::Sound::Playlist::play()
 {
     this->_musics[this->_currentMusic]->play();
+    this->_isPlaying = true;
 }
 
 void EGE::Sound::Playlist::pause()
 {
     this->_musics[this->_currentMusic]->pause();
+    this->_isPlaying = false;
+}
+
+void EGE::Sound::Playlist::playPause()
+{
+    if (this->_isPlaying)
+        this->pause();
+    else
+        this->play();
 }
 
 void EGE::Sound::Playlist::stop()
 {
     this->_musics[this->_currentMusic]->stop();
+    this->_isPlaying = false;
     this->_currentMusic = 0;
 }
 
