@@ -17,6 +17,7 @@
 namespace EGE {
     class Movement {
         public:
+            Movement();
             Movement(int duration);
             ~Movement();
 

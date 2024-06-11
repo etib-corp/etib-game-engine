@@ -7,6 +7,16 @@
 
 #include "Movement.hpp"
 
+EGE::Movement::Movement()
+{
+    this->_currentKeyFrame = 0;
+    this->_lastKeyFrame = 0;
+    this->_duration = 1;
+    this->_durationPerKeyFrame = this->_duration;
+    this->_clock = std::chrono::high_resolution_clock();
+    this->_lastTime = this->_clock.now();
+}
+
 EGE::Movement::Movement(int duration)
 {
     this->_currentKeyFrame = 0;
@@ -99,6 +109,17 @@ void EGE::Movement::setCurrentKeyFrame(int keyFrame)
 int EGE::Movement::getCurrentKeyFrame() const
 {
     return this->_currentKeyFrame;
+}
+
+void EGE::Movement::setDuration(int duration)
+{
+    this->_duration = duration;
+    this->_durationPerKeyFrame = duration / (this->_keyFrames.size() == 0 ? 1 : this->_keyFrames.size());
+}
+
+int EGE::Movement::getDuration() const
+{
+    return this->_duration;
 }
 
 EGE::Movement& EGE::Movement::pushFrontKeyFrame(const EGE::Maths::Matrix<4, 4, float> &keyFrame)
