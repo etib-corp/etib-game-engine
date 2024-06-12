@@ -1424,7 +1424,7 @@ void EGE::WindowVR::display()
         matrix_inverse(view, view);
         matrix_multiply(view_proj, proj, view);
         matrix_inverse(inverse_view_proj, view_proj);
-        
+
 
         // // Model
 
@@ -1471,11 +1471,14 @@ void EGE::WindowVR::display()
         // glDrawArrays(GL_TRIANGLES, 0, 36);
 
         for (auto &[key, value] : this->_models) {
+            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Drawing %s", key.c_str());
             auto shader = value.first;
             auto model = value.second;
-            shader->use();
-            unsigned int location = glGetUniformLocation(shader->getID(), "view_proj");
-            glUniformMatrix4fv(location, 1, GL_FALSE, view_proj);
+            if (shader == nullptr) {
+                shader->use();
+                unsigned int location = glGetUniformLocation(shader->getID(), "view_proj");
+                glUniformMatrix4fv(location, 1, GL_FALSE, view_proj);
+            }
             model->draw(*shader);
         }
 

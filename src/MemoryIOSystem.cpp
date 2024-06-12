@@ -31,7 +31,7 @@ char MemoryIOSystem::getOsSeparator() const
 
 Assimp::IOStream *MemoryIOSystem::Open(const char *pFile, const char *pMode)
 {
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Opening file %s\n", pFile);
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Opening file\n");
     if (this->files.find(pFile) == this->files.end())
         return nullptr;
     return new MemoryIOStream(this->files[pFile].first, this->files[pFile].second);
