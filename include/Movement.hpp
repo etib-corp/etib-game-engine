@@ -17,6 +17,10 @@
 namespace EGE {
     class Movement {
         public:
+            class MovementError : public EGE::Error {
+                public:
+                    MovementError(const std::string& message) : EGE::Error(message) {}
+            };
             Movement(int duration = 1000, bool loop = false);
             ~Movement();
 
