@@ -7,17 +7,7 @@
 
 #include "Movement.hpp"
 
-EGE::Movement::Movement()
-{
-    this->_currentKeyFrame = 0;
-    this->_lastKeyFrame = 0;
-    this->_duration = 1;
-    this->_durationPerKeyFrame = this->_duration;
-    this->_clock = std::chrono::high_resolution_clock();
-    this->_lastTime = this->_clock.now();
-}
-
-EGE::Movement::Movement(int duration)
+EGE::Movement::Movement(int duration, bool loop)
 {
     this->_currentKeyFrame = 0;
     this->_lastKeyFrame = 0;
@@ -25,6 +15,7 @@ EGE::Movement::Movement(int duration)
     this->_durationPerKeyFrame = this->_duration;
     this->_clock = std::chrono::high_resolution_clock();
     this->_lastTime = this->_clock.now();
+    this->_loop = loop;
 }
 
 EGE::Movement::~Movement()
@@ -43,7 +34,7 @@ void EGE::Movement::move(float deltaTime)
     if (this->_clock.now() - this->_lastTime >= std::chrono::milliseconds(this->_durationPerKeyFrame)) {
         this->_currentKeyFrame = (this->_currentKeyFrame + 1) % this->_keyFrames.size();
         this->_lastTime = this->_clock.now();
-        if (this->_currentKeyFrame == 0) {
+        if (this->_loop && this->_currentKeyFrame == 0) {
             for (auto &[name, model] : _models) {
                 EGE::Maths::Matrix<4, 4, float> originalModelMatrix = model->getOriginalModelMatrix();
                 model->setPosition(this->getTranslation(originalModelMatrix));
