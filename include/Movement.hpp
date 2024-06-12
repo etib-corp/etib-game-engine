@@ -17,7 +17,11 @@
 namespace EGE {
     class Movement {
         public:
-            Movement(int duration);
+            class MovementError : public EGE::Error {
+                public:
+                    MovementError(const std::string& message) : EGE::Error(message) {}
+            };
+            Movement(int duration = 1000, bool loop = false);
             ~Movement();
 
             void move(float deltaTime);
@@ -73,5 +77,6 @@ namespace EGE {
             int _durationPerKeyFrame;
             std::chrono::high_resolution_clock _clock;
             std::chrono::high_resolution_clock::time_point _lastTime;
+            bool _loop;
     };
 }
