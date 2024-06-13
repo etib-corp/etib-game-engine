@@ -22,11 +22,13 @@
 #include "Maths/Vector3.hpp"
 #include "Maths/Matrix.hpp"
 #include <memory>
+#include <map>
 
 #include "Error.hpp"
 #include <string.h>
 #include <vector>
 #include <tuple>
+
 
 #define XR_USE_PLATFORM_ANDROID
 #define XR_USE_GRAPHICS_API_OPENGL_ES
@@ -66,12 +68,14 @@ namespace EGE {
 
             bool isShouldRender();
 
-            void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model, const std::shared_ptr<Shader> &shader);
+            void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model);
+
+            void addNewSlot(const std::string &key, const std::shared_ptr<Shader> &shader);
 
             void display();
 
         private:
-            std::map<std::string, std::pair<std::shared_ptr<Shader>, std::shared_ptr<ModelVR>>> _models;
+            std::map<std::string, std::pair<std::shared_ptr<Shader>, std::vector<std::shared_ptr<ModelVR>>>> _drawable;
 
             void _appSetCallbacksAndWait();
             void _appInitEgl();
