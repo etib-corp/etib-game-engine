@@ -22,7 +22,8 @@ void EGE::RadioButton::draw()
 {
     if (!this->isVisible())
         return;
-    ImGui::RadioButton(this->_name.c_str(), this->_checked);
+    if (ImGui::RadioButton(this->_name.c_str(), this->_checked))
+        this->setChecked(!this->_checked);
 }
 
 void EGE::RadioButton::setChecked(bool checked)

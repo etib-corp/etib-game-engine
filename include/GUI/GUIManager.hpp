@@ -20,7 +20,6 @@
 #include "GUI/ListBox.hpp"
 #include "GUI/RadioButtonList.hpp"
 
-
 #include "GUI/Text.hpp"
 
 #include "backends/imgui_impl_glfw.h"
@@ -41,7 +40,7 @@ namespace EGE {
 
             /**
              * @brief Initializes the GUIManager with the specified window.
-             * 
+             *
              * @param win The window to be associated with the GUIManager.
              */
             void init(Window *win);
@@ -60,6 +59,16 @@ namespace EGE {
              * @brief Displays the rendered GUI elements on the screen.
              */
             void display();
+
+            /**
+             * @brief Sets the default mode for the GUIManager.
+             */
+            void defaultMode();
+
+            /**
+             * @brief Sets the dark mode for the GUIManager.
+             */
+            void darkMode();
 
             std::map<std::string, Panel *> _panels; /**< The vector of panels managed by the GUIManager. */
             Main *_menuBar; /**< The main menu bar managed by the GUIManager. */
