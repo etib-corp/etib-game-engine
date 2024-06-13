@@ -1350,10 +1350,15 @@ void EGE::WindowVR::appUpdateBeginFrame()
     }
 }
 
-// void EGE::WindowVR::draw(EGE::Model *model, EGE::Shader *shader)
-// {
-//     this->_drawables.push_back({model, shader});
-// }
+void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model)
+{
+    this->_drawable[key].second.push_back(model);
+}
+
+void EGE::WindowVR::addNewSlot(const std::string &key, const std::shared_ptr<EGE::Shader> &shader)
+{
+    this->_drawable[key] = {shader, {}};
+}
 
 void EGE::WindowVR::display()
 {
@@ -1470,23 +1475,23 @@ void EGE::WindowVR::display()
         // glUniform2f(1, this->_triggerStates[0].currentState, (float)(this->_triggerClickStates[0].currentState));
         // glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        for (auto &[key, value] : this->_models) {
-            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Drawing %s", key.c_str());
-            auto shader = value.first;
-            auto model = value.second;
-            if (shader == nullptr) {
-                shader->use();
-                unsigned int location = glGetUniformLocation(shader->getID(), "view_proj");
-                glUniformMatrix4fv(location, 1, GL_FALSE, view_proj);
-            }
-            model->draw(*shader);
-        }
-
         // // Render Right Hand
         // glUseProgram(this->_boxProgram);
         // glUniformMatrix4fv(0, 1, GL_FALSE, right_mvp);
         // glUniform2f(1, this->_triggerStates[1].currentState, (float)(this->_triggerClickStates[1].currentState));
         // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        for (auto& d : this->_drawable) {
+            auto shader = d.second.first;
+            auto models = d.second.second;
+            shader->use();
+            int id = glGetUniformLocation(shader->getID(), "view_proj");
+            glUniformMatrix4fv(id, 1, GL_FALSE, view_proj);
+            for (auto& model : models) {
+                __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Drawing Model");
+                model->draw(*shader);
+            }
+        }
 
         // // Bind Screen Texture
         // glActiveTexture(GL_TEXTURE0);
@@ -1541,10 +1546,4 @@ bool EGE::WindowVR::isSessionReady()
 bool EGE::WindowVR::isShouldRender()
 {
     return this->_shouldRender;
-}
-
-
-void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model, const std::shared_ptr<EGE::Shader> &shader)
-{
-    this->_models[key] = {shader, model};
 }
