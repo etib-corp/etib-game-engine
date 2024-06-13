@@ -7,8 +7,11 @@
 
 #pragma once
 
+#include "Animation.hpp"
+#include "Animator.hpp"
 #include "Camera.hpp"
 #include "Color.hpp"
+#include "Movement.hpp"
 #include "Shader.hpp"
 #include "Window.hpp"
 #include "Texture.hpp"

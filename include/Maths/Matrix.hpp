@@ -9,9 +9,7 @@
 
 // Engine include
 #include "Error.hpp"
-#include "Maths/Vector2.hpp"
-#include "Maths/Vector3.hpp"
-#include "Maths/Vector4.hpp"
+#include "glm.hpp"
 
 // C++ include
 #include <array>
@@ -44,7 +42,7 @@ namespace EGE {
          * @note The type T must be an arithmetic type.
         */
         template<int WIDTH, int HEIGHT, typename T>
-        requires (WIDTH > 0 && HEIGHT > 0 && std::is_arithmetic<T>::value)
+        // requires (WIDTH > 0 && HEIGHT > 0 && std::is_arithmetic<T>::value)
         class Matrix {
             public:
                 /**
@@ -96,6 +94,15 @@ namespace EGE {
                     for (int i = 0; i < HEIGHT; i++) {
                         for (int j = 0; j < WIDTH; j++) {
                             this->_matrix[i][j] = matrix[i][j];
+                        }
+                    }
+                }
+
+                Matrix(T f)
+                {
+                    for (int i = 0; i < HEIGHT; i++) {
+                        for (int j = 0; j < WIDTH; j++) {
+                            this->_matrix[i][j] = f;
                         }
                     }
                 }
@@ -426,7 +433,7 @@ namespace EGE {
                  * @return The element at the specified position.
                  * @throw MatrixError if the position is out of bounds.
                 */
-                std::array<double, WIDTH> operator[](int pos) const
+                std::array<T, WIDTH> operator[](int pos) const
                 {
                     if (pos < 0 || pos >= HEIGHT) {
                         throw MatrixError("Position out of range");
@@ -442,7 +449,7 @@ namespace EGE {
                  * @return The element at the specified position.
                  * @throw MatrixError if the position is out of bounds.
                 */
-                std::array<double, WIDTH>& operator[](int pos)
+                std::array<T, WIDTH>& operator[](int pos)
                 {
                     if (pos < 0 || pos >= HEIGHT) {
                         throw MatrixError("Position out of range");

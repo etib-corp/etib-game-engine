@@ -39,8 +39,16 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
 
 find_package(assimp REQUIRED)
+find_package(OpenAL REQUIRED)
+
+file(GLOB_RECURSE MEMORY_SRC "src/MemoryIOStream.cpp" "src/MemoryIOSystem.cpp")
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE VR_SOURCES "src/*VR.cpp")
+list(REMOVE_ITEM SOURCES ${VR_SOURCES})
+list(REMOVE_ITEM SOURCES ${MEMORY_SRC})
+message("Sources: ${MEMORY_SRC}")
+
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_options(-g3 -ggdb)
@@ -58,13 +66,15 @@ target_link_libraries(EGE PUBLIC ${GL_LIBS})
 
 target_link_libraries(EGE PUBLIC assimp::assimp)
 
+target_link_libraries(EGE PUBLIC OpenAL::OpenAL)
+
 target_link_libraries(EGE PUBLIC imgui_glfw)
 
 set_target_properties(EGE PROPERTIES OUTPUT_NAME "EGE-OpenGL")
 set_target_properties(EGE PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
     message("Building tests")
     file(GLOB_RECURSE TEST_SOURCES "tests/functional/src/*.cpp")
 

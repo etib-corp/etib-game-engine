@@ -61,6 +61,7 @@ namespace EGE {
              */
             Texture(const std::string& path, const std::string& type, unsigned int id);
 
+
             /**
              * @brief Destructor for Texture.
              */
@@ -72,6 +73,7 @@ namespace EGE {
              */
             void loadFromFile(const std::string& path, bool flip = false);
 
+            void loadFromFile(const unsigned char *buffer, off_t size, bool flip = false);
             /**
              * @brief Gets the id of the texture.
              * @return The id of the texture.
