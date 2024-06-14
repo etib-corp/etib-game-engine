@@ -91,6 +91,8 @@ namespace EGE {
             void appUpdateSessionStateChange(XrSessionState state);
             // void _appInitOpenglShaders();
 
+            XrVector3f _position;
+
             // Native app glue
             android_app *_app;
             bool _isWindowInit;
@@ -122,6 +124,7 @@ namespace EGE {
             XrPath _posePaths[HAND_COUNT];
             XrPath _hapticPaths[HAND_COUNT];
             XrPath _menuClickPaths[HAND_COUNT];
+            XrPath _thumbstickPaths[HAND_COUNT];
 
             // Action Set and Actions
             XrActionSet _actionSet;
@@ -131,6 +134,7 @@ namespace EGE {
             XrAction _poseAction;
             XrAction _vibrateAction;
             XrAction _menuAction;
+            XrAction _thumbstickAction;
 
             // Swapchains
             int32_t _swapchainWidths[MAX_VIEWS];
@@ -152,6 +156,7 @@ namespace EGE {
             XrSpaceLocation _handLocations[HAND_COUNT];
             XrActionStateFloat _triggerStates[HAND_COUNT];
             XrActionStateBoolean _triggerClickStates[HAND_COUNT];
+            XrActionStateVector2f _thumbstickStates[HAND_COUNT];
 
             // Session State
             XrSessionState _sessionState;

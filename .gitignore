@@ -40,4 +40,5 @@ imgui
 # Development files
 .vscode
 TODO
+*.apk
 tests/vr/debug.keystore
