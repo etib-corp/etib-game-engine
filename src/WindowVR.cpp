@@ -347,6 +347,8 @@ EGE::WindowVR::WindowVR(android_app *app)
     this->_app = app;
     this->_isWindowInit = false;
 
+    this->_position = {0.0, 0.0, 0.0};
+
     this->_eglDisplay = EGL_NO_DISPLAY;
     this->_eglConfig = 0;
     this->_eglContext = EGL_NO_CONTEXT;
@@ -820,6 +822,9 @@ void EGE::WindowVR::_appInitXrCreateActions()
 	xrStringToPath(this->_instance, "/user/hand/right/output/haptic", &this->_hapticPaths[1]);
 	xrStringToPath(this->_instance, "/user/hand/left/input/menu/click", &this->_menuClickPaths[0]);
 	xrStringToPath(this->_instance, "/user/hand/right/input/menu/click", &this->_menuClickPaths[1]);
+    xrStringToPath(this->_instance, "/user/hand/left/input/thumbstick", &this->_thumbstickPaths[0]);
+    xrStringToPath(this->_instance, "/user/hand/right/input/thumbstick", &this->_thumbstickPaths[1]);
+
 
     // Create Actions
     XrActionCreateInfo grab_desc;
@@ -900,7 +905,19 @@ void EGE::WindowVR::_appInitXrCreateActions()
         throw EGE::WindowVRError("xrCreateAction() failed");
     }
 
-    // Oculus Touch Controller Interaction Profile
+    XrActionCreateInfo thumbstickDesc;
+    thumbstickDesc.type = XR_TYPE_ACTION_CREATE_INFO;
+    thumbstickDesc.next = NULL;
+    thumbstickDesc.actionType = XR_ACTION_TYPE_VECTOR2F_INPUT;
+    strcpy(thumbstickDesc.actionName, "thumbstick" );
+    strcpy(thumbstickDesc.localizedActionName, "Thumbstick");
+    thumbstickDesc.countSubactionPaths = 2;
+    thumbstickDesc.subactionPaths = this->_handPaths;
+    result = xrCreateAction(this->_actionSet, &thumbstickDesc, &this->_thumbstickAction);
+    if (XR_FAILED(result)) {
+        throw EGE::WindowVRError("xrCreateAction() failed");
+    }
+
     xrStringToPath(this->_instance, "/interaction_profiles/oculus/touch_controller", &this->_touchControllerPath);
     XrActionSuggestedBinding bindings[] = {
             {this->_grabAction, this->_squeezeValuePaths[0]},
@@ -912,9 +929,13 @@ void EGE::WindowVR::_appInitXrCreateActions()
             {this->_poseAction, this->_posePaths[0]},
             {this->_poseAction, this->_posePaths[1]},
             {this->_menuAction, this->_menuClickPaths[0]},
+            // {this->_menuAction, this->_menuClickPaths[1]},
             {this->_vibrateAction, this->_hapticPaths[0]},
-            {this->_vibrateAction, this->_hapticPaths[1]}
+            {this->_vibrateAction, this->_hapticPaths[1]},
+            {this->_thumbstickAction, this->_thumbstickPaths[0]},
+            {this->_thumbstickAction, this->_thumbstickPaths[1]}
     };
+
     XrInteractionProfileSuggestedBinding suggested_bindings;
     suggested_bindings.type = XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING;
     suggested_bindings.next = NULL;
@@ -1268,6 +1289,7 @@ void EGE::WindowVR::appUpdatePumpEvents()
             case XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING:
                     printf("Event: XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING\n");
                     // TODO: Handle Reference Spaces changes
+                    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING");
                     break;
             case XR_TYPE_EVENT_DATA_EVENTS_LOST:
                     printf("Event: XR_TYPE_EVENT_DATA_EVENTS_LOST\n");
@@ -1319,6 +1341,7 @@ void EGE::WindowVR::appUpdateBeginFrame()
             this->_handLocations[i].type = XR_TYPE_SPACE_LOCATION;
             this->_triggerStates[i].type = XR_TYPE_ACTION_STATE_FLOAT;
             this->_triggerClickStates[i].type = XR_TYPE_ACTION_STATE_BOOLEAN;
+            this->_thumbstickStates[i].type = XR_TYPE_ACTION_STATE_VECTOR2F;
     }
     result = xrLocateSpace(this->_handSpaces[0], this->_stageSpace, this->_frameState.predictedDisplayTime, &this->_handLocations[0]);
     if (XR_FAILED(result)) {
@@ -1341,6 +1364,15 @@ void EGE::WindowVR::appUpdateBeginFrame()
     action_get_info.subactionPath = this->_handPaths[1];
     xrGetActionStateBoolean(this->_session, &action_get_info, &this->_triggerClickStates[1]);
 
+    action_get_info.action = this->_thumbstickAction;
+    action_get_info.subactionPath = this->_handPaths[0];
+    xrGetActionStateVector2f(this->_session, &action_get_info, &this->_thumbstickStates[0]);
+    action_get_info.subactionPath = this->_handPaths[1];
+    xrGetActionStateVector2f(this->_session, &action_get_info, &this->_thumbstickStates[1]);
+
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Trigger: x = %f", this->_thumbstickStates[0].currentState.x);
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Trigger: y = %f", this->_thumbstickStates[0].currentState.y);
+
     XrFrameBeginInfo frame_begin;
     frame_begin.type = XR_TYPE_FRAME_BEGIN_INFO;
     frame_begin.next = NULL;
@@ -1350,10 +1382,15 @@ void EGE::WindowVR::appUpdateBeginFrame()
     }
 }
 
-// void EGE::WindowVR::draw(EGE::Model *model, EGE::Shader *shader)
-// {
-//     this->_drawables.push_back({model, shader});
-// }
+void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model)
+{
+    this->_drawable[key].second.push_back(model);
+}
+
+void EGE::WindowVR::addNewSlot(const std::string &key, const std::shared_ptr<EGE::Shader> &shader)
+{
+    this->_drawable[key] = {shader, {}};
+}
 
 void EGE::WindowVR::display()
 {
@@ -1418,15 +1455,35 @@ void EGE::WindowVR::display()
         float view_proj[16];
         float inverse_view_proj[16];
         matrix_identity(translation);
-        matrix_translate(translation, translation, (float *)&this->_projectionLayerViews[v].pose.position);
+        XrVector3f pos = {0, 0, 0};
+        this->_projectionLayerViews[v].pose.position.x += this->_position.x * 0.1;
+        this->_projectionLayerViews[v].pose.position.z += this->_position.z * 0.1;
+        matrix_translate(translation, translation, (float *)& this->_projectionLayerViews[v].pose.position);
         matrix_rotation_from_quat(rotation, (float *)&this->_projectionLayerViews[v].pose.orientation);
         matrix_multiply(view, translation, rotation);
         matrix_inverse(view, view);
         matrix_multiply(view_proj, proj, view);
         matrix_inverse(inverse_view_proj, view_proj);
-        
 
-        // // Model
+        // get front vector from view matrix
+        float front[3] = {view[2], view[6], view[10]};
+        // get right vector from view matrix
+        float right_vector[3] = {view[0], view[4], view[8]};
+        // get up vector from view matrix
+        float up_vector[3] = {view[1], view[5], view[9]};
+
+
+
+
+        this->_position.x -= this->_thumbstickStates[0].currentState.y * front[0];
+        this->_position.y -= this->_thumbstickStates[0].currentState.y * front[1];
+        this->_position.z -= this->_thumbstickStates[0].currentState.y * front[2];
+
+        this->_position.x += this->_thumbstickStates[0].currentState.x * right_vector[0];
+        this->_position.y += this->_thumbstickStates[0].currentState.x * right_vector[1];
+        this->_position.z += this->_thumbstickStates[0].currentState.x * right_vector[2];
+
+
 
         // // Left MVP
         // float left_translation[16];
@@ -1470,20 +1527,22 @@ void EGE::WindowVR::display()
         // glUniform2f(1, this->_triggerStates[0].currentState, (float)(this->_triggerClickStates[0].currentState));
         // glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        for (auto &[key, value] : this->_models) {
-            auto shader = value.first;
-            auto model = value.second;
-            shader->use();
-            unsigned int location = glGetUniformLocation(shader->getID(), "view_proj");
-            glUniformMatrix4fv(location, 1, GL_FALSE, view_proj);
-            model->draw(*shader);
-        }
-
         // // Render Right Hand
         // glUseProgram(this->_boxProgram);
         // glUniformMatrix4fv(0, 1, GL_FALSE, right_mvp);
         // glUniform2f(1, this->_triggerStates[1].currentState, (float)(this->_triggerClickStates[1].currentState));
         // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        for (auto& d : this->_drawable) {
+            auto shader = d.second.first;
+            auto models = d.second.second;
+            shader->use();
+            int id = glGetUniformLocation(shader->getID(), "view_proj");
+            glUniformMatrix4fv(id, 1, GL_FALSE, view_proj);
+            for (auto& model : models) {
+                model->draw(*shader);
+            }
+        }
 
         // // Bind Screen Texture
         // glActiveTexture(GL_TEXTURE0);
@@ -1538,10 +1597,4 @@ bool EGE::WindowVR::isSessionReady()
 bool EGE::WindowVR::isShouldRender()
 {
     return this->_shouldRender;
-}
-
-
-void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model, const std::shared_ptr<EGE::Shader> &shader)
-{
-    this->_models[key] = {shader, model};
 }

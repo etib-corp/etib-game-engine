@@ -28,9 +28,9 @@ extern "C" void android_main(android_app *app) {
     EGE::WindowVR a(app);
     EGE::UtilsVR::app = app;
 
-    std::string vertexSource = EGE::UtilsVR::readAssetFile("shaders/vertex.vert");
+    std::string vertexSource = EGE::UtilsVR::readAssetFile("shader/vertex.vert");
 
-    std::string fragmentSource = EGE::UtilsVR::readAssetFile("shaders/fragment.frag");
+    std::string fragmentSource = EGE::UtilsVR::readAssetFile("shader/fragment.frag");
 
     a.create();
 
@@ -39,17 +39,18 @@ extern "C" void android_main(android_app *app) {
     gMemoryIOSystem = new MemoryIOSystem();
     gMemoryIOSystem->setAssetManager(app->activity->assetManager);
 
-    gMemoryIOSystem->addFile("models/floor/floor.obj");
-    gMemoryIOSystem->addFile("models/floor/floor.mtl");
+    gMemoryIOSystem->addFile("models/cube/Grass_Block.mtl");
+    gMemoryIOSystem->addFile("models/cube/Grass_Block.obj");
 
-    std::shared_ptr<EGE::ModelVR> m = std::make_shared<EGE::ModelVR>("models/floor/floor.obj");
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Model loaded\n");
+    std::shared_ptr<EGE::ModelVR> m = std::make_shared<EGE::ModelVR>("models/cube/Grass_Block.obj");
     m->setPosition(EGE::Maths::Vector3<float>(0, 1, 0));
     m->setScale(EGE::Maths::Vector3<float>(0.5, 0.5, 0.5));
     // ImGuiContext &ctx = *ImGui::CreateContext();
     // ImGuiIO &io = ImGui::GetIO();
     // ImGui_ImplOpenGL3_Init();
-    a.addModel("Cube", m, s);
+
+    a.addNewSlot("Test", s);
+    a.addModel("Test", m);
 
     // GLuint gui_framebuffer;
     // glGenFramebuffers(1, &gui_framebuffer);

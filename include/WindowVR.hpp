@@ -22,11 +22,13 @@
 #include "Maths/Vector3.hpp"
 #include "Maths/Matrix.hpp"
 #include <memory>
+#include <map>
 
 #include "Error.hpp"
 #include <string.h>
 #include <vector>
 #include <tuple>
+
 
 #define XR_USE_PLATFORM_ANDROID
 #define XR_USE_GRAPHICS_API_OPENGL_ES
@@ -66,12 +68,14 @@ namespace EGE {
 
             bool isShouldRender();
 
-            void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model, const std::shared_ptr<Shader> &shader);
+            void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model);
+
+            void addNewSlot(const std::string &key, const std::shared_ptr<Shader> &shader);
 
             void display();
 
         private:
-            std::map<std::string, std::pair<std::shared_ptr<Shader>, std::shared_ptr<ModelVR>>> _models;
+            std::map<std::string, std::pair<std::shared_ptr<Shader>, std::vector<std::shared_ptr<ModelVR>>>> _drawable;
 
             void _appSetCallbacksAndWait();
             void _appInitEgl();
@@ -86,6 +90,8 @@ namespace EGE {
             void _appUpdateBeginSession();
             void appUpdateSessionStateChange(XrSessionState state);
             // void _appInitOpenglShaders();
+
+            XrVector3f _position;
 
             // Native app glue
             android_app *_app;
@@ -118,6 +124,7 @@ namespace EGE {
             XrPath _posePaths[HAND_COUNT];
             XrPath _hapticPaths[HAND_COUNT];
             XrPath _menuClickPaths[HAND_COUNT];
+            XrPath _thumbstickPaths[HAND_COUNT];
 
             // Action Set and Actions
             XrActionSet _actionSet;
@@ -127,6 +134,7 @@ namespace EGE {
             XrAction _poseAction;
             XrAction _vibrateAction;
             XrAction _menuAction;
+            XrAction _thumbstickAction;
 
             // Swapchains
             int32_t _swapchainWidths[MAX_VIEWS];
@@ -148,6 +156,7 @@ namespace EGE {
             XrSpaceLocation _handLocations[HAND_COUNT];
             XrActionStateFloat _triggerStates[HAND_COUNT];
             XrActionStateBoolean _triggerClickStates[HAND_COUNT];
+            XrActionStateVector2f _thumbstickStates[HAND_COUNT];
 
             // Session State
             XrSessionState _sessionState;

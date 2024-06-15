@@ -9,6 +9,8 @@
 
 std::map<std::string, EGE::ModelVR *> EGE::ModelVR::_modelsLoaded = {};
 
+static Assimp::Importer importer;
+
 EGE::ModelVR::ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position, const EGE::Maths::Vector3<float>& scale, bool flipTexture)
 {
     if (ModelVR::_modelsLoaded.find(path) != ModelVR::_modelsLoaded.end()) {
@@ -40,8 +42,9 @@ void EGE::ModelVR::draw(Shader &shader)
 
 void EGE::ModelVR::loadModel(const std::string& path, bool flipTexture)
 {
-    Assimp::Importer importer;
-    importer.SetIOHandler(gMemoryIOSystem);
+    if (importer.IsDefaultIOHandler()) {
+        importer.SetIOHandler(gMemoryIOSystem);
+    }
     const aiScene *scene = importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
