@@ -28,9 +28,9 @@ EGE::Camera::~Camera()
 {
 }
 
-EGE::Maths::Matrix<4, 4, double> EGE::Camera::getViewMatrix() const
+EGE::Maths::Matrix<4, 4, float> EGE::Camera::getViewMatrix() const
 {
-    return EGE::Maths::Matrix<4, 4, double>(glm::lookAt(this->_position.toGlmVec3(), this->_position.toGlmVec3() + this->_front.toGlmVec3(), this->_up.toGlmVec3()));
+    return EGE::Maths::Matrix<4, 4, float>(glm::lookAt(this->_position.toGlmVec3(), this->_position.toGlmVec3() + this->_front.toGlmVec3(), this->_up.toGlmVec3()));
 }
 
 void EGE::Camera::move(Movement direction, float deltaTime)
@@ -54,10 +54,10 @@ void EGE::Camera::move(Movement direction, float deltaTime)
 void EGE::Camera::update(EGE::Shader &shader, float aspect)
 {
     shader.use();
-    glm::mat4 projection = glm::perspective(glm::radians(this->getZoom()), aspect, 0.1f, 10000.0f);
-    glm::mat4 view = this->getViewMatrix().toGlm();
-    shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(projection));
-    shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(view));
+    this->_projection = glm::perspective(glm::radians(this->getZoom()), aspect, 0.1f, 10000.0f);
+    this->_view = this->getViewMatrix();
+    shader.setMat("projection", EGE::Maths::Matrix<4, 4, float>(this->_projection.toGlm()));
+    shader.setMat("view", EGE::Maths::Matrix<4, 4, float>(this->_view.toGlm()));
 }
 
 void EGE::Camera::rotate(float xoffset, float yoffset, bool constrainPitch)

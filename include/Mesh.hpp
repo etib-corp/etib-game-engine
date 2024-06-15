@@ -49,6 +49,8 @@ namespace EGE {
              */
             void draw(const Shader& shader);
 
+            std::vector<Vertex> getVertices() const { return _vertices; }
+
         private:
             /**
              * @brief Sets up the mesh for rendering.

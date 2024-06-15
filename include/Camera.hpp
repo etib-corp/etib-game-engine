@@ -71,7 +71,7 @@ namespace EGE {
          *
          * @return The view matrix.
          */
-        Maths::Matrix<4, 4, double> getViewMatrix() const;
+        Maths::Matrix<4, 4, float> getViewMatrix() const;
 
         /**
          * @brief Moves the camera based on the specified direction.
@@ -224,6 +224,9 @@ namespace EGE {
          * @return The zoom value of the camera.
          */
         float getZoom() const;
+
+        Maths::Matrix<4, 4, float> _view; ///< The view matrix of the camera
+        Maths::Matrix<4, 4, float> _projection; ///< The projection matrix of the camera
 
     private:
         /**

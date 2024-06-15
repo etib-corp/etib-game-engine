@@ -145,6 +145,9 @@ namespace EGE {
             std::map<std::string, BoneInfo>& getBoneInfoMap();
 
             int& getBoneNumber();
+
+            std::vector<Mesh> getMeshes() const { return this->_meshes; }
+
         private:
             /**
              * @brief Loads a model from a file.
