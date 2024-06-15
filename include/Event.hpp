@@ -263,9 +263,9 @@ namespace EGE {
             enum JoystickAxis {
                 JoystickLX = GLFW_GAMEPAD_AXIS_LEFT_X,              /**< Joystick axis code for the left X axis. */
                 JoystickLY = GLFW_GAMEPAD_AXIS_LEFT_Y,              /**< Joystick axis code for the left Y axis. */
-                JoystickRX = GLFW_GAMEPAD_AXIS_RIGHT_X,             /**< Joystick axis code for the right X axis. */
-                JoystickRY = GLFW_GAMEPAD_AXIS_RIGHT_Y,             /**< Joystick axis code for the right Y axis. */
-                JoystickLT = GLFW_GAMEPAD_AXIS_LEFT_TRIGGER,        /**< Joystick axis code for the left trigger axis. */
+                JoystickLT = GLFW_GAMEPAD_AXIS_RIGHT_X,             /**< Joystick axis code for the left trigger axis. */
+                JoystickRX = GLFW_GAMEPAD_AXIS_RIGHT_Y,             /**< Joystick axis code for the right X axis. */
+                JoystickRY = GLFW_GAMEPAD_AXIS_LEFT_TRIGGER,        /**< Joystick axis code for the right Y axis.*/
                 JoystickRT = GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER,       /**< Joystick axis code for the right trigger axis. */
             };
 
@@ -311,6 +311,18 @@ namespace EGE {
                 Trigger(Type type, std::uint32_t trigger, Mode mode, std::function<void()> callback, std::uint8_t joystickId = -1);
 
                 /**
+                 * @brief Constructs a Trigger object.
+                 *
+                 * @param type The type of the trigger.
+                 * @param trigger The trigger value.
+                 * @param mode The mode of the trigger.
+                 * @param callback The callback function to be called when the trigger is activated.
+                 * @param joystickId The ID of the joystick associated with the trigger (optional, default is -1).
+                 * @note This constructor is used for joystick axis events.
+                */
+                Trigger(Type type, std::uint32_t trigger, Mode mode, std::function<void(float)> callback, std::uint8_t joystickId = -1);
+
+                /**
                  * @brief Destroys the Trigger object.
                  */
                 ~Trigger();
@@ -349,6 +361,14 @@ namespace EGE {
                  * @return The callback function associated with this event.
                  */
                 std::function<void()> getCallback() const;
+
+                                /**
+                 * @brief Retrieves the callback function associated with this event.
+                 *
+                 * @return The callback function associated with this event.
+                 * @note This function is used for joystick axis events.
+                 */
+                std::function<void(float)> getJoystickAxisCallback() const;
 
                 /**
                  * @brief Checks if the trigger is currently pressed.
@@ -393,6 +413,7 @@ namespace EGE {
                 const std::uint32_t _trigger;                       /**< The trigger value. */
                 const Type _type;                                   /**< The type of the trigger. */
                 std::function<void()> _callback;                    /**< The callback function to be called when the trigger is activated. */
+                std::function<void(float)> _joystickAxisCallback;   /**< The callback function to be called when the joystickAxis is moved. */
                 const std::int8_t _joystickId;                      /**< The ID of the joystick associated with the trigger. */
                 Mode _mode;                                         /**< The mode of the trigger. */
                 bool _pressed;                                      /**< The pressed state of the trigger. */

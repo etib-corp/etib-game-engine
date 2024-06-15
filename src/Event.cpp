@@ -26,6 +26,11 @@ EGE::Event::Trigger::Trigger(EGE::Event::Type type, std::uint32_t trigger, EGE::
 {
 }
 
+EGE::Event::Trigger::Trigger(EGE::Event::Type type, std::uint32_t trigger, EGE::Event::Mode mode, std::function<void(float)> callback, std::uint8_t joystickId)
+    : _type(type), _trigger(trigger), _mode(mode), _joystickAxisCallback(callback), _joystickId(joystickId)
+{
+}
+
 EGE::Event::Trigger::~Trigger()
 {
 }
@@ -52,7 +57,16 @@ EGE::Event::Mode EGE::Event::Trigger::getMode() const
 
 std::function<void()> EGE::Event::Trigger::getCallback() const
 {
+    if (!this->_callback)
+        throw EGE::Event::EventError("Callback is not set");
     return this->_callback;
+}
+
+std::function<void(float)> EGE::Event::Trigger::getJoystickAxisCallback() const
+{
+    if (!this->_joystickAxisCallback)
+        throw EGE::Event::EventError("JoystickAxis Callback is not set");
+    return this->_joystickAxisCallback;
 }
 
 bool EGE::Event::Trigger::isPressed() const
@@ -80,6 +94,7 @@ EGE::Event::Trigger& EGE::Event::Trigger::operator=(const EGE::Event::Trigger &o
     if (this != &other) {
         this->_mode = other._mode;
         this->_callback = other._callback;
+        this->_joystickAxisCallback = other._joystickAxisCallback;
         this->_pressed = other._pressed;
     }
     return *this;
@@ -125,9 +140,22 @@ void EGE::Event::pollEvents()
             else
                 keyValue = -1;
         } else if (trigger.getType() == EGE::Event::Type::JoystickButton) {
-            keyValue = -1;
+            if (!glfwJoystickPresent(trigger.getJoystickId()))
+                continue;
+            int count = 0;
+            const unsigned char *buttons = glfwGetJoystickButtons(trigger.getJoystickId(), &count);
+            if (count < trigger.getTrigger())
+                continue;
+            keyValue = buttons[trigger.getTrigger()];
         } else if (trigger.getType() == EGE::Event::Type::JoystickAxis) {
-            keyValue = -1;
+            if (!glfwJoystickPresent(trigger.getJoystickId()))
+                continue;
+            int count = 0;
+            const float *axes = glfwGetJoystickAxes(trigger.getJoystickId(), &count);
+            if (count < trigger.getTrigger())
+                continue;
+            trigger.getJoystickAxisCallback()(axes[trigger.getTrigger()]);
+            continue;
         } else if (trigger.getType() == EGE::Event::Type::Window) {
             keyValue = -1; /**< Window event are already managed by glfw callback functions */
         } else {
