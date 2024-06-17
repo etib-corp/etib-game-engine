@@ -29,6 +29,8 @@ void EGE::GUIManager::display()
 
 void EGE::GUIManager::draw()
 {
+    if (this->_hidden)
+        return;
     this->_menuBar->draw();
     for (auto &gui : this->_panels) {
         this->_panels[gui.first]->draw();
@@ -205,4 +207,14 @@ void EGE::GUIManager::darkMode()
     style.Colors[ImGuiCol_PlotHistogramHovered]  = ImVec4(0.098f, 0.463f, 0.824f, 1.0f);
 
     style.Colors[ImGuiCol_TextSelectedBg]        = ImVec4(1.0f, 1.0f, 1.0f, 0.5f);
+}
+
+void EGE::GUIManager::show()
+{
+    this->_hidden = false;
+}
+
+void EGE::GUIManager::hide()
+{
+    this->_hidden = true;
 }

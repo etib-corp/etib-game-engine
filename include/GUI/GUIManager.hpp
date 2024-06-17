@@ -70,10 +70,23 @@ namespace EGE {
              */
             void darkMode();
 
+            /**
+             * @brief Shows the GUIManager.
+             */
+            void show();
+
+            /**
+             * @brief Hides the GUIManager.
+             */
+            void hide();
+
             std::map<std::string, Panel *> _panels; /**< The vector of panels managed by the GUIManager. */
             Main *_menuBar; /**< The main menu bar managed by the GUIManager. */
 
             Window *_window; /**< The window associated with the GUIManager. */
+
+        protected:
+            bool _hidden; /**< The hidden state of the GUIManager. */
     };
 }
 
