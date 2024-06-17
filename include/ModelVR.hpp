@@ -56,7 +56,7 @@ namespace EGE {
              * @brief Constructor for ModelVR.
              * @param path The path to the model file.
              */
-            ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& rotation, const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
+            ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& rotation = EGE::Maths::Vector3<float>(0.0f, 0.0f, 0.0f), const EGE::Maths::Vector3<float>& scale = EGE::Maths::Vector3<float>(1.0f, 1.0f, 1.0f), bool flipTexture = false);
 
             /**
              * @brief Destructor for ModelVR.
@@ -96,6 +96,20 @@ namespace EGE {
              * @return Vector3 of float that is the scale of the model
             */
             EGE::Maths::Vector3<float> getScale() const;
+
+            /**
+             * @brief Returns the rotation of the model
+             *
+             * @return Vector3 of float that is the rotation of the model
+            */
+            EGE::Maths::Vector3<float> getRotation() const;
+
+            /**
+             * @brief Set the rotation of the model
+             *
+             * @param rotation Vector3 of float that is the new rotation of the model
+            */
+            void setRotation(const EGE::Maths::Vector3<float>& rotation);
 
         private:
             /**
