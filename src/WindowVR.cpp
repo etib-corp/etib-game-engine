@@ -1292,7 +1292,6 @@ void EGE::WindowVR::appUpdatePumpEvents()
             case XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING:
                     printf("Event: XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING\n");
                     // TODO: Handle Reference Spaces changes
-                    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING");
                     break;
             case XR_TYPE_EVENT_DATA_EVENTS_LOST:
                     printf("Event: XR_TYPE_EVENT_DATA_EVENTS_LOST\n");
@@ -1373,8 +1372,6 @@ void EGE::WindowVR::appUpdateBeginFrame()
     action_get_info.subactionPath = this->_handPaths[1];
     xrGetActionStateVector2f(this->_session, &action_get_info, &this->_thumbstickStates[1]);
 
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Trigger: x = %f", this->_thumbstickStates[0].currentState.x);
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Trigger: y = %f", this->_thumbstickStates[0].currentState.y);
 
     XrFrameBeginInfo frame_begin;
     frame_begin.type = XR_TYPE_FRAME_BEGIN_INFO;

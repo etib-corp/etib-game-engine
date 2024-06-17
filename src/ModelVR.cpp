@@ -49,6 +49,7 @@ void EGE::ModelVR::loadModel(const std::string& path, bool flipTexture)
     if (importer.IsDefaultIOHandler()) {
         importer.SetIOHandler(gMemoryIOSystem);
     }
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading model %s", path.c_str());
     const aiScene *scene = importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if (scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         throw ModelError("ERROR\n\tASSIMP\n\t\t" + std::string(importer.GetErrorString()));
@@ -61,6 +62,7 @@ void EGE::ModelVR::loadModel(const std::string& path, bool flipTexture)
 void EGE::ModelVR::processNode(aiNode *node, const aiScene *scene, bool flipTexture)
 {
     // both loop could be parallelized
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Processing node %d", node->mNumMeshes);
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
         this->_meshes.push_back(this->processMesh(mesh, scene, flipTexture));
@@ -77,6 +79,7 @@ EGE::Mesh EGE::ModelVR::processMesh(aiMesh *mesh, const aiScene *scene, bool fli
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
 
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Processing mesh %d", mesh->mNumVertices);
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
 
@@ -123,6 +126,7 @@ EGE::Mesh EGE::ModelVR::processMesh(aiMesh *mesh, const aiScene *scene, bool fli
 std::vector<EGE::Texture> EGE::ModelVR::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture)
 {
     std::vector<Texture> textures;
+    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading textures %d\n", mat->GetTextureCount(type));
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
         mat->GetTexture(type, i, &str);
@@ -138,8 +142,10 @@ std::vector<EGE::Texture> EGE::ModelVR::loadMaterialTextures(aiMaterial *mat, ai
             Texture texture;
             AAssetManager *mgr = gMemoryIOSystem->getAssetManager();
             std::string path = this->_directory + "/" + str.C_Str();
+            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Loading texture %s", path.c_str());
             AAsset *file = AAssetManager_open(mgr, path.c_str(), AASSET_MODE_UNKNOWN);
             off_t fileLength = AAsset_getLength(file);
+            __android_log_print(ANDROID_LOG_INFO, "MYTAG", "file lenght %d\n", fileLength);
             unsigned char *buffer = (unsigned char *)calloc(fileLength + 1, sizeof(unsigned char));
             AAsset_read(file, buffer, fileLength);
             texture.loadFromFile(buffer, fileLength, flipTexture);

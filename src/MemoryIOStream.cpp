@@ -9,7 +9,6 @@
 
 size_t MemoryIOStream::Read(void *pvBuffer, size_t pSize, size_t pCount)
 {
-    __android_log_print(ANDROID_LOG_INFO, "MYTAG", "Reading %d bytes\n", pSize * pCount);
     size_t toRead = pSize * pCount;
     if (this->pos + toRead > this->length)
         toRead = this->length - this->pos;

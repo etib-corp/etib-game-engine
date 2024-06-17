@@ -19,6 +19,8 @@ class MemoryIOSystem : public Assimp::IOSystem {
 
     void addFile(const std::string &path);
 
+    void addFile(const std::string &path, const std::string &buffer);
+
     bool Exists(const char *pFile) const override;
 
     char getOsSeparator() const override;
