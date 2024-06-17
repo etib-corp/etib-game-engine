@@ -11,9 +11,9 @@ std::map<std::string, EGE::ModelVR *> EGE::ModelVR::_modelsLoaded = {};
 
 static Assimp::Importer importer;
 
-EGE::ModelVR::ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position, const EGE::Maths::Vector3<float> &rotation, const EGE::Maths::Vector3<float>& scale, bool flipTexture)
+EGE::ModelVR::ModelVR(const std::string& path, const EGE::Maths::Vector3<float>& position, const EGE::Maths::Vector3<float> &rotation, const EGE::Maths::Vector3<float>& scale, bool flipTexture, bool forceReload)
 {
-    if (ModelVR::_modelsLoaded.find(path) != ModelVR::_modelsLoaded.end()) {
+    if (!forceReload && ModelVR::_modelsLoaded.find(path) != ModelVR::_modelsLoaded.end()) {
         *this = *ModelVR::_modelsLoaded[path];
         this->_position = position;
         this->_scale = scale;
