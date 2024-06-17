@@ -80,6 +80,18 @@ namespace EGE {
              */
             void hide();
 
+            /**
+             * @brief Toggles the visibility of the GUIManager.
+             */
+            void toggle();
+
+            /**
+             * @brief Checks if the GUIManager is hidden.
+             *
+             * @return True if the GUIManager is visible, false otherwise.
+             */
+            bool isVisible() const;
+
             std::map<std::string, Panel *> _panels; /**< The vector of panels managed by the GUIManager. */
             Main *_menuBar; /**< The main menu bar managed by the GUIManager. */
 

@@ -218,3 +218,13 @@ void EGE::GUIManager::hide()
 {
     this->_hidden = true;
 }
+
+void EGE::GUIManager::toggle()
+{
+    this->_hidden = !this->_hidden;
+}
+
+bool EGE::GUIManager::isVisible() const
+{
+    return !this->_hidden;
+}
