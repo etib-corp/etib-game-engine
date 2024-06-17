@@ -70,6 +70,8 @@ namespace EGE {
 
             void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model);
 
+            void removeModel(const std::string &key, const std::shared_ptr<ModelVR> &model);
+
             void addNewSlot(const std::string &key, const std::shared_ptr<Shader> &shader);
 
             void display();
