@@ -564,5 +564,6 @@ namespace EGE {
         private:
             std::vector<Trigger> _triggers;                         /**< A container that holds a collection of Trigger objects. */
             GLFWwindow *_window;                                    /**< The window associated with the event. */
+            bool _joystickEnabled;                                  /**< A flag indicating whether joystick events are enabled. */
     };
 }

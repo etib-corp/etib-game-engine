@@ -103,6 +103,7 @@ EGE::Event::Trigger& EGE::Event::Trigger::operator=(const EGE::Event::Trigger &o
 EGE::Event::Event(GLFWwindow *window)
 {
     this->_window = window;
+    this->_joystickEnabled = false;
 }
 
 EGE::Event::~Event()
@@ -140,7 +141,7 @@ void EGE::Event::pollEvents()
             else
                 keyValue = -1;
         } else if (trigger.getType() == EGE::Event::Type::JoystickButton) {
-            if (!glfwJoystickPresent(trigger.getJoystickId()))
+            if (!this->_joystickEnabled || !glfwJoystickPresent(trigger.getJoystickId()))
                 continue;
             int count = 0;
             const unsigned char *buttons = glfwGetJoystickButtons(trigger.getJoystickId(), &count);
@@ -148,7 +149,7 @@ void EGE::Event::pollEvents()
                 continue;
             keyValue = buttons[trigger.getTrigger()];
         } else if (trigger.getType() == EGE::Event::Type::JoystickAxis) {
-            if (!glfwJoystickPresent(trigger.getJoystickId()))
+            if (!this->_joystickEnabled || !glfwJoystickPresent(trigger.getJoystickId()))
                 continue;
             int count = 0;
             const float *axes = glfwGetJoystickAxes(trigger.getJoystickId(), &count);
