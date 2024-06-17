@@ -1390,6 +1390,11 @@ void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::
     this->_drawable[key].second.push_back(model);
 }
 
+void EGE::WindowVR::removeModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model)
+{
+    this->_drawable[key].second.remove(model);
+}
+
 void EGE::WindowVR::addNewSlot(const std::string &key, const std::shared_ptr<EGE::Shader> &shader)
 {
     this->_drawable[key] = {shader, {}};
