@@ -132,7 +132,9 @@ namespace EGE {
             std::string _directory; ///< The directory of the model file.
             std::vector<Texture> _texturesLoaded; ///< The textures loaded for the model.
             EGE::Maths::Vector3<float> _position; ///< The position of the model.
+            EGE::Maths::Vector3<float> _rotation; ///< The rotation of the model.
             EGE::Maths::Vector3<float> _scale; ///< The scale of the model.
+            EGE::Maths::Vector3<float> _shear; ///< The shear of the model.
             static std::map<std::string, ModelVR *> _modelsLoaded; ///< The loaded models.
     };
 }
