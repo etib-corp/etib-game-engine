@@ -35,7 +35,7 @@ namespace EGE {
              * This function is called when the interactable GUI element is interacted with.
              * Derived classes should override this function to define their specific interaction behavior.
              */
-            virtual void perform() = 0;
+            void perform();
 
             /**
              * @brief Set the callback function for the interaction action.
@@ -45,7 +45,7 @@ namespace EGE {
              *
              * @param callback The callback function to set.
              */
-            virtual void setCallback(std::function<void()> callback) = 0;
+            void setCallback(std::function<void()> callback);
 
         protected:
             std::function<void()> _callback;
