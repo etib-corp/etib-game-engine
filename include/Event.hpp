@@ -9,6 +9,7 @@
 
 // Engine include
 #include "Error.hpp"
+#include "GlfwCallback.hpp"
 #include "OpenGL.hpp"
 
 // C++ include
@@ -288,8 +289,6 @@ namespace EGE {
                 WindowCursorMoved,                                  /**< Window event for moving the cursor. */
             };
 
-            #include "GlfwCallback.hpp"
-
             /**
              * @class Trigger
              * @brief The Trigger class represents a trigger event.
@@ -454,88 +453,88 @@ namespace EGE {
                 switch (trigger)
                 {
                 case EGE::Event::WindowTrigger::WindowClose:
-                    GlfwWindowCloseCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowCloseCallbackFunction::getInstance(callback, true);
                     glfwSetWindowCloseCallback(this->_window, [](GLFWwindow *window) {
                         glfwSetWindowShouldClose(window, GL_FALSE);
-                        GlfwWindowCloseCallbackFunction::getInstance()->call(window);
+                        EGE::GlfwWindowCloseCallbackFunction::getInstance()->call(window);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowFocus:
-                    GlfwWindowFocusCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowFocusCallbackFunction::getInstance(callback, true);
                     glfwSetWindowFocusCallback(this->_window, [](GLFWwindow *window, int focused) {
                         if (focused)
-                            GlfwWindowFocusCallbackFunction::getInstance()->call(window, focused);
+                            EGE::GlfwWindowFocusCallbackFunction::getInstance()->call(window, focused);
                         if (!focused)
-                            GlfwWindowLostFocusCallbackFunction::getInstance()->call(window, focused);
+                            EGE::GlfwWindowLostFocusCallbackFunction::getInstance()->call(window, focused);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowLostFocus:
-                    GlfwWindowLostFocusCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowLostFocusCallbackFunction::getInstance(callback, true);
                     glfwSetWindowFocusCallback(this->_window, [](GLFWwindow *window, int focused) {
                         if (focused)
-                            GlfwWindowFocusCallbackFunction::getInstance()->call(window, focused);
+                            EGE::GlfwWindowFocusCallbackFunction::getInstance()->call(window, focused);
                         if (!focused)
-                            GlfwWindowLostFocusCallbackFunction::getInstance()->call(window, focused);
+                            EGE::GlfwWindowLostFocusCallbackFunction::getInstance()->call(window, focused);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowFileDrop:
-                    GlfwWindowFileDropCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowFileDropCallbackFunction::getInstance(callback, true);
                     glfwSetDropCallback(this->_window, [](GLFWwindow *window, int nb, const char* paths[]) {
-                        GlfwWindowFileDropCallbackFunction::getInstance()->call(window, nb, paths);
+                        EGE::GlfwWindowFileDropCallbackFunction::getInstance()->call(window, nb, paths);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowScroll:
-                    GlfwWindowScrollCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowScrollCallbackFunction::getInstance(callback, true);
                     glfwSetScrollCallback(this->_window, [](GLFWwindow *window, double xoffset, double yoffset) {
-                        GlfwWindowScrollCallbackFunction::getInstance()->call(window, xoffset, yoffset);
+                        EGE::GlfwWindowScrollCallbackFunction::getInstance()->call(window, xoffset, yoffset);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowContentScaleChanged:
-                    GlfwWindowContentScaleChangedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowContentScaleChangedCallbackFunction::getInstance(callback, true);
                     glfwSetWindowContentScaleCallback(this->_window, [](GLFWwindow *window, float x, float y) {
-                        GlfwWindowContentScaleChangedCallbackFunction::getInstance()->call(window, x, y);
+                        EGE::GlfwWindowContentScaleChangedCallbackFunction::getInstance()->call(window, x, y);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowFramebufferResized:
-                    GlfwWindowFramebufferResizedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowFramebufferResizedCallbackFunction::getInstance(callback, true);
                     glfwSetFramebufferSizeCallback(this->_window, [](GLFWwindow *window, int width, int height) {
-                        GlfwWindowFramebufferResizedCallbackFunction::getInstance()->call(window, width, height);
+                        EGE::GlfwWindowFramebufferResizedCallbackFunction::getInstance()->call(window, width, height);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowIconified:
-                    GlfwWindowIconifiedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowIconifiedCallbackFunction::getInstance(callback, true);
                     glfwSetWindowIconifyCallback(this->_window, [](GLFWwindow *window, int iconified) {
-                        GlfwWindowIconifiedCallbackFunction::getInstance()->call(window, iconified);
+                        EGE::GlfwWindowIconifiedCallbackFunction::getInstance()->call(window, iconified);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowMaximized:
-                    GlfwWindowMaximizedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowMaximizedCallbackFunction::getInstance(callback, true);
                     glfwSetWindowMaximizeCallback(this->_window, [](GLFWwindow *window, int maximized) {
-                        GlfwWindowMaximizedCallbackFunction::getInstance()->call(window, maximized);
+                        EGE::GlfwWindowMaximizedCallbackFunction::getInstance()->call(window, maximized);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowMoved:
-                    GlfwWindowMovedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowMovedCallbackFunction::getInstance(callback, true);
                     glfwSetWindowPosCallback(this->_window, [](GLFWwindow *window, int x, int y) {
-                        GlfwWindowMovedCallbackFunction::getInstance()->call(window, x, y);
+                        EGE::GlfwWindowMovedCallbackFunction::getInstance()->call(window, x, y);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowResized:
-                    GlfwWindowResizedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowResizedCallbackFunction::getInstance(callback, true);
                     glfwSetWindowSizeCallback(this->_window, [](GLFWwindow *window, int width, int height) {
-                        GlfwWindowResizedCallbackFunction::getInstance()->call(window, width, height);
+                        EGE::GlfwWindowResizedCallbackFunction::getInstance()->call(window, width, height);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowRefreshed:
-                    GlfwWindowRefreshedCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwWindowRefreshedCallbackFunction::getInstance(callback, true);
                     glfwSetWindowRefreshCallback(this->_window, [](GLFWwindow *window) {
-                        GlfwWindowRefreshedCallbackFunction::getInstance()->call(window);
+                        EGE::GlfwWindowRefreshedCallbackFunction::getInstance()->call(window);
                     });
                     return true;
                 case EGE::Event::WindowTrigger::WindowCursorMoved:
-                    GlfwCursorCallbackFunction::getInstance(callback, true);
+                    EGE::GlfwCursorCallbackFunction::getInstance(callback, true);
                     glfwSetCursorPosCallback(this->_window, [](GLFWwindow *window, double xpos, double ypos) {
-                        GlfwCursorCallbackFunction::getInstance()->call(window, xpos, ypos);
+                        EGE::GlfwCursorCallbackFunction::getInstance()->call(window, xpos, ypos);
                     });
                 default:
                     return false;

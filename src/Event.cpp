@@ -7,19 +7,19 @@
 
 #include "Event.hpp"
 
-EGE::Event::GlfwWindowCloseCallbackFunction *EGE::Event::GlfwWindowCloseCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowFocusCallbackFunction *EGE::Event::GlfwWindowFocusCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowLostFocusCallbackFunction *EGE::Event::GlfwWindowLostFocusCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowFileDropCallbackFunction *EGE::Event::GlfwWindowFileDropCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowScrollCallbackFunction *EGE::Event::GlfwWindowScrollCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowContentScaleChangedCallbackFunction *EGE::Event::GlfwWindowContentScaleChangedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowFramebufferResizedCallbackFunction *EGE::Event::GlfwWindowFramebufferResizedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowIconifiedCallbackFunction *EGE::Event::GlfwWindowIconifiedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowMaximizedCallbackFunction *EGE::Event::GlfwWindowMaximizedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowMovedCallbackFunction *EGE::Event::GlfwWindowMovedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowResizedCallbackFunction *EGE::Event::GlfwWindowResizedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwWindowRefreshedCallbackFunction *EGE::Event::GlfwWindowRefreshedCallbackFunction::_instance = nullptr;
-EGE::Event::GlfwCursorCallbackFunction *EGE::Event::GlfwCursorCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowCloseCallbackFunction *EGE::GlfwWindowCloseCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowFocusCallbackFunction *EGE::GlfwWindowFocusCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowLostFocusCallbackFunction *EGE::GlfwWindowLostFocusCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowFileDropCallbackFunction *EGE::GlfwWindowFileDropCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowScrollCallbackFunction *EGE::GlfwWindowScrollCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowContentScaleChangedCallbackFunction *EGE::GlfwWindowContentScaleChangedCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowFramebufferResizedCallbackFunction *EGE::GlfwWindowFramebufferResizedCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowIconifiedCallbackFunction *EGE::GlfwWindowIconifiedCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowMaximizedCallbackFunction *EGE::GlfwWindowMaximizedCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowMovedCallbackFunction *EGE::GlfwWindowMovedCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowResizedCallbackFunction *EGE::GlfwWindowResizedCallbackFunction::_instance = nullptr;
+EGE::GlfwWindowRefreshedCallbackFunction *EGE::GlfwWindowRefreshedCallbackFunction::_instance = nullptr;
+EGE::GlfwCursorCallbackFunction *EGE::GlfwCursorCallbackFunction::_instance = nullptr;
 
 EGE::Event::Trigger::Trigger(EGE::Event::Type type, std::uint32_t trigger, EGE::Event::Mode mode, std::function<void()> callback, std::uint8_t joystickId)
     : _type(type), _trigger(trigger), _mode(mode), _callback(callback), _joystickId(joystickId)
