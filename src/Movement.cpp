@@ -25,6 +25,9 @@ EGE::Movement::~Movement()
 void EGE::Movement::move(float deltaTime)
 {
     float ratio = (deltaTime * 1000.0) / this->_durationPerKeyFrame;
+    if (this->_keyFrames.size() == 0) {
+        return;
+    }
     for (auto &[name, model] : _models) {
         model->setPosition(model->getPosition() + this->getTranslation(this->_keyFrames[_currentKeyFrame]) * ratio);
         model->setRotation(model->getRotation() + this->getRotation(this->_keyFrames[_currentKeyFrame] * ratio));
