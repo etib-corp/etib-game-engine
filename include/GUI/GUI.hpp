@@ -18,7 +18,7 @@ namespace EGE {
 
     /**
      * @brief The GUI class represents a graphical user interface.
-     * 
+     *
      * This class provides an interface for creating and managing GUI elements.
      * It defines common methods for drawing, initializing, and managing the GUI.
      */

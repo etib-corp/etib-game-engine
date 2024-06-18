@@ -72,7 +72,6 @@ namespace EGE {
                 JoystickButton,                                     /**< Event type for joystick events. */
                 JoystickAxis,                                       /**< Event type for joystick events. */
                 Window                                              /**< Event type for window events. */
-                // TODO: Special check for binding window events because they are handled by GLFW with a callback
             };
 
             /**
@@ -306,7 +305,7 @@ namespace EGE {
                  * @param trigger The trigger value.
                  * @param mode The mode of the trigger.
                  * @param callback The callback function to be called when the trigger is activated.
-                 * @param joystickId The ID of the joystick associated with the trigger (optional, default is -1).
+                 * @param joystickId The ID of the joystick associated with the trigger (optional, default is -1, meaning that no joystick is bound).
                  */
                 Trigger(Type type, std::uint32_t trigger, Mode mode, std::function<void()> callback, std::uint8_t joystickId = -1);
 
@@ -317,7 +316,7 @@ namespace EGE {
                  * @param trigger The trigger value.
                  * @param mode The mode of the trigger.
                  * @param callback The callback function to be called when the trigger is activated.
-                 * @param joystickId The ID of the joystick associated with the trigger (optional, default is -1).
+                 * @param joystickId The ID of the joystick associated with the trigger (optional, default is -1, meaning that no joystick is bound).
                  * @note This constructor is used for joystick axis events.
                 */
                 Trigger(Type type, std::uint32_t trigger, Mode mode, std::function<void(float)> callback, std::uint8_t joystickId = -1);
@@ -536,7 +535,6 @@ namespace EGE {
                 case EGE::Event::WindowTrigger::WindowCursorMoved:
                     GlfwCursorCallbackFunction::getInstance(callback, true);
                     glfwSetCursorPosCallback(this->_window, [](GLFWwindow *window, double xpos, double ypos) {
-                        // std::cout << "Cursor moved to (" << xpos << ", " << ypos << ")" << std::endl;
                         GlfwCursorCallbackFunction::getInstance()->call(window, xpos, ypos);
                     });
                 default:

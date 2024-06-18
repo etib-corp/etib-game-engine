@@ -38,7 +38,7 @@ namespace EGE {
     };
 
     struct BoneInfo {
-        int _id;
-        glm::mat4 _offset;
+        int _id;            ///< The ID of the bone.
+        glm::mat4 _offset;  ///< The offset matrix of the bone.
     };
 }

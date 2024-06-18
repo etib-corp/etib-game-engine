@@ -16,7 +16,7 @@ namespace EGE {
 
     /**
      * @brief The Bar class represents a menu bar in the GUI.
-     * 
+     *
      * It is a container that holds a collection of menu items.
      * The Bar class inherits from the Container class and is specialized for menus.
      */
@@ -26,7 +26,7 @@ namespace EGE {
              * @brief Constructs a Bar object.
              */
             Bar();
-            
+
             /**
              * @brief Destroys the Bar object.
              */
@@ -34,7 +34,7 @@ namespace EGE {
 
             /**
              * @brief Draws the menu bar on the screen.
-             * 
+             *
              * This function is called to render the menu bar on the GUI.
              * It overrides the draw() function from the base class.
              */
@@ -42,14 +42,14 @@ namespace EGE {
 
             /**
              * @brief Hides the menu bar.
-             * 
+             *
              * This function hides the menu bar from the GUI.
              */
             void hideBar();
 
             /**
              * @brief Shows the menu bar.
-             * 
+             *
              * This function shows the menu bar on the GUI.
              */
             void showBar();

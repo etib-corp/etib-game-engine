@@ -142,10 +142,25 @@ namespace EGE {
             */
             EGE::Maths::Vector3<float> getShear() const;
 
+            /**
+             * @brief Returns the map of boneInfo of the model.
+             *
+             * @return std::map<std::string, BoneInfo> that is the boneInfo of the model
+             **/
             std::map<std::string, BoneInfo>& getBoneInfoMap();
 
+            /**
+             * @brief Returns the number of bones in the model.
+             *
+             * @return int& that is the number of bones in the model
+             **/
             int& getBoneNumber();
 
+            /**
+             * @brief Returns the vector of meshes of the model.
+             * 
+             * @return std::vector<Mesh> that is the vector of meshes of the model
+             **/
             std::vector<Mesh> getMeshes() const { return this->_meshes; }
 
         private:
@@ -179,10 +194,29 @@ namespace EGE {
              */
             std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string& typeName, bool flipTexture = false);
 
+            /**
+             * @brief Resets the bone data of a vertex to default values.
+             *
+             * @param vertex The vertex to reset.
+             */
             void setVertexBoneDataToDefault(Vertex& vertex);
 
+            /**
+             * @brief Sets the bone data for a vertex.
+             *
+             * @param vertex The vertex to set the bone data for.
+             * @param boneID The ID of the bone.
+             * @param weight The weight of the bone.
+             */
             void setVertexBoneData(Vertex& vertex, int boneID, float weight);
 
+            /**
+             * @brief Extracts bone weight for vertices.
+             *
+             * @param vertices The vertices to extract bone weight for.
+             * @param mesh The mesh containing the vertices.
+             * @param scene The scene containing the mesh.
+             */
             void extractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh *mesh, const aiScene *scene);
 
             std::vector<Mesh> _meshes; ///< The meshes in the model.
@@ -194,7 +228,7 @@ namespace EGE {
             EGE::Maths::Vector3<float> _scale; ///< The scale of the model.
             static std::map<std::string, Model *> _modelsLoaded; ///< The loaded models.
             std::map<std::string, BoneInfo> _boneInfoMap; ///< The boneInfo of the model.
-            int _boneNumber;
-            EGE::Maths::Matrix<4, 4, float> _originalModelMatrix;
+            int _boneNumber;    ///< The number of bones in the model.
+            EGE::Maths::Matrix<4, 4, float> _originalModelMatrix;   ///< The original model matrix of the model.
     };
 }

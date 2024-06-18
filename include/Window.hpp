@@ -160,6 +160,17 @@ namespace EGE {
              */
             bool bindTrigger(const EGE::Event::Trigger& trigger);
 
+            /**
+             * @brief Binds a trigger to the window.
+             *
+             * This function binds the specified trigger to the window. When the trigger is activated,
+             * the window will respond accordingly.
+             *
+             * @tparam _ArgTypes The argument types of the callback function.
+             * @param trigger The trigger to bind.
+             * @param callback The callback function to bind to the trigger.
+             * @return True if the trigger was successfully bound, false otherwise.
+             */
             template <typename... _ArgTypes, typename F>
             requires std::invocable<F, _ArgTypes...>
             bool bindWindowTrigger(EGE::Event::WindowTrigger trigger, F &&callback) {
@@ -309,7 +320,7 @@ namespace EGE {
             int _framerateLimit;                    /**< The framerate limit of the window. */
             bool _cursorVisible;                    /**< The visibility of the cursor in the window. */
             bool _active;                           /**< The activity state of the window. */
-            std::uint8_t _style;                     /**< The style of the window. */
-            std::shared_ptr<EGE::Event> _event;      /**< The event handler for the window. */
+            std::uint8_t _style;                    /**< The style of the window. */
+            std::shared_ptr<EGE::Event> _event;     /**< The event handler for the window. */
     };
 }

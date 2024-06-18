@@ -24,7 +24,7 @@ namespace EGE {
              * @param max The maximum value of the slider.
              */
             Slider(const std::string &title = "", float min = 0.0, float max = 1.0);
-            
+
             /**
              * @brief Destroys the Slider object.
              */
@@ -40,7 +40,7 @@ namespace EGE {
              * @param value The value to set.
              */
             void setValue(float value);
-            
+
             /**
              * @brief Gets the current value of the slider.
              * @return The current value of the slider.

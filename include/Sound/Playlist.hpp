@@ -21,14 +21,14 @@ namespace EGE {
         /**
          * @class Playlist
          * @brief Represents a playlist of music tracks.
-         * 
+         *
          * The Playlist class allows you to manage a collection of music tracks and perform operations such as playing, pausing, stopping, and navigating between tracks.
          */
         class Playlist {
             public:
                 /**
                  * @brief Constructs a Playlist object with the specified path.
-                 * 
+                 *
                  * @param path The path to the playlist file.
                  */
                 Playlist(const std::string &path);

@@ -23,8 +23,15 @@
 namespace EGE {
     class Shader {
         public:
+            /**
+             * @brief The ShaderError class represents an error that can occur during shader compilation.
+            */
             class ShaderError : public Error {
                 public:
+                    /**
+                     * @brief Constructs a ShaderError object with the given error message.
+                     * @param message The error message.
+                    */
                     ShaderError(const std::string &message) : Error(message) {}
             };
 

@@ -14,14 +14,14 @@ namespace EGE {
 
     /**
      * @brief Represents a panel in the GUI.
-     * 
+     *
      * This class inherits from the Container class and provides functionality for creating a panel in the GUI.
      */
     class Panel : public Container<GUI> {
         public:
             /**
              * @brief Constructs a Panel object with the specified title.
-             * 
+             *
              * @param title The title of the panel.
              */
             Panel(const std::string &title);
@@ -33,7 +33,7 @@ namespace EGE {
 
             /**
              * @brief Draws the panel on the screen.
-             * 
+             *
              * This function overrides the draw() function of the base class.
              */
             void draw() override;

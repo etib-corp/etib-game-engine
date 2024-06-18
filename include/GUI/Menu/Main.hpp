@@ -14,7 +14,7 @@ namespace EGE {
 
     /**
      * @brief The Main class represents the main menu of the game.
-     * 
+     *
      * This class inherits from the Bar class and provides functionality
      * to draw the main menu.
      */
@@ -24,7 +24,7 @@ namespace EGE {
              * @brief Constructs a Main object.
              */
             Main();
-            
+
             /**
              * @brief Destroys the Main object.
              */
@@ -32,7 +32,7 @@ namespace EGE {
 
             /**
              * @brief Draws the main menu.
-             * 
+             *
              * This function overrides the draw() function of the Bar class
              * and is responsible for drawing the main menu on the screen.
              */

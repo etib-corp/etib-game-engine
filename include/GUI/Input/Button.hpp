@@ -19,7 +19,7 @@ namespace EGE {
         public:
             /**
              * @brief Constructs a Button object with the specified title and callback function.
-             * 
+             *
              * @param title The title of the button.
              * @param callback The callback function to be executed when the button is clicked.
              */

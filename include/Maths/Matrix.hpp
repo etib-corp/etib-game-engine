@@ -98,6 +98,12 @@ namespace EGE {
                     }
                 }
 
+                /**
+                 * @brief Constructs a Matrix object with all elements set to the specified value.
+                 *
+                 * The constructor initializes all elements of the matrix to the specified value.
+                 * @param f The value to initialize the matrix with.
+                */
                 Matrix(T f)
                 {
                     for (int i = 0; i < HEIGHT; i++) {
@@ -473,6 +479,14 @@ namespace EGE {
     }
 }
 
+/**
+ * @brief Outputs the matrix to the specified output stream.
+ *
+ * The function outputs the matrix to the specified output stream.
+ * @param os The output stream.
+ * @param matrix The matrix to output.
+ * @return The output stream.
+*/
 template<int WIDTH, int HEIGHT, typename T>
 std::ostream& operator<<(std::ostream& os, const EGE::Maths::Matrix<WIDTH, HEIGHT, T>& matrix)
 {
