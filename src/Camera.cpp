@@ -19,7 +19,8 @@ EGE::Camera::Camera(
       _pitch(pitch),
       _front(Maths::Vector3<float>(0.0f, 0.0f, -1.0f)),
       _speed(SPEED),
-      _zoom(ZOOM)
+      _zoom(ZOOM),
+      _sensitivity(SENSITIVITY)
 {
     updateCameraVectors();
 }
@@ -62,8 +63,8 @@ void EGE::Camera::update(EGE::Shader &shader, float aspect)
 
 void EGE::Camera::rotate(float xoffset, float yoffset, bool constrainPitch)
 {
-    xoffset *= this->_speed / 10.0f;
-    yoffset *= this->_speed / 10.0f;
+    xoffset *= this->_sensitivity / 10.0f;
+    yoffset *= this->_sensitivity / 10.0f;
 
     this->_yaw += xoffset;
     this->_pitch += yoffset;
@@ -175,6 +176,16 @@ float EGE::Camera::getSpeed() const
 float EGE::Camera::getZoom() const
 {
     return this->_zoom;
+}
+
+void EGE::Camera::setSensitivity(float sensitivity)
+{
+    this->_sensitivity = sensitivity;
+}
+
+float EGE::Camera::getSensitivity() const
+{
+    return this->_sensitivity;
 }
 
 void EGE::Camera::updateCameraVectors()

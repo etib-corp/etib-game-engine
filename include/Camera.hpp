@@ -30,8 +30,8 @@ namespace EGE {
     public:
         constexpr static const float YAW = -90.0f;        ///< Default yaw value
         constexpr static const float PITCH = 0.0f;        ///< Default pitch value
-        constexpr static const float SPEED = 2.5f;        ///< Default speed value
-        constexpr static const float SENSITIVITY = 0.1f;  ///< Default sensitivity value
+        constexpr static const float SPEED = 10.0f;        ///< Default speed value
+        constexpr static const float SENSITIVITY = 2.5f;  ///< Default sensitivity value
         constexpr static const float ZOOM = 45.0f;        ///< Default zoom value
 
         /**
@@ -225,6 +225,20 @@ namespace EGE {
          */
         float getZoom() const;
 
+        /**
+         * @brief Sets the sensitivity of the camera.
+         *
+         * @param sensitivity The new sensitivity of the camera.
+         */
+        void setSensitivity(float sensitivity);
+
+        /**
+         * @brief Gets the sensitivity of the camera.
+         *
+         * @return The sensitivity of the camera.
+         */
+        float getSensitivity() const;
+
         Maths::Matrix<4, 4, float> _view; ///< The view matrix of the camera
         Maths::Matrix<4, 4, float> _projection; ///< The projection matrix of the camera
 
@@ -245,5 +259,6 @@ namespace EGE {
 
         float _speed;   ///< The speed of the camera
         float _zoom;    ///< The zoom value of the camera
+        float _sensitivity; ///< The sensitivity of the camera
     };
 }
