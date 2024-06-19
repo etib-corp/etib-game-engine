@@ -13,6 +13,7 @@
 
 // C++ include
 #include <cmath>
+#include <iostream>
 #include <string>
 
 /**
@@ -352,4 +353,18 @@ namespace EGE {
                 T y; /**< The y component of the vector. */
         };
     }
+}
+
+/**
+ * @brief Outputs the vector to the output stream.
+ *
+ * @param os The output stream.
+ * @param vec The vector to output.
+ * @return The output stream.
+*/
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const EGE::Maths::Vector2<T> vec)
+{
+    os << "Vector2<" << typeid(T).name() << ">(" << vec.x << ", " << vec.y << ")";
+    return os;
 }

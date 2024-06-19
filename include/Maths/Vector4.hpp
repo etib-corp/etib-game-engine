@@ -12,6 +12,8 @@
 
 // C++ include
 #include <cmath>
+#include <iostream>
+
 
 /**
  * @file Vector4.hpp
@@ -362,4 +364,18 @@ namespace EGE {
                 T w; /**< The w component of the vector. */
         };
     }
+}
+
+/**
+ * @brief Outputs the vector to the output stream.
+ *
+ * @param os The output stream.
+ * @param vec The vector.
+ * @return The output stream.
+*/
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const EGE::Maths::Vector4<T> vec)
+{
+    os << "Vector4<" << typeid(T).name() << ">(" << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w << ")";
+    return os;
 }
