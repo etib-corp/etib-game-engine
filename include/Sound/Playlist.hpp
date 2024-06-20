@@ -48,6 +48,8 @@ namespace EGE {
                  */
                 void pause();
 
+                void update();
+
                 /**
                 * @brief Plays or pauses the currently playing music track, depending on its current state.
                 */

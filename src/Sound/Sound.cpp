@@ -10,6 +10,8 @@
 
 #include "Sound/Sound.hpp"
 
+#include <iostream>
+
 EGE::Sound::Sound::Sound(const std::string &path, FileType type)
 {
     std::vector<int16_t> samples;
@@ -71,7 +73,6 @@ EGE::Sound::Sound::~Sound()
 
 void EGE::Sound::Sound::play()
 {
-
     alSourcePlay(this->_source);
     this->_stream = std::thread([this] {
         ALint state;
@@ -79,7 +80,9 @@ void EGE::Sound::Sound::play()
         alGetSourcei(this->_source, AL_SOURCE_STATE, &state);
         while (state == AL_PLAYING) {
             alGetSourcei(this->_source, AL_SOURCE_STATE, &state);
+            this->setPlaying(true);
         }
+        this->setPlaying(false);
     });
     this->_stream.detach();
 }
@@ -87,15 +90,27 @@ void EGE::Sound::Sound::play()
 void EGE::Sound::Sound::pause()
 {
     alSourcePause(this->_source);
+    this->_playing = false;
 }
 
 void EGE::Sound::Sound::stop()
 {
     alSourceStop(this->_source);
+    this->_playing = false;
 }
 
 void EGE::Sound::Sound::replay()
 {
     alSourceRewind(this->_source);
     this->play();
+}
+
+bool EGE::Sound::Sound::isPlaying() const
+{
+    return this->_playing;
+}
+
+void EGE::Sound::Sound::setPlaying(bool playing)
+{
+    this->_playing = playing;
 }

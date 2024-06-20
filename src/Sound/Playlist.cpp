@@ -7,6 +7,8 @@
 
 #include "Sound/Playlist.hpp"
 
+#include <iostream>
+
 EGE::Sound::Playlist::Playlist(const std::string &path)
 {
     std::vector<std::string> mp3Files = Utils::getDirectoryFiles(path, ".mp3");
@@ -31,8 +33,8 @@ EGE::Sound::Playlist::~Playlist()
 
 void EGE::Sound::Playlist::play()
 {
-    this->_musics[this->_currentMusic]->play();
     this->_isPlaying = true;
+    this->_musics[this->_currentMusic]->play();
 }
 
 void EGE::Sound::Playlist::pause()
@@ -70,4 +72,11 @@ void EGE::Sound::Playlist::previous()
     this->_musics[this->_currentMusic]->stop();
     this->_currentMusic = this->_currentMusic == 0 ? this->_musics.size() - 1 : this->_currentMusic - 1;
     this->_musics[this->_currentMusic]->play();
+}
+
+void EGE::Sound::Playlist::update()
+{
+    if (this->_isPlaying && this->_musics[this->_currentMusic]->isPlaying() == false) {
+        this->next();
+    }
 }

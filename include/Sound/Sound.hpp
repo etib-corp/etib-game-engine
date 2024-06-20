@@ -84,6 +84,10 @@ namespace EGE {
                  */
                 void replay();
 
+                bool isPlaying() const;
+
+                void setPlaying(bool playing);
+
             protected:
                 ALuint _buffer;        /**< OpenAL buffer ID */
                 ALuint _source;        /**< OpenAL source ID */
@@ -92,6 +96,7 @@ namespace EGE {
                 drmp3 _mp3;            /**< MP3 file object */
                 std::string _path;     /**< Path to the sound file */
                 std::thread _stream;   /**< Thread for streaming sound data */
+                bool _playing;       /**< Flag indicating whether the sound is playing */
         };
     }
 }
