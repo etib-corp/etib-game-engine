@@ -34,6 +34,8 @@ namespace EGE {
          */
         void add(T *gui, const std::string& name)
         {
+            if (this->_elements[name] != nullptr)
+                delete this->_elements[name];
             this->_elements[name] = gui;
         }
 
