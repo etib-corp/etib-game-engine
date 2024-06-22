@@ -31,6 +31,7 @@ namespace EGE {
          * @brief Adds a GUI element to the container.
          *
          * @param gui A pointer to the GUI element to be added.
+         * @param name The name of the GUI element.
          */
         void add(T *gui, const std::string& name)
         {
@@ -51,16 +52,33 @@ namespace EGE {
         /**
          * @brief Removes a GUI element from the container.
          *
-         * @param gui A pointer to the GUI element to be removed.
+         * @param name The name of the GUI element to be removed.
          */
         void remove(const std::string& name)
         {
             this->_elements.erase(name);
         }
 
+        /**
+         * @brief Gets all the GUI elements in the container.
+         *
+         * @return A map of GUI elements, where the key is the name of the element and the value is a pointer to the element.
+         */
+        std::map<std::string, T *> getElements() const
+        {
+            return this->_elements;
+        }
+
+        /**
+         * @brief Clears all the GUI elements in the container.
+         */
+        void clear()
+        {
+            this->_elements.clear();
+        }
 
     protected:
-        std::map<std::string, T *> _elements;
+        std::map<std::string, T *> _elements; /**< The map of GUI elements in the container. */
     };
 }
 
