@@ -83,6 +83,15 @@ namespace EGE {
                     this->_matrix = matrix;
                 }
 
+                Matrix(T values[WIDTH * HEIGHT])
+                {
+                    for (int i = 0; i < HEIGHT; i++) {
+                        for (int j = 0; j < WIDTH; j++) {
+                            this->_matrix[i][j] = values[i * WIDTH + j];
+                        }
+                    }
+                }
+
                 /**
                  * @brief Constructs a Matrix object from a glm::mat.
                  *
