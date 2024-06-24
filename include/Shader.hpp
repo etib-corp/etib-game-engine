@@ -167,9 +167,6 @@ namespace EGE {
                         throw ShaderError("ERROR\n\tINVALID MATRIX DIMENSION\n\t\twhile trying to set " + name + "\n");
                 }
             }
-            void compile(const std::string &vertexSource, const std::string &fragmentSource);
-
-        private:
 
             /**
              * @brief Compile the shader
@@ -178,7 +175,9 @@ namespace EGE {
              * @param fragmentSource The source code of the fragment shader
              * @throw ShaderError if the shader compilation or linking failed.
             */
+            void compile(const std::string &vertexSource, const std::string &fragmentSource);
 
+        private:
             GLuint _ID;           ///< The ID of the shader program
             GLuint _vertex;       ///< The ID of the vertex shader
             GLuint _fragment;     ///< The ID of the fragment shader
