@@ -25,6 +25,7 @@
 #include <map>
 
 #include "Error.hpp"
+#include <functional>
 #include <string.h>
 #include <vector>
 #include <tuple>
@@ -127,28 +128,19 @@ namespace EGE {
             bool isShouldRender();
 
             /**
-             * @brief Adds a model to render on the window.
+             * @brief Adds a drawable to render on the window.
              *
              * @param key The key of the model.
-             * @param model The shared pointer to the model object.
+             * @param udpdate The function to update the model.
              */
-            void addModel(const std::string &key, const std::shared_ptr<ModelVR> &model);
+            void addDrawable(const std::string &key, const std::shared_ptr<EGE::Shader>& shader, const std::function<void(const std::shared_ptr<EGE::Shader>&, float[16])> &update);
 
             /**
-             * @brief Removes a model from the window.
+             * @brief Removes a drawable from the window.
              *
              * @param key The key of the model.
-             * @param model The shared pointer to the model object.
              */
-            void removeModel(const std::string &key, const std::shared_ptr<ModelVR> &model);
-
-            /**
-             * @brief Adds a shader to the window.
-             *
-             * @param key The key of the shader.
-             * @param shader The shared pointer to the shader object.
-             */
-            void addNewSlot(const std::string &key, const std::shared_ptr<Shader> &shader);
+            void removeDrawable(const std::string &key);
 
             /**
              * @brief Displays the window.
@@ -158,7 +150,8 @@ namespace EGE {
             void display();
 
         private:
-            std::map<std::string, std::pair<std::shared_ptr<Shader>, std::vector<std::shared_ptr<ModelVR>>>> _drawable; ///< Map of shaders and models to render
+            // std::map<std::string, std::pair<std::shared_ptr<Shader>, std::vector<std::shared_ptr<ModelVR>>>> _drawable; ///< Map of shaders and models to render
+            std::map<std::string, std::pair<std::shared_ptr<EGE::Shader>, std::function<void(const std::shared_ptr<EGE::Shader>&, float[16])>>> _drawable; ///< Map of shaders and models to render
 
             /**
              * @brief Sets the callbacks and waits for the app to be ready.

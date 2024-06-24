@@ -1382,19 +1382,14 @@ void EGE::WindowVR::appUpdateBeginFrame()
     }
 }
 
-void EGE::WindowVR::addModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model)
+void EGE::WindowVR::addDrawable(const std::string &key, const std::shared_ptr<EGE::Shader>& shader, const std::function<void(const std::shared_ptr<EGE::Shader>&, float[16])> &update)
 {
-    this->_drawable[key].second.push_back(model);
+    this->_drawable[key] = {shader, update};
 }
 
-void EGE::WindowVR::removeModel(const std::string &key, const std::shared_ptr<EGE::ModelVR> &model)
+void EGE::WindowVR::removeDrawable(const std::string &key)
 {
-    this->_drawable[key].second.erase(std::remove(this->_drawable[key].second.begin(), this->_drawable[key].second.end(), model), this->_drawable[key].second.end());
-}
-
-void EGE::WindowVR::addNewSlot(const std::string &key, const std::shared_ptr<EGE::Shader> &shader)
-{
-    this->_drawable[key] = {shader, {}};
+    this->_drawable[key] = {nullptr, nullptr};
 }
 
 void EGE::WindowVR::display()
@@ -1538,16 +1533,14 @@ void EGE::WindowVR::display()
         // glUniform2f(1, this->_triggerStates[1].currentState, (float)(this->_triggerClickStates[1].currentState));
         // glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        for (auto& d : this->_drawable) {
-            auto shader = d.second.first;
-            auto models = d.second.second;
-            shader->use();
-            int id = glGetUniformLocation(shader->getID(), "view_proj");
-            glUniformMatrix4fv(id, 1, GL_FALSE, view_proj);
-            for (auto& model : models) {
-                model->draw(*shader);
-            }
+        __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "before drawable");
+
+        for (auto& [name, update] : this->_drawable) {
+            if (update.second == nullptr)
+                continue;
+            update.second(update.first, view_proj);
         }
+        __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "after drawable");
 
         // // Bind Screen Texture
         // glActiveTexture(GL_TEXTURE0);
@@ -1576,16 +1569,26 @@ void EGE::WindowVR::display()
 
 void EGE::WindowVR::appUpdateEndFrame()
 {
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1572");
     const XrCompositionLayerBaseHeader * layers[1] = { (XrCompositionLayerBaseHeader *)&this->_projectionLayer };
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1574");
     XrFrameEndInfo frame_end = { XR_TYPE_FRAME_END_INFO };
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1576");
     frame_end.displayTime = this->_frameState.predictedDisplayTime;
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1578");
     frame_end.environmentBlendMode = XR_ENVIRONMENT_BLEND_MODE_OPAQUE;
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1580");
     frame_end.layerCount = this->_shouldRender ? 1 : 0;
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1582");
     frame_end.layers = this->_shouldRender ? layers : NULL;
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1584");
 
     XrResult result = xrEndFrame(this->_session, &frame_end);
+    __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1587");
     if (XR_FAILED(result)) {
+        __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1589");
         throw EGE::WindowVRError("xrEndFrame failed");
+        __android_log_print(ANDROID_LOG_FATAL, "DEBUG", "WindowVR.cpp: appUpdateEndFrame() : 1591");
     }
 }
 
