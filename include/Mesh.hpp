@@ -49,15 +49,15 @@ namespace EGE {
              */
             void draw(const Shader& shader);
 
-            std::vector<Vertex> getVertices() const { return _vertices; }
+            // std::vector<Vertex> getVertices() const { return _vertices; }
 
         private:
             /**
              * @brief Sets up the mesh for rendering.
              */
-            void setupMesh();
+            void setupMesh(const std::vector<Vertex>& vertices);
 
-            std::vector<Vertex> _vertices; ///< The vertices of the mesh.
+            // std::vector<Vertex> _vertices; ///< The vertices of the mesh.
             std::vector<unsigned int> _indices; ///< The indices of the mesh.
             std::vector<Texture> _textures; ///< The textures of the mesh.
             unsigned int _vao; ///< The Vertex Array Object of the mesh.

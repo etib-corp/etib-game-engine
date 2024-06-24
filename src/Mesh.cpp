@@ -9,10 +9,10 @@
 
 EGE::Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures)
 {
-    this->_vertices = vertices;
+    // this->_vertices = vertices;
     this->_indices = indices;
     this->_textures = textures;
-    this->setupMesh();
+    this->setupMesh(vertices);
 }
 
 EGE::Mesh::~Mesh()
@@ -51,7 +51,7 @@ void EGE::Mesh::draw(const Shader& shader)
 
 }
 
-void EGE::Mesh::setupMesh()
+void EGE::Mesh::setupMesh(const std::vector<Vertex>& vertices)
 {
     glGenVertexArrays(1, &this->_vao);
     glGenBuffers(1, &this->_vbo);
@@ -60,7 +60,7 @@ void EGE::Mesh::setupMesh()
     glBindVertexArray(this->_vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
-    glBufferData(GL_ARRAY_BUFFER, this->_vertices.size() * sizeof(Vertex), &this->_vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->_indices.size() * sizeof(unsigned int), &this->_indices[0], GL_STATIC_DRAW);
